@@ -1,10 +1,10 @@
 # 1. PHP base image
 FROM php:8.2-cli
 
-# 2. System dependencies
+# 2. System dependencies + MySQL support
 RUN apt-get update && apt-get install -y \
-    unzip git curl libpq-dev libzip-dev zip \
-    && docker-php-ext-install pdo pdo_pgsql zip
+    unzip git curl libzip-dev zip default-mysql-client \
+    && docker-php-ext-install pdo pdo_mysql zip
 
 # 3. Composer install
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -18,10 +18,13 @@ COPY . .
 # 6. Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-# 7. Expose app port
+# 7. Fix permissions (Laravel needs storage + cache writable)
+RUN chmod -R 777 storage bootstrap/cache
+
+# 8. Expose app port
 EXPOSE 8000
 
-# 8. Run Laravel server (runtime artisan clears)
+# 9. Run Laravel server (artisan clears at runtime)
 CMD php artisan config:clear && \
     php artisan cache:clear && \
     php artisan route:clear && \
