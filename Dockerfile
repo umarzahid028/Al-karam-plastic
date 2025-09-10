@@ -18,11 +18,11 @@ COPY . .
 # 6. Laravel dependencies install
 RUN composer install --optimize-autoloader --no-dev
 
-# 7. Laravel cache optimize
-RUN php artisan config:clear && php artisan cache:clear && php artisan route:clear
-
-# 8. Expose Render port
+# 7. Expose port
 EXPOSE 8000
 
-# 9. Start Laravel server
-CMD php artisan serve --host 0.0.0.0 --port $PORT
+# 8. Start Laravel server (runtime artisan clears)
+CMD php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan route:clear && \
+    php artisan serve --host 0.0.0.0 --port $PORT
