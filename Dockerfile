@@ -21,11 +21,8 @@ RUN composer install --optimize-autoloader --no-dev
 # 7. Fix storage/cache permissions
 RUN chmod -R 777 storage bootstrap/cache
 
-# 8. Expose port
-EXPOSE 8000
+# 8. Expose the Railway port
+EXPOSE ${PORT:-8000}
 
-# 9. CMD: clear caches & serve (no migrations here)
-CMD bash -c "php artisan config:clear && \
-             php artisan cache:clear && \
-             php artisan route:clear && \
-             php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
+# 9. CMD: keep process alive
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
