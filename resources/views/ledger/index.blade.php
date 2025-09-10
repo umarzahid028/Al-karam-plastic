@@ -60,8 +60,14 @@
             <td>{{ $e->invoice_no ?? '-' }}</td>
             <td>{{ $e->invoice_date }}</td>
             <td>{{ $e->description ?? '-' }}</td>
-            <td class="text-end">{{ number_format($e->debit, 2) }}</td>
-            <td class="text-end">{{ number_format($e->credit, 2) }}</td>
+
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($e->debit, 2), '0'), '.') }}
+            </td>
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($e->credit, 2), '0'), '.') }}
+
+            </td>
             <td>{{ $e->created_at->format('Y-m-d') }}</td>
           </tr>
         @endforeach
@@ -76,23 +82,28 @@
   <table class="table table-bordered w-50">
     <tr>
       <th>Total Sales</th>
-      <td>{{ number_format($sales, 2) }}</td>
+      <td>{{ rtrim(rtrim(number_format($sales, 2), '0'), '.') }}</td>
     </tr>
     <tr>
-      <th>Total Purchases</th>
-      <td>{{ number_format($purchases, 2) }}</td>
+      <th>Total Purchases</th>  
+      <td>{{ rtrim(rtrim(number_format($purchases, 2), '0'), '.') }}</td>
     </tr>
     <tr>
       <th>Total Expenses</th>
-      <td>{{ number_format($expenses, 2) }}</td>
+      <td>{{ rtrim(rtrim(number_format($expenses, 2), '0'), '.') }}</td>
     </tr>
     <tr>
       <th>Net Profit / Loss</th>
       <td>
         @if($profitOrLoss >= 0)
-          <span class="text-success">Profit: {{ number_format($profitOrLoss, 2) }}</span>
-        @else
-          <span class="text-danger">Loss: {{ number_format(abs($profitOrLoss), 2) }}</span>
+          <span class="text-success">Profit: {{ rtrim(rtrim(number_format($profitOrLoss, 2), '0'), '.') }}
+          
+          </span>
+        
+          @else
+          <span class="text-danger">Loss: {{ rtrim(rtrim(number_format($profitOrLoss, 2), '0'), '.') }}
+            
+         </span>
         @endif
       </td>
     </tr>

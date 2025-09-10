@@ -124,9 +124,9 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
 
     <!-- Totals -->
     <div class="mt-3">
-        <p>Invoice Total: Rs <span id="invoiceTotal">0.00</span></p>
-        <p>Previous Balance: Rs <span id="prevBalance">0.00</span></p>
-        <h5>Grand Total: Rs <span id="grandTotal">0.00</span></h5>
+        <p>Invoice Total: Rs <span id="invoiceTotal">0</span></p>
+        <p>Previous Balance: Rs <span id="prevBalance">0</span></p>
+        <h5>Grand Total: Rs <span id="grandTotal">0</span></h5>
     </div>
 
     <!-- Buttons -->
@@ -200,7 +200,7 @@ setupSearch("group","groupList","group");
 
 // ================= Buyer Balance =================
 function fetchBuyerBalance(buyerId){
-    if(!buyerId){ prevBalance=0; document.getElementById("prevBalance").textContent="0.00"; updateTotals(); return; }
+    if(!buyerId){ prevBalance=0; document.getElementById("prevBalance").textContent="0"; updateTotals(); return; }
 
     fetch(`/buyers/${buyerId}/balance`)
     .then(res=>res.json())

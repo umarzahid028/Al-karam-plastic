@@ -4,62 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ledger;
+use App\Models\Expense;
+use App\Models\SalesInvoice;
+use App\Models\RawSupplier;
 
 class LedgerController extends Controller
 {
     public function index()
-{
-    $entries = Ledger::orderBy('id', 'asc')->paginate(5);
+    {
+        $entries = Ledger::orderBy('id', 'asc')->paginate(5);
 
-    // Totals
-    $sales = \App\Models\Ledger::where('ref_type', 'sale')
-                ->where('credit', '>', 0)
-                ->sum('credit');
+        // Totals
+        $sales = Ledger::where('ref_type', 'sale')
+                    ->where('credit', '>', 0)
+                    ->sum('credit');
 
-    $purchases = \App\Models\Ledger::where('ref_type', 'purchase')
-                ->where('debit', '>', 0)
-                ->sum('debit');
+        $purchases = Ledger::where('ref_type', 'purchase')
+                    ->where('debit', '>', 0)
+                    ->sum('debit');
 
-    // Expenses (assuming you have expenses table)
-    $expenses = \App\Models\Expense::sum('amount');
+        $expenses = Expense::sum('amount');
 
-    // Net P&L
-    $profitOrLoss = $sales - ($purchases + $expenses);
+        // Net P&L
+        $profitOrLoss = $sales - ($purchases + $expenses);
 
-    return view('ledger.index', compact('entries', 'sales', 'purchases', 'expenses', 'profitOrLoss'));
-}
-
-    
-    
-    // Optional: manual entry form
-    // public function create()
-    // {
-    //     return view('ledger.create');
-    // }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'party_id'     => 'required|string',
-    //         'party_type'   => 'required|string|in:customer,supplier,user',
-    //         'ref_type'     => 'required|string|in:sale,purchase,invoice,payment',
-    //         'invoice_no'   => 'nullable|string',
-    //         'invoice_date' => 'required|date',
-    //         'description'  => 'nullable|string',
-    //         'debit'        => 'numeric|min:0',
-    //         'credit'       => 'numeric|min:0',
-    //     ]);
-    
-    //     Ledger::create($request->all());
-    
-    //     return redirect()->route('ledger.index')->with('success', 'Ledger entry added!');
-    // }
+        return view('ledger.index', compact('entries', 'sales', 'purchases', 'expenses', 'profitOrLoss'));
+    }
 
     // =========================
-    // Automatic double-entry
+    // Record Sale (Manual Call)
     // =========================
-
-    // Sale
     public function recordSale($customerId, $invoiceNo, $amount, $date)
     {
         // Customer owes (Debit)
@@ -77,7 +51,7 @@ class LedgerController extends Controller
         // Sales Revenue (Credit)
         Ledger::create([
             'party_id' => null,
-            'party_type' => 'user', // system account
+            'party_type' => 'user', 
             'ref_type' => 'sale',
             'invoice_no' => $invoiceNo,
             'invoice_date' => $date,
@@ -87,13 +61,52 @@ class LedgerController extends Controller
         ]);
     }
 
+    // =========================
+    // Record Sale from Invoice
+    // =========================
+    public function recordSaleFromInvoice($invoiceId)
+    {
+        $invoice = SalesInvoice::with('items')->findOrFail($invoiceId);
+
+        $amount = $invoice->total_amount;
+        $date = $invoice->invoice_date;
+        $customerId = $invoice->buyer_id;
+        $invoiceNo = $invoice->invoice_no;
+
+        // Customer Debit (Accounts Receivable)
+        Ledger::create([
+            'party_id' => $customerId,
+            'party_type' => 'customer',
+            'ref_type' => 'sale',
+            'invoice_no' => $invoiceNo,
+            'invoice_date' => $date,
+            'description' => 'Sale Invoice #' . $invoiceNo,
+            'debit' => $amount,
+            'credit' => 0,
+        ]);
+
+        // Sales Revenue Credit
+        Ledger::create([
+            'party_id' => null,
+            'party_type' => 'user',
+            'ref_type' => 'sale',
+            'invoice_no' => $invoiceNo,
+            'invoice_date' => $date,
+            'description' => 'Revenue from Invoice #' . $invoiceNo,
+            'debit' => 0,
+            'credit' => $amount,
+        ]);
+    }
+
+    // =========================
     // Purchase
+    // =========================
     public function recordPurchase($supplierId, $invoiceNo, $amount, $date)
     {
         // Inventory / Purchases (Debit)
         Ledger::create([
             'party_id' => null,
-            'party_type' => 'user', // system account
+            'party_type' => 'user',
             'ref_type' => 'purchase',
             'invoice_no' => $invoiceNo,
             'invoice_date' => $date,
@@ -115,7 +128,9 @@ class LedgerController extends Controller
         ]);
     }
 
+    // =========================
     // Customer payment
+    // =========================
     public function recordCustomerPayment($customerId, $amount, $date, $invoiceNo = null)
     {
         // Cash / Bank (Debit)
@@ -143,7 +158,9 @@ class LedgerController extends Controller
         ]);
     }
 
+    // =========================
     // Supplier payment
+    // =========================
     public function recordSupplierPayment($supplierId, $amount, $date, $invoiceNo = null)
     {
         // Reduce Accounts Payable (Debit)
@@ -169,5 +186,62 @@ class LedgerController extends Controller
             'debit' => 0,
             'credit' => $amount,
         ]);
+    }
+
+    // =========================
+    // Customer Balance
+    // =========================
+    public function customerBalance($customerId)
+    {
+        $debit = Ledger::where('party_id', $customerId)
+                    ->where('party_type', 'customer')
+                    ->sum('debit');
+
+        $credit = Ledger::where('party_id', $customerId)
+                    ->where('party_type', 'customer')
+                    ->sum('credit');
+
+        return $debit - $credit; 
+        // Positive = customer ne dene hain
+        // Negative = customer ko dene hain
+    }
+
+    // =========================
+    // Supplier Balance
+    // =========================
+    public function supplierBalance($supplierId)
+    {
+        $debit = Ledger::where('party_id', $supplierId)
+                    ->where('party_type', 'supplier')
+                    ->sum('debit');
+
+        $credit = Ledger::where('party_id', $supplierId)
+                    ->where('party_type', 'supplier')
+                    ->sum('credit');
+
+        return $credit - $debit;
+        // Positive = supplier ko dene hain
+        // Negative = supplier ne wapis dena hai
+    }
+
+    // =========================
+    // Show All Balances
+    // =========================
+    public function balances()
+    {
+        $customers = RawSupplier::all();
+        $suppliers = RawSupplier::all();
+
+        $customerBalances = [];
+        foreach ($customers as $c) {
+            $customerBalances[$c->id] = $this->customerBalance($c->id);
+        }
+
+        $supplierBalances = [];
+        foreach ($suppliers as $s) {
+            $supplierBalances[$s->id] = $this->supplierBalance($s->id);
+        }
+
+        return view('ledger.balances', compact('customers', 'suppliers', 'customerBalances', 'supplierBalances'));
     }
 }

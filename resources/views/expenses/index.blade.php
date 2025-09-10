@@ -109,7 +109,9 @@
                     <td>{{ \Carbon\Carbon::parse($exp->expense_date)->format('d M, Y') }}</td>
                     <td>{{ $exp->expense_type }}</td>
                     <td>{{ $exp->description }}</td>
-                    <td class="text-end amount negative">{{ number_format($exp->amount, 2) }}</td>
+                    <td class="text-end amount negative">
+                        {{rtrim(rtrim(number_format($exp->amount, 2), '0'), '.') }} 
+</td>
                     <td>
                         <a href="{{ route('expenses.show', $exp->id) }}" class="btn btn-sm btn-back">
                             View
@@ -126,7 +128,9 @@
         <tfoot style="position: sticky; bottom: 0; background: #f8f9fc; z-index: 2;">
             <tr>
                 <td colspan="4" class="text-end">Total</td>
-                <td class="text-end amount positive">{{ number_format($total, 2) }}</td>
+                <td class="text-end amount positive">
+                {{rtrim(rtrim(number_format($total, 2), '0'), '.') }} 
+</td>
                 <td></td>
             </tr>
         </tfoot>

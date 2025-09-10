@@ -56,7 +56,10 @@
           <div class="icon text-sales me-3"><i class="bi bi-currency-dollar fs-2"></i></div>
           <div>
             <h6 class="mb-1">Total Sales</h6>
-            <div class="fs-4 fw-bold text-sales">{{ number_format($totalSales,2) }}</div>
+            <div class="fs-4 fw-bold text-sales">
+              {{rtrim(rtrim(number_format($totalSales,2), '0'), '.') }}
+            
+            </div>
           </div>
         </div>
       </a>
@@ -69,7 +72,9 @@
           <div class="icon text-purchases me-3"><i class="bi bi-basket fs-2"></i></div>
           <div>
             <h6 class="mb-1">Total Purchases</h6>
-            <div class="fs-4 fw-bold text-purchases">{{ number_format($totalPurchases,2) }}</div>
+            <div class="fs-4 fw-bold text-purchases">
+              {{rtrim(rtrim(number_format($totalPurchases,2), '0'), '.') }}
+            </div>
           </div>
         </div>
       </a>
@@ -81,7 +86,9 @@
         <div class="icon text-profit me-3"><i class="bi bi-graph-up fs-2"></i></div>
         <div>
           <h6 class="mb-1">Profit / Loss</h6>
-          <div class="fs-4 fw-bold text-profit">{{ number_format($profitLoss,2) }}</div>
+          <div class="fs-4 fw-bold text-profit">
+            {{rtrim(rtrim(number_format($profitLoss,2), '0'), '.') }}
+          </div>
         </div>
       </div>
     </div>
@@ -123,7 +130,9 @@
             <tr>
               <td>{{ $sale->invoice_no }}</td>
               <td>{{ $sale->customer_name }}</td>
-              <td class="text-end">{{ number_format($sale->total_amount,2) }}</td>
+              <td class="text-end">
+                {{rtrim(rtrim(number_format($sale->total_amount,2), '0'), '.') }}
+               </td>
             </tr>
             @endforeach
           </tbody>
@@ -147,7 +156,9 @@
             <tr>
               <td>{{ $purchase->invoice_no }}</td>
               <td>{{ $purchase->supplier_name }}</td>
-              <td class="text-end">{{ number_format($purchase->total_amount,2) }}</td>
+              <td class="text-end">
+                {{rtrim(rtrim(number_format($purchase->total_amount,2), '0'), '.') }}
+               </td>
             </tr>
             @endforeach
           </tbody>

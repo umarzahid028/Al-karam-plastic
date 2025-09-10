@@ -9,8 +9,10 @@ return new class extends Migration
     public function up()
 {
     Schema::table('purchases', function (Blueprint $table) {
+        $table->date('invoice_date')->nullable()->after('id');
         $table->string('payment_method')->nullable()->after('invoice_date');
     });
+    
 }
 
 public function down()

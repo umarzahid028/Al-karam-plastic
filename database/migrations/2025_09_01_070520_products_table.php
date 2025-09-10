@@ -10,7 +10,8 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+{
+    if (!Schema::hasTable('products')) {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('product_code')->unique();
@@ -25,8 +26,9 @@ return new class extends Migration
             $table->decimal('weight', 10, 2)->default(0);
             $table->timestamps();
         });
-        
     }
+}
+
 
     /**
      * Reverse the migrations.

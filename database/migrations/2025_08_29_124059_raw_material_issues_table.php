@@ -29,6 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('raw_material_issues');
+        Schema::enableForeignKeyConstraints();
     }
+    
 };

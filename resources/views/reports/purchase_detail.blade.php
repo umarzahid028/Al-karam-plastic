@@ -45,8 +45,13 @@
             <td>{{ $r->invoice_date }}</td>
             <td>{{ $r->product }}</td>
             <td class="text-end">{{ (float)$r->quantity }}</td>
-            <td class="text-end">{{ number_format($r->unit_price,2) }}</td>
-            <td class="text-end">{{ number_format($r->line_total,2) }}</td>
+            <td class="text-end">
+            
+              {{rtrim(rtrim(number_format($r->unit_price,2), '0'), '.') }}
+            </td>
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($r->line_total,2), '0'), '.') }}
+            </td>
             
           </tr>
         @empty
@@ -58,7 +63,9 @@
         <tr>
           <th colspan="6" class="text-end">Total Purchases</th>
           @isset($total)
-            <th class="text-end">{{ number_format($total,2) }}</th>
+            <th class="text-end">
+              {{rtrim(rtrim(number_format($total,2), '0'), '.') }}
+             </th>
           @else
             <th class="text-end">0.00</th>
           @endisset

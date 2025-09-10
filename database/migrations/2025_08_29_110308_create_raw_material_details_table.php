@@ -26,6 +26,17 @@ return new class extends Migration
 
     public function down(): void
     {
+        // Disable foreign key checks
+        Schema::disableForeignKeyConstraints();
+    
+        // Drop child table first (agar exists)
+        Schema::dropIfExists('raw_material_details');
+    
+        // Drop parent table
         Schema::dropIfExists('raw_materials');
+    
+        // Enable foreign key checks back
+        Schema::enableForeignKeyConstraints();
     }
+    
 };

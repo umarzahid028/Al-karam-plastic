@@ -176,6 +176,34 @@ public function summaryReport()
         'chartPurchases' => $purchaseData,
     ]);
 }
-          
+public function salesReport()
+{
+    // Total Sales from sales_invoices
+    $totalSales = DB::table('sales_invoices')->sum('total_amount');
+
+    // Sales detail with items & product
+    $records = DB::table('sales_invoices as si')
+        ->join('raw_suppliers as rs', 'si.buyer_id', '=', 'rs.id') // customer info
+        ->join('sales_invoice_items as sii', 'si.id', '=', 'sii.sales_invoice_id')
+        ->join('products as p', 'sii.product_id', '=', 'p.id')
+        ->select(
+            'rs.name as customer_name',
+            'rs.company_name as city',
+            'si.invoice_no',
+            'si.invoice_date',
+            'p.product_name as product', // yahan apne products table ka actual column lagana hai
+            'sii.qty',
+            'sii.price',
+            DB::raw('(sii.qty * sii.price) as line_total')
+        )
+        ->orderBy('si.invoice_date', 'desc')
+        ->get();
+
+    return view('reports.sales', [
+        'totalSales' => $totalSales,
+        'records' => $records
+    ]);
+}
+         
     
 }    

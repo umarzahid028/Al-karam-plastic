@@ -104,7 +104,9 @@ thead th {
                                 <option value="on hold"  {{ $s->status == 'on hold' ? 'selected' : '' }}>On Hold</option>
                             </select>
                         </td>
-                        <td>{{ number_format($s->opening_balance, 2) }}</td>
+                        <td>
+                            {{rtrim(rtrim(number_format($s->opening_balance, 2), '0'), '.') }}
+                        </td>
                         <td class="text-center">
                             <a href="/suppliers/{{ $s->id }}" class="btn btn-sm btn-info">View</a>
                         </td>

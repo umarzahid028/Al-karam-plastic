@@ -112,8 +112,14 @@
               <td>{{ $r->invoice_date }}</td>
               <td>{{ $r->product }}</td>
               <td class="text-end">{{ (float)$r->qty }}</td>
-              <td class="text-end">{{ number_format($r->price,2) }}</td>
-              <td class="text-end">{{ number_format($r->line_total,2) }}</td>
+              <td class="text-end">
+                {{rtrim(rtrim(number_format($r->price,2), '0'), '.') }}
+
+              </td>
+              <td class="text-end">
+                {{rtrim(rtrim(number_format($r->line_total,2), '0'), '.') }}
+
+              </td>
             </tr>
           @empty
             <tr><td colspan="8" class="text-center text-muted">No records found</td></tr>
@@ -123,7 +129,10 @@
         <tfoot>
           <tr>
             <td colspan="7" class="text-end">Total Sales</td>
-            <td class="text-end">{{ number_format($total,2) }}</td>
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($total,2), '0'), '.') }}
+
+            </td>
           </tr>
         </tfoot>
         @endif

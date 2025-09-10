@@ -42,9 +42,15 @@
           <tr>
             <td>{{ $r->material_code }}</td>
             <td>{{ $r->material_name }}</td>
-            <td class="text-end">{{ number_format($r->total_purchased,2) }}</td>
-            <td class="text-end">{{ number_format($r->total_sold,2) }}</td>
-            <td class="text-end">{{ number_format($r->current_stock,2) }}</td>
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($r->total_purchased,2), '0'), '.') }}
+            </td>
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($r->total_sold,2), '0'), '.') }}
+            </td>
+            <td class="text-end">
+              {{rtrim(rtrim(number_format($r->current_stock,2), '0'), '.') }}
+          </td>
           </tr>
         @empty
           <tr><td colspan="5" class="text-center text-muted">No products found</td></tr>
@@ -54,9 +60,15 @@
       <tfoot>
         <tr class="fw-bold">
           <td colspan="2" class="text-end">Totals</td>
-          <td class="text-end">{{ number_format($totals['purchased'],2) }}</td>
-          <td class="text-end">{{ number_format($totals['sold'],2) }}</td>
-          <td class="text-end">{{ number_format($totals['stock'],2) }}</td>
+          <td class="text-end">
+            {{rtrim(rtrim(number_format($totals['purchased'],2), '0'), '.') }}
+          </td>
+          <td class="text-end">
+            {{rtrim(rtrim(number_format($totals['sold'],2), '0'), '.') }}
+           </td>
+          <td class="text-end">
+            {{rtrim(rtrim(number_format($totals['stock'],2), '0'), '.') }}
+          </td>
         </tr>
       </tfoot>
       @endif

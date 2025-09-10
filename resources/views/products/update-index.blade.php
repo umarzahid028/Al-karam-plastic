@@ -57,7 +57,7 @@ body {
                     <th>Sale Price</th>
                     <th>Cost Price</th>
                     <th>Stock</th>
-                    {{-- <th>Actions</th> --}}
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,11 +75,11 @@ body {
                         {{rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}
                       </td>
                     <td>{{ $p->current_stock }}</td>
-                    {{-- <td>
+                    <td>
                         <a href="{{ route('products.update', $p->id) }}" class="btn btn-sm btn-info">
                             Edit
                         </a>
-                    </td> --}}
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

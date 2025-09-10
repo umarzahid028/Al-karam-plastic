@@ -103,9 +103,8 @@ thead th {
                         <td>{{ $c->name }}</td>
                         <td>{{ $c->contact_no }}</td>
                         <td>{{ $c->email ?? '-' }}</td>
-                        <td>{{ number_format($c->opening_balance, 2) }}</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select" data-id="{{ $c->id }}">
+                        <td>{{rtrim(rtrim(number_format($c->opening_balance, 2), '0'), '.') }} </td>
+                             <td><select class="form-select form-select-sm status-select" data-id="{{ $c->id }}">
                                 <option value="active"   {{ $c->status == 'active' ? 'selected' : '' }}>Active</option>
                                 <option value="inactive" {{ $c->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                 <option value="onhold"   {{ $c->status == 'onhold' ? 'selected' : '' }}>On Hold</option>

@@ -92,7 +92,9 @@ thead th {
                         <td>{{ $u->name }}</td>
                         <td>{{ $u->email }}</td>
                         <td>{{ $u->contact_no ?? '-' }}</td>
-                        <td>{{ number_format($u->salary, 2) }}</td>
+                        <td>
+                            {{rtrim(rtrim(number_format($u->salary,2), '0'), '.') }}
+                           </td>
                         <td>{{ ucfirst($u->role) }}</td>
                         <td>
                             <select class="form-select form-select-sm status-select" data-id="{{ $u->id }}">

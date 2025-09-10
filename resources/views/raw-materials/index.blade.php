@@ -49,7 +49,9 @@
                         <td>{{ $entry->material_code }}</td>
                         <td>{{ $entry->material_name }}</td>
                         <td>{{ $entry->unit }}</td>
-                        <td>{{ $entry->purchase_price }}</td>
+                        <td>
+                            {{rtrim(rtrim(number_format($entry->purchase_price, 2), '0'), '.') }}
+                        </td>
                         <td>{{ $entry->stocks }}</td>
                         <td>
                             <a href="/raw-material-issues?material_id={{ $entry->id }}" class="btn btn-info btn-sm">View</a>

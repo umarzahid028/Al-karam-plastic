@@ -17,6 +17,13 @@ class ProductController extends Controller
         $products = Product::paginate(5);
         return view('products.index', compact('products'));
     }
+
+    public function indesx() {
+        // 10 products per page
+        $products = Product::paginate(5);
+        return view('products.update-index', compact('products'));
+    }
+
     public function create() {
         return view('products.create');
     }
@@ -99,6 +106,7 @@ class ProductController extends Controller
     $product = Product::with('rawStocks')->findOrFail($id);
     return view('products.update', compact('product'));
 }
+
 
 public function update(Request $request, $id)
 {

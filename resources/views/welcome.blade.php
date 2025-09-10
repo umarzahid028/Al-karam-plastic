@@ -241,7 +241,7 @@
 
       <!-- Row 4 -->
       <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('products.index')}}">
+        <a class="card action-card text-decoration-none" href="{{route('products.update-index')}}">
           <div class="card-body">
             <i class="bi bi-arrow-repeat"></i>
             <div>

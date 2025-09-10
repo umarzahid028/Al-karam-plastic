@@ -25,7 +25,7 @@ Route::post('/products', [ProductController::class, 'store']);
 // web.php
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-
+Route::get('/products', [ProductController::class, 'indesx'])->name('products.update-index');
 // Raw Stocks
 Route::get('/raw-stocks', [RawStockController::class, 'index'])->name('raw-stocks.index');
 Route::get('/raw-stocks/search', [RawStockController::class, 'search']);
@@ -96,6 +96,8 @@ Route::get('/reports/summary', [ReportController::class, 'summaryReport'])->name
 
 Route::get('/reports/purchase-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
 Route::get('/reports/purchase-detail-data', [ReportController::class, 'purchaseDetailReportData'])->name('reports.purchase_detail_data');
+Route::get('/reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
+
 use App\Http\Controllers\ExpenseController;
 
 Route::resource('expenses', ExpenseController::class);
@@ -107,3 +109,17 @@ Route::get('/gate-pass', [GatePassController::class, 'index'])->name('gatepass.i
 Route::get('/gate-pass/create', [GatePassController::class, 'create'])->name('gatepass.create');
 Route::post('/gate-pass/store', [GatePassController::class, 'store'])->name('gatepass.store');
 Route::get('/gate-pass/{id}', [GatePassController::class, 'show'])->name('gatepass.show');
+
+use App\Http\Controllers\PaymentController;
+
+Route::get('/payments', [PaymentController::class,'index'])->name('payments.index');
+Route::post('/payments/customer', [PaymentController::class,'storeCustomer'])->name('payments.customer.store');
+Route::post('/payments/supplier', [PaymentController::class,'storeSupplier'])->name('payments.supplier.store');
+
+Route::get('/reports/customers-outstanding', [PaymentController::class,'customersOutstanding'])->name('reports.customers.outstanding');
+Route::get('/reports/suppliers-outstanding', [PaymentController::class,'suppliersOutstanding'])->name('reports.suppliers.outstanding');
+
+Route::get('/dashboard', [PaymentController::class,'dashboard'])->name('dashboard');
+
+Route::get('/reports/pending-receivables', [PaymentController::class, 'pendingReceivables'])->name('reports.pending_receivables');
+Route::get('/reports/pending-payables', [PaymentController::class, 'pendingPayables'])->name('reports.pending_payables');
