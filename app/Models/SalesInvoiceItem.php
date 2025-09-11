@@ -26,9 +26,20 @@ class SalesInvoiceItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id'); 
     }
+  
+    public function items()
+{
+    return $this->hasMany(SalesInvoiceItem::class, 'sales_invoice_id');
+}
 
-    public function buyer()
-    {
-        return $this->belongsTo(RawSupplier::class, 'buyer_id'); 
-    }
+public function returns()
+{
+    return $this->hasMany(SalesReturn::class, 'sales_invoice_id');
+}
+
+public function buyer()
+{
+    return $this->belongsTo(RawSupplier::class, 'buyer_id'); 
+}
+
 }

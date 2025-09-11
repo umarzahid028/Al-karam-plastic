@@ -24,4 +24,8 @@ class RawMaterial extends Model
     {
         return $this->belongsTo(Store::class);
     }
+    public function purchaseItems()
+    {
+        return $this->hasMany(PurchaseItem::class, 'material_id');
+    }
 }

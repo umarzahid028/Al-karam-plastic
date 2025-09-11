@@ -59,7 +59,8 @@ body { font-family: Arial; background:#f5f7fa; }
                     <td>{{ ucfirst($purchase->status) }}</td>
                     <td>{{ $purchase->description }}</td>
                     <td>
-                        <a href="#" class="btn btn-info btn-sm">Edit</a>
+                        <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
+
                         <form action="#" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')

@@ -300,17 +300,113 @@
       </div>
     </a>
   </div>
+
+
+<!-- Dashboard Cards -->
+
+
+  <!-- Purchase Return Card -->
+  <div class="col-12 col-sm-6 col-lg-4">
+    <a class="card action-card text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#purchaseReturnModal">
+      <div class="card-body">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        <div>
+          <p class="action-title">Purchase Return</p>
+          <p class="action-sub">Return purchased items</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="row g-3">
+  <!-- Sales Return Card -->
+  <div class="col-12 col-sm-6 col-lg-4">
+    <a class="card action-card text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#salesReturnModal">
+      <div class="card-body">
+        <i class="bi bi-arrow-repeat"></i>
+        <div>
+          <p class="action-title">Sales Return</p>
+          <p class="action-sub">Return sold items</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+</div>
+</div>
+<!-- Purchase Return Modal -->
+<div class="modal fade" id="purchaseReturnModal" tabindex="-1" aria-labelledby="purchaseReturnLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('purchase_returns.search.get') }}" method="POST">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="purchaseReturnLabel">Search Purchase Invoice</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          @if(session('error'))
+          <div class="alert alert-danger">{{ session('error') }}</div>
+          @endif
+          <input type="text" name="invoice_no" class="form-control" placeholder="Enter Invoice No" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Your Sales Return Modal -->
+<div class="modal fade" id="salesReturnModal" tabindex="-1" aria-labelledby="salesReturnLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('sales_returns.search') }}" method="POST">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="salesReturnLabel">Search Sales Invoice</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          @if(session('error'))
+          <div class="alert alert-danger">{{ session('error') }}</div>
+          @endif
+          <input type="text" name="invoice_no" class="form-control" placeholder="Enter Invoice Number" required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
-    </div>
-
-  
-
-    
     <div class="py-4"></div>
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Auto open modal if there is an error -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    @if(session('error'))
+    var salesModal = new bootstrap.Modal(document.getElementById('salesReturnModal'));
+    salesModal.show();
+    @endif
+});
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      @if(session('error'))
+      var purchaseModal = new bootstrap.Modal(document.getElementById('purchaseReturnModal'));
+      purchaseModal.show();
+      @endif
+  });
+  </script>
 </body>
 </html>

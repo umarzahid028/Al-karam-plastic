@@ -123,3 +123,34 @@ Route::get('/dashboard', [PaymentController::class,'dashboard'])->name('dashboar
 
 Route::get('/reports/pending-receivables', [PaymentController::class, 'pendingReceivables'])->name('reports.pending_receivables');
 Route::get('/reports/pending-payables', [PaymentController::class, 'pendingPayables'])->name('reports.pending_payables');
+Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
+
+
+use App\Http\Controllers\PurchaseReturnController;
+
+Route::get('/purchase-returns', [PurchaseReturnController::class, 'index'])
+        ->name('purchase_returns.index');
+
+Route::post('/purchase-returns/search', [PurchaseReturnController::class, 'search'])
+        ->name('purchase_returns.search');
+
+Route::post('/purchase-returns/{purchase}', [PurchaseReturnController::class, 'store'])
+        ->name('purchase_returns.store');
+        Route::get('/purchase-returns/search', [PurchaseReturnController::class, 'searchGet'])
+        ->name('purchase_returns.search.get');
+
+        
+        use App\Http\Controllers\SalesReturnController;
+
+        Route::get('/sales-returns', [SalesReturnController::class, 'index'])
+            ->name('sales_returns.index');
+        
+        Route::post('/sales-returns/search', [SalesReturnController::class, 'search'])
+            ->name('sales_returns.search');
+        
+        Route::get('/sales-returns/search', [SalesReturnController::class, 'searchGet'])
+            ->name('sales_returns.search.get');
+        
+        Route::post('/sales-returns/{invoice}', [SalesReturnController::class, 'store'])
+            ->name('sales_returns.store');
+        

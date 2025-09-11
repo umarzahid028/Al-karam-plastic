@@ -27,7 +27,10 @@ public function rawStocks()
 {
     return $this->hasMany(RawStock::class, 'rawpro_id');
 }
-
+public function salesItems()
+    {
+        return $this->hasMany(SalesInvoiceItem::class, 'product_id');
+    }
 public function getCurrentStockAttribute()
 {
     return $this->rawStocks->sum('quantity_in') - $this->rawStocks->sum('quantity_out');

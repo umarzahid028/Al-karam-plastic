@@ -118,4 +118,13 @@ class PurchaseController extends Controller
     public function materials() {
         return response()->json(RawMaterial::all());
     }
+    public function show(Purchase $purchase)
+    {
+        $items = $purchase->items()->with('material')->get();
+        return view('purchases.show', compact('purchase', 'items'));
+    }
+    
+    
+    
+
 }

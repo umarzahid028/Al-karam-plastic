@@ -21,9 +21,25 @@ class PurchaseItem extends Model
     {
         return $this->belongsTo(RawMaterial::class, 'raw_material_id'); // match the column
     }
+    // public function material()
+    // {
+    //     return $this->belongsTo(RawMaterial::class, 'material_id');
+    // }
+    public function material()
+    {
+        return $this->belongsTo(RawMaterial::class, 'raw_material_id', 'id');
+
+    }
 
     public function purchase()
     {
         return $this->belongsTo(Purchase::class);
     }
+ 
+
+public function returnItems()
+{
+    return $this->hasMany(PurchaseReturnItem::class);
+}
+
 }
