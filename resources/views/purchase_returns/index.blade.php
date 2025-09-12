@@ -63,7 +63,11 @@
 </head>
 <body>
 
-    <div class="col-12 col-sm-6 col-lg-4"> <a class="card action-card text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#purchaseReturnModal"> <div class="card-body"> <i class="bi bi-arrow-counterclockwise"></i> <div> <p class="action-title">Purchase Return</p> <p class="action-sub">Return purchased items</p> </div> </div> </a> </div>
+    <div class="col-12 col-sm-6 col-lg-4">
+       <a class="card action-card text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#purchaseReturnModal"> 
+        <div class="card-body"> <i class="bi bi-arrow-counterclockwise"></i> <div>
+           <p class="action-title">Purchase Return</p> <p class="action-sub">Return purchased items</p> </div> 
+          </div> </a> </div>
 
   <!-- Purchase Return Card -->
 

@@ -88,15 +88,25 @@ Route::get('/ledger/create', [LedgerController::class, 'create'])->name('ledger.
 Route::post('/ledger', [LedgerController::class, 'store'])->name('ledger.store');
 
 use App\Http\Controllers\ReportController;
+Route::get('/report/total-sales', [ReportController::class, 'totalSalesReport'])
+    ->name('reports.total_sales');
+    Route::get('/report/returns_sales_report', [ReportController::class, 'salesReturnReport'])
+     ->name('reports.returns_sales_report');
 
-Route::get('/reports/sales-detail', [ReportController::class, 'salesDetailReport'])->name('reports.sales_detail');
-Route::get('/reports/purchases-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
-Route::get('/reports/stock', [ReportController::class, 'stockReport'])->name('reports.stock');
-Route::get('/reports/summary', [ReportController::class, 'summaryReport'])->name('reports.summary');
+     Route::get('/reports/total-purchases',[ReportController::class, 'totalPurchaseReport'])->name('reports.total_purchases');
+ Route::get('/reports/purchase-returns', [ReportController::class, 'totalPurchaseReturnReport'])->name('reports.purchase_returns');
+ Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
+ Route::get('/reports/sales-summary',[ReportController::class, 'salesSummary'])->name('reports.sales_summary');
+ Route::get('/reports/raw-supplier-purchases', [ReportController::class, 'rawSupplierPurchaseSummary'])
+ ->name('reports.raw_supplier_purchase_summary');
+// Route::get('/reports/sales-detail', [ReportController::class, 'salesDetailReport'])->name('reports.sales_detail');
+// Route::get('/reports/purchases-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
+// Route::get('/reports/stock', [ReportController::class, 'stockReport'])->name('reports.stock');
+// Route::get('/reports/summary', [ReportController::class, 'summaryReport'])->name('reports.summary');
 
-Route::get('/reports/purchase-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
-Route::get('/reports/purchase-detail-data', [ReportController::class, 'purchaseDetailReportData'])->name('reports.purchase_detail_data');
-Route::get('/reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
+// Route::get('/reports/purchase-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
+// Route::get('/reports/purchase-detail-data', [ReportController::class, 'purchaseDetailReportData'])->name('reports.purchase_detail_data');
+// Route::get('/reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
 
 use App\Http\Controllers\ExpenseController;
 

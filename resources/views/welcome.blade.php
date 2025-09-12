@@ -177,9 +177,9 @@
           </div>
         </a>
       </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('reports.summary')}}">
+      @include('report.index')
+      {{-- <div class="col-12 col-sm-6 col-lg-4">
+        <a class="card action-card text-decoration-none" href="#">
           <div class="card-body">
             <i class="bi bi-bar-chart-line"></i>
             <div>
@@ -189,6 +189,7 @@
           </div>
         </a>
       </div>
+      --}}
 
       <div class="col-12 col-sm-6 col-lg-4">
         <a class="card action-card text-decoration-none" href="{{route('users.index')}}">

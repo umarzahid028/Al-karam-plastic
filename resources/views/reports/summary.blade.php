@@ -73,12 +73,13 @@
           <div>
             <h6 class="mb-1">Total Purchases</h6>
             <div class="fs-4 fw-bold text-purchases">
-              {{rtrim(rtrim(number_format($totalPurchases,2), '0'), '.') }}
+              {{ number_format($totalPurchases, 0, '.', ',') }}
             </div>
           </div>
         </div>
       </a>
     </div>
+    
 
     <!-- Profit / Loss -->
     <div class="col-md-3">
