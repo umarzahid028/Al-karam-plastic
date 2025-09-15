@@ -87,14 +87,15 @@
           </div>
 
           <div class="modal-body">
-            @if(session('error'))
-              <div class="alert alert-danger">{{ session('error') }}</div>
+            @if(session('purchase_return_error'))
+              <div class="alert alert-danger">{{ session('purchase_return_error') }}</div>
             @endif
             <div class="mb-3">
               <label for="invoice_no" class="form-label">Invoice Number</label>
               <input type="text" id="invoice_no" name="invoice_no" class="form-control" placeholder="Enter Invoice Number" required>
             </div>
-          </div>
+        </div>
+        
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -116,13 +117,14 @@
 
 <!-- Auto open modal if there is an error -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    @if(session('error'))
-      var purchaseModal = new bootstrap.Modal(document.getElementById('purchaseReturnModal'));
-      purchaseModal.show();
-    @endif
-});
-</script>
+  document.addEventListener('DOMContentLoaded', function() {
+      @if(session('purchase_return_error'))
+        var purchaseModal = new bootstrap.Modal(document.getElementById('purchaseReturnModal'));
+        purchaseModal.show();
+      @endif
+  });
+  </script>
+  
 
 </body>
 </html>

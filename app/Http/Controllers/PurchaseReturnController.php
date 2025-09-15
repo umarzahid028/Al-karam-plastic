@@ -45,7 +45,8 @@ class PurchaseReturnController extends Controller
             ->with(['items.rawMaterial', 'returns.items'])
             ->first();
 
-        if (!$purchase) return back()->with('error', 'Invoice not found!');
+            if (!$purchase) return back()->with('purchase_return_error', 'Invoice not found!');
+
 
         $purchase->items = $purchase->items->filter(fn($item) => $item->quantity > 0);
 

@@ -71,9 +71,9 @@
           </div>
 
           <div class="modal-body">
-            @if(session('error'))
-              <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+            @if(session('sales_return_error'))
+            <div class="alert alert-danger">{{ session('sales_return_error') }}</div>
+          @endif
             <div class="mb-3">
               <label for="invoice_no" class="form-label">Invoice Number</label>
               <input type="text" id="invoice_no" name="invoice_no" class="form-control" placeholder="Enter Invoice Number" required>
@@ -100,13 +100,13 @@
 
 <!-- Auto-show modal if error -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    @if(session('error'))
-      var salesModal = new bootstrap.Modal(document.getElementById('salesReturnModal'));
-      salesModal.show();
-    @endif
-});
-</script>
-
+  document.addEventListener('DOMContentLoaded', function() {
+      @if(session('sales_return_error'))
+        var salesModal = new bootstrap.Modal(document.getElementById('salesReturnModal'));
+        salesModal.show();
+      @endif
+  });
+  </script>
+  
 </body>
 </html>
