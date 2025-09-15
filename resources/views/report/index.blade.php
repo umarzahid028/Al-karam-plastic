@@ -65,22 +65,22 @@ body {
             <div class="row g-2"> <!-- g-2 = gap between columns -->
                 <div class="col-12 col-md-6">
                     <a href="#" class="btn btn-outline-primary w-100" data-section="salesSection">
-                        <i class="bi bi-cart"></i> Sales / Purchase Reports
+                        <i class="bi bi-cart"></i> Sales/Pur Report
                     </a>
                 </div>
                 <div class="col-12 col-md-6">
                     <a href="#" class="btn btn-outline-success w-100" data-section="stockSection">
-                        <i class="bi bi-box-seam"></i> Stock Reports
+                        <i class="bi bi-box-seam"></i> Stock Report
                     </a>
                 </div>
                 <div class="col-12 col-md-6">
                     <a href="#" class="btn btn-outline-success w-100" data-section="salemansection">
-                        <i class="bi bi-box-seam"></i> Sale man
+                        <i class="bi bi-box-seam"></i> Saleman Report
                     </a>
                 </div>
                 <div class="col-12 col-md-6">
                     <a href="#" class="btn btn-outline-success w-100" data-section="stockSection">
-                        <i class="bi bi-box-seam"></i> ACCS
+                        <i class="bi bi-box-seam"></i> ACCS Report
                     </a>
                 </div>
             </div>

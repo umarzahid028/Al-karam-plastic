@@ -197,95 +197,6 @@ public function totalPurchaseReturnReport(Request $request)
     ]);
 }
 
-public function salesSummary(Request $request)
-{
-    $type = $request->input('type', 'customer'); // customer or raw_supplier
-    $from = $request->input('from_date', null);
-    $to   = $request->input('to_date', null);
-    $week = $request->input('week', null); // new week input
-
-    // if week is selected, calculate start and end dates
-    if ($week) {
-        [$year, $weekNumber] = explode('-W', $week);
-        $from = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek()->toDateString();
-        $to   = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek()->toDateString();
-    } else {
-        $from = $from ?? Carbon::now()->startOfMonth()->toDateString();
-        $to   = $to   ?? Carbon::now()->endOfMonth()->toDateString();
-    }
-
-    if ($type === 'raw_supplier') {
-        // Raw Supplier Sales
-        $sales = DB::table('sales_invoices as si')
-            ->join('raw_suppliers as s', 'si.buyer_id', '=', 's.id')
-            ->join('sales_invoice_items as sii', 'si.id', '=', 'sii.sales_invoice_id')
-            ->select(
-                'si.id',
-                'si.invoice_no',
-                'si.invoice_date',
-                's.company_name as party_name',
-                's.email as party_email',
-                's.contact_no as party_phone',
-                DB::raw('SUM(sii.qty) as total_qty'),
-                DB::raw('SUM(sii.total) as gross_amount'),
-                DB::raw('SUM(si.total_amount) as net_amount')
-            )
-            ->whereBetween('si.invoice_date', [$from, $to])
-            ->groupBy(
-                'si.id','si.invoice_no','si.invoice_date',
-                's.company_name','s.email','s.contact_no'
-            )
-            ->orderByDesc('si.invoice_date')
-            ->get();
-
-        $totalDiscount = Schema::hasColumn('sales_invoices','discount')
-            ? DB::table('sales_invoices')->whereBetween('invoice_date', [$from, $to])->sum('discount')
-            : 0;
-
-        $totalTax = Schema::hasColumn('sales_invoices','tax')
-            ? DB::table('sales_invoices')->whereBetween('invoice_date', [$from, $to])->sum('tax')
-            : 0;
-
-    } else {
-        // Customer Sales
-        $sales = DB::table('customer_invoices as ci')
-            ->join('customers as c', 'ci.buyer_id', '=', 'c.id')
-            ->join('customer_invoice_items as cii', 'ci.id', '=', 'cii.customer_invoice_id')
-            ->select(
-                'ci.id',
-                'ci.invoice_no',
-                'ci.invoice_date',
-                'c.name as party_name',
-                'c.email as party_email',
-                'c.contact_no as party_phone',
-                DB::raw('SUM(cii.qty) as total_qty'),
-                DB::raw('SUM(cii.total) as gross_amount'),
-                DB::raw('SUM(ci.total_amount) as net_amount')
-            )
-            ->whereBetween('ci.invoice_date', [$from, $to])
-            ->groupBy(
-                'ci.id','ci.invoice_no','ci.invoice_date',
-                'c.name','c.email','c.contact_no'
-            )
-            ->orderByDesc('ci.invoice_date')
-            ->get();
-
-        $totalDiscount = Schema::hasColumn('customer_invoices','discount')
-            ? DB::table('customer_invoices')->whereBetween('invoice_date', [$from, $to])->sum('discount')
-            : 0;
-
-        $totalTax = Schema::hasColumn('customer_invoices','tax')
-            ? DB::table('customer_invoices')->whereBetween('invoice_date', [$from, $to])->sum('tax')
-            : 0;
-    }
-
-    $grossTotal = $sales->sum('gross_amount');
-    $grandTotal = $sales->sum('net_amount');
-
-    return view('report.sales_summary', compact(
-        'type','from','to','week','grossTotal','totalDiscount','totalTax','grandTotal','sales'
-    ));
-}
 
 public function rawSupplierPurchaseSummary(Request $request)
 {
@@ -430,4 +341,5 @@ public function ordersSummary(Request $request)
     // Pass everything to the Blade view
     return view('report.orders_summary', compact('from', 'to', 'bySupplier', 'totals'));
 }
+
 }
