@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Purchase Summary Report</title>
+<title>Orders Summary Report</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -10,84 +10,90 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 
 <style>
-body { background:#f8f9fa; font-family:Arial,sans-serif; }
-.container { margin-top:40px; }
-h3 { margin-bottom:20px; }
+body         { background:#f8f9fa; font-family:Arial,sans-serif; }
+.container   { margin-top:40px; }
+h3           { margin-bottom:20px; }
 .table thead { background:#0d6efd; color:#fff; }
 .table-hover tbody tr:hover { background:#f1f1f1; }
 .summary-box strong { display:block; font-size:1.1rem; }
-.items-list { font-size:0.9rem; color:#555; }
 </style>
 </head>
 <body>
 <div class="container">
-    <h3>Raw Supplier Purchase Summary</h3>
+    <h3>Orders Summary Report</h3>
 
     <!-- Filters -->
     <div class="card mb-3 p-3">
-        <form method="GET" class="row g-2">
+        <form method="GET" class="row g-2 align-items-end">
+            {{-- From Date --}}
             <div class="col-md-3">
+                <label class="form-label">From</label>
                 <input type="date" name="from_date" value="{{ $from }}" class="form-control">
             </div>
+
+            {{-- To Date --}}
             <div class="col-md-3">
+                <label class="form-label">To</label>
                 <input type="date" name="to_date" value="{{ $to }}" class="form-control">
             </div>
+
+            {{-- Week Picker --}}
             <div class="col-md-3">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search Supplier / Invoice">
+                <label class="form-label">Week</label>
+                <input type="week"
+                       name="week"
+                       value="{{ request('week') }}"
+                       class="form-control">
             </div>
+
+            {{-- Action Buttons --}}
             <div class="col-md-3 d-flex gap-2">
                 <button class="btn btn-primary flex-fill">Filter</button>
-                <a href="{{ route('reports.raw_supplier_purchase_summary') }}" class="btn btn-outline-danger flex-fill">Reset</a>
+                <a href="{{ route('report.orders_summary') }}"
+                   class="btn btn-outline-danger flex-fill">Reset</a>
+            </div>
+
+            {{-- Global Search --}}
+            <div class="col-6 mt-2">
+                <input type="text"
+                       id="searchInput"
+                       class="form-control"
+                       placeholder="Search Supplier / Status / Code / Material">
             </div>
         </form>
     </div>
 
-    <!-- Totals -->
+    <!-- Totals Summary -->
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-6"><strong>Gross Amount:</strong> {{ number_format($grossTotal,2) }}</div>
-        <div class="col-md-6"><strong>Paid Amount:</strong> {{ number_format($paidTotal,2) }}</div>
+        <div class="col-md-3"><strong>Total Orders:</strong> {{ $totals->total_orders }}</div>
+        <div class="col-md-3 text-warning"><strong>Pending:</strong> {{ $totals->pending_orders }}</div>
+        <div class="col-md-3 text-success"><strong>Completed:</strong> {{ $totals->completed_orders }}</div>
+        <div class="col-md-3"><strong>Grand Total:</strong> {{ number_format($totals->grand_total,2) }}</div>
     </div>
 
-    <!-- Purchases Table -->
+    <!-- DataTable -->
     <div class="table-responsive">
-        <table id="purchaseTable" class="table table-bordered table-hover table-striped">
+        <table id="orderTable" class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Invoice #</th>
                     <th>Supplier</th>
-                    <th>Payment Method</th>
-                    <th>Status</th>
+                    <th>Total Orders</th>
+                    <th>Pending</th>
+                    <th>Completed</th>
                     <th>Total Amount</th>
-                    <th>Paid Amount</th>
-                    <th>Items</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($purchases as $purchase)
+                @foreach($bySupplier as $row)
                 <tr>
-                    <td>{{ $purchase->purchase_date }}</td>
-                    <td>{{ $purchase->invoice_no }}</td>
-                    <td>{{ $purchase->supplier_name }}</td>
-                    <td>{{ $purchase->payment_method }}</td>
-                    <td>{{ $purchase->status }}</td>
-                    <td>{{ number_format($purchase->total_amount,2) }}</td>
-                    <td>{{ number_format($purchase->paid_amount,2) }}</td>
-                    <td>
-                        @if(isset($purchaseItems[$purchase->id]))
-                            <ul class="items-list">
-                            @foreach($purchaseItems[$purchase->id] as $item)
-                                <li>{{ $item->material_name }} ({{ $item->quantity }} x {{ $item->unit_price }} = {{ $item->total_price }})</li>
-                            @endforeach
-                            </ul>
-                        @else
-                            -
-                        @endif
-                    </td>
+                    <td>{{ $row->supplier }}</td>
+                    <td>{{ $row->total_orders }}</td>
+                    <td>{{ $row->pending_orders }}</td>
+                    <td>{{ $row->completed_orders }}</td>
+                    <td>{{ number_format($row->total_amount,2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
-            
         </table>
     </div>
 </div>
@@ -106,10 +112,10 @@ h3 { margin-bottom:20px; }
 
 <script>
 $(function(){
-    var table = $('#purchaseTable').DataTable({
+    var table = $('#orderTable').DataTable({
         paging:true,
         ordering:true,
-        order:[[0,'desc']],
+        order:[[0,'asc']],
         pageLength:25,
         responsive:true,
         dom:'Bfrtip',

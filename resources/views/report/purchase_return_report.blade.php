@@ -28,6 +28,11 @@ h3 { margin-bottom:20px; }
             <div class="col-md-3">
                 <input type="date" name="to_date" value="{{ $toDate }}" class="form-control" placeholder="To Date">
             </div>
+            <!-- Inside your filter form -->
+<div class="col-md-3">
+    <input type="week" name="week" value="{{ $week ?? '' }}" class="form-control" placeholder="Select Week">
+</div>
+
             <div class="col-md-3">
                 <input type="text" id="searchInput" class="form-control" placeholder="Search Supplier / Invoice">
             </div>

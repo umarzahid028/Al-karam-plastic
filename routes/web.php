@@ -99,6 +99,10 @@ Route::get('/report/total-sales', [ReportController::class, 'totalSalesReport'])
  Route::get('/reports/sales-summary',[ReportController::class, 'salesSummary'])->name('reports.sales_summary');
  Route::get('/reports/raw-supplier-purchases', [ReportController::class, 'rawSupplierPurchaseSummary'])
  ->name('reports.raw_supplier_purchase_summary');
+ Route::get('/reports/raw_material_item_report', [ReportController::class, 'rawMaterialItemReport'])
+ ->name('reports.raw_material_item_report');
+ Route::get('/reports/orders_summary', [ReportController::class, 'ordersSummary'])
+ ->name('report.orders_summary');
 // Route::get('/reports/sales-detail', [ReportController::class, 'salesDetailReport'])->name('reports.sales_detail');
 // Route::get('/reports/purchases-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
 // Route::get('/reports/stock', [ReportController::class, 'stockReport'])->name('reports.stock');

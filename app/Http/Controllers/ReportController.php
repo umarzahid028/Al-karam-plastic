@@ -145,22 +145,22 @@ public function totalPurchaseReport(Request $request)
     ]);
 }
 
-
 public function totalPurchaseReturnReport(Request $request)
 {
     $fromDate = $request->from_date ? Carbon::parse($request->from_date) : null;
     $toDate   = $request->to_date ? Carbon::parse($request->to_date) : null;
+    $week     = $request->week ?? null; // new week input
 
     $query = DB::table('purchase_returns')
         ->join('purchase_return_items','purchase_returns.id','=','purchase_return_items.purchase_return_id')
         ->join('purchase_items','purchase_return_items.purchase_item_id','=','purchase_items.id')
         ->join('raw_materials','purchase_items.raw_material_id','=','raw_materials.id')
-        ->join('purchases','purchase_returns.purchase_id','=','purchases.id')   // <-- join purchases
+        ->join('purchases','purchase_returns.purchase_id','=','purchases.id')
         ->join('raw_suppliers','purchases.supplier_id','=','raw_suppliers.id')
         ->select(
             'purchase_returns.return_date',
             'purchase_returns.remarks',
-            'purchases.invoice_no',                    // <-- make sure this is here
+            'purchases.invoice_no',
             'raw_suppliers.company_name as supplier_name',
             'raw_materials.material_name',
             'purchase_return_items.quantity',
@@ -169,11 +169,20 @@ public function totalPurchaseReturnReport(Request $request)
         )
         ->orderBy('purchase_returns.return_date','desc');
 
-    if ($fromDate) {
-        $query->whereDate('purchase_returns.return_date','>=',$fromDate);
-    }
-    if ($toDate) {
-        $query->whereDate('purchase_returns.return_date','<=',$toDate);
+    // Apply week filter if selected
+    if ($week) {
+        // week format: YYYY-Www
+        [$year, $weekNumber] = explode('-W', $week);
+        $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
+        $endOfWeek   = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek();
+        $query->whereBetween('purchase_returns.return_date', [$startOfWeek, $endOfWeek]);
+    } else {
+        if ($fromDate) {
+            $query->whereDate('purchase_returns.return_date','>=',$fromDate);
+        }
+        if ($toDate) {
+            $query->whereDate('purchase_returns.return_date','<=',$toDate);
+        }
     }
 
     $returns = $query->get();
@@ -184,14 +193,26 @@ public function totalPurchaseReturnReport(Request $request)
         'grandTotal' => $grandTotal,
         'fromDate'   => $fromDate?->format('Y-m-d'),
         'toDate'     => $toDate?->format('Y-m-d'),
+        'week'       => $week, // pass week to the view
     ]);
 }
 
 public function salesSummary(Request $request)
 {
     $type = $request->input('type', 'customer'); // customer or raw_supplier
-    $from = $request->input('from_date', Carbon::now()->startOfMonth()->toDateString());
-    $to   = $request->input('to_date',   Carbon::now()->endOfMonth()->toDateString());
+    $from = $request->input('from_date', null);
+    $to   = $request->input('to_date', null);
+    $week = $request->input('week', null); // new week input
+
+    // if week is selected, calculate start and end dates
+    if ($week) {
+        [$year, $weekNumber] = explode('-W', $week);
+        $from = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek()->toDateString();
+        $to   = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek()->toDateString();
+    } else {
+        $from = $from ?? Carbon::now()->startOfMonth()->toDateString();
+        $to   = $to   ?? Carbon::now()->endOfMonth()->toDateString();
+    }
 
     if ($type === 'raw_supplier') {
         // Raw Supplier Sales
@@ -262,59 +283,151 @@ public function salesSummary(Request $request)
     $grandTotal = $sales->sum('net_amount');
 
     return view('report.sales_summary', compact(
-        'type','from','to','grossTotal','totalDiscount','totalTax','grandTotal','sales'
+        'type','from','to','week','grossTotal','totalDiscount','totalTax','grandTotal','sales'
     ));
 }
+
 public function rawSupplierPurchaseSummary(Request $request)
 {
-    // 1️⃣ Inputs
-    $from = $request->input('from_date', Carbon::now()->startOfMonth()->toDateString());
-    $to   = $request->input('to_date', Carbon::now()->endOfMonth()->toDateString());
+    // ✅ Agar user ne dates bheji hain to unka use karo, warna current month
+    $from = $request->input('from_date');
+    $to   = $request->input('to_date');
 
-    // 2️⃣ Query: Raw Supplier Purchases
+    if (!$from || !$to) {
+        $from = Carbon::now()->startOfMonth()->toDateString();
+        $to   = Carbon::now()->endOfMonth()->toDateString();
+    }
+
+    // 1️⃣ Purchases with supplier (LEFT JOIN so missing supplier bhi aaye)
     $purchases = DB::table('purchases as p')
-        ->join('raw_suppliers as s', 'p.supplier_id', '=', 's.id')
-        ->join('purchase_items as pi', 'p.id', '=', 'pi.purchase_id')
+        ->leftJoin('raw_suppliers as s', 'p.supplier_id', '=', 's.id')
         ->select(
             'p.id',
             'p.invoice_no',
             'p.purchase_date',
             's.company_name as supplier_name',
-            's.email as supplier_email',
-            's.contact_no as supplier_phone',
-            DB::raw('SUM(pi.quantity) as total_qty'),
-            DB::raw('SUM(pi.total_price) as gross_amount'),
-            DB::raw('SUM(p.total_amount) as net_amount')
+            'p.payment_method',
+            'p.total_amount',
+            'p.paid_amount',
+            'p.status'
         )
         ->whereBetween('p.purchase_date', [$from, $to])
-        ->groupBy(
-            'p.id',
-            'p.invoice_no',
-            'p.purchase_date',
-            's.company_name',
-            's.email',
-            's.contact_no'
-        )
         ->orderByDesc('p.purchase_date')
         ->get();
 
+    // 2️⃣ Purchase items group by purchase
+    $purchaseItems = DB::table('purchase_items as pi')
+        ->join('raw_materials as rm', 'pi.raw_material_id', '=', 'rm.id')
+        ->select(
+            'pi.purchase_id',
+            'rm.material_name',
+            'pi.quantity',
+            'pi.unit_price',
+            'pi.total_price'
+        )
+        ->whereIn('pi.purchase_id', $purchases->pluck('id'))
+        ->get()
+        ->groupBy('purchase_id');
+
     // 3️⃣ Totals
-    $grossTotal = $purchases->sum('gross_amount');
-    $grandTotal = $purchases->sum('net_amount');
+    $grossTotal = $purchases->sum('total_amount');
+    $paidTotal  = $purchases->sum('paid_amount');
 
-    $totalDiscount = Schema::hasColumn('purchases','discount')
-        ? DB::table('purchases')->whereBetween('purchase_date', [$from, $to])->sum('discount')
-        : 0;
-
-    $totalTax = Schema::hasColumn('purchases','tax')
-        ? DB::table('purchases')->whereBetween('purchase_date', [$from, $to])->sum('tax')
-        : 0;
-
-    // 4️⃣ Return view
     return view('report.raw_supplier_purchase_summary', compact(
-        'from', 'to',
-        'grossTotal', 'totalDiscount', 'totalTax', 'grandTotal',
-        'purchases'
+        'from', 'to', 'purchases', 'purchaseItems', 'grossTotal', 'paidTotal'
     ));
+}
+public function rawMaterialItemReport(Request $request)
+{
+    $from = $request->input('from_date', Carbon::now()->startOfMonth()->toDateString());
+    $to   = $request->input('to_date',   Carbon::now()->endOfMonth()->toDateString());
+// 👉 NEW: Week filter
+if ($request->filled('week')) {
+    // HTML <input type="week"> ka format hota hai: YYYY-Www (e.g. 2025-W37)
+    [$year, $week] = explode('-W', $request->week);
+
+    // Week start (Monday) aur end (Sunday) nikalne ke liye Carbon helper
+    $startOfWeek = Carbon::now()->setISODate($year, $week)->startOfWeek();
+    $endOfWeek   = Carbon::now()->setISODate($year, $week)->endOfWeek();
+
+    $from = $startOfWeek->toDateString();
+    $to   = $endOfWeek->toDateString();
+}
+    $report = DB::table('raw_materials as rm')
+        ->leftJoin('raw_material_issue_items as rii', 'rm.id', '=', 'rii.rawpro_id')
+        ->leftJoin('raw_material_issues as ri', 'rii.issue_id', '=', 'ri.id')
+        ->leftJoin('stores as s', 'rm.store_id', '=', 's.id')
+        ->select(
+            'rm.id',
+            'rm.material_code',
+            'rm.material_name',
+            'rm.unit',
+            'rm.stocks as opening_stock',
+            DB::raw('COALESCE(SUM(rii.qty),0) as total_issued'),
+            DB::raw('MAX(ri.issue_date) as last_issue_date'),
+            DB::raw('MAX(s.store_name) as store_name'),
+            // issued_by and approved_by are plain text columns in raw_material_issues
+            DB::raw('MAX(ri.issued_by) as issued_by'),
+            DB::raw('MAX(ri.approved_by) as approved_by'),
+            // make sure closing never goes below zero
+            DB::raw('GREATEST(rm.stocks - COALESCE(SUM(rii.qty),0), 0) as closing_stock')
+        )
+        ->whereBetween('ri.issue_date', [$from, $to])
+        ->groupBy(
+            'rm.id',
+            'rm.material_code',
+            'rm.material_name',
+            'rm.unit',
+            'rm.stocks',
+            's.store_name'
+        )
+        ->orderBy('rm.material_name')
+        ->get();
+
+    return view('report.raw_material_item_report', compact('from', 'to', 'report'));
+}
+
+
+public function ordersSummary(Request $request)
+{
+    // Default date range: first to last day of the current month
+    $from = $request->input('from_date', now()->startOfMonth()->toDateString());
+    $to   = $request->input('to_date',   now()->endOfMonth()->toDateString());
+
+    // ✅ Optional Week filter (HTML <input type="week"> returns e.g. "2025-W37")
+    if ($request->filled('week')) {
+        [$year, $week] = explode('-W', $request->week);
+
+        // Get Monday-to-Sunday range for that ISO week
+        $from = Carbon::now()->setISODate($year, $week)->startOfWeek()->toDateString();
+        $to   = Carbon::now()->setISODate($year, $week)->endOfWeek()->toDateString();
+    }
+
+    // ✅ Group orders by supplier and count totals
+    $bySupplier = DB::table('sales_invoices as si')
+        ->join('raw_suppliers as rs', 'rs.id', '=', 'si.buyer_id')
+        ->selectRaw("
+            rs.company_name AS supplier,
+            COUNT(*) AS total_orders,
+            SUM(CASE WHEN si.status = 'pending' THEN 1 ELSE 0 END) AS pending_orders,
+            -- Treat both 'completed' and 'paid' as completed
+            SUM(CASE WHEN si.status IN ('completed','paid') THEN 1 ELSE 0 END) AS completed_orders,
+            SUM(si.total_amount) AS total_amount
+        ")
+        ->whereBetween('si.invoice_date', [$from, $to])
+        ->groupBy('rs.company_name')
+        ->orderBy('rs.company_name')
+        ->get();
+
+    // ✅ Overall totals for the summary boxes in the Blade view
+    $totals = (object) [
+        'total_orders'     => $bySupplier->sum('total_orders'),
+        'pending_orders'   => $bySupplier->sum('pending_orders'),
+        'completed_orders' => $bySupplier->sum('completed_orders'),
+        'grand_total'      => $bySupplier->sum('total_amount'),
+    ];
+
+    // Pass everything to the Blade view
+    return view('report.orders_summary', compact('from', 'to', 'bySupplier', 'totals'));
 }
 }
