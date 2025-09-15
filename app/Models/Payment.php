@@ -26,7 +26,7 @@ class Payment extends Model
 
     public function customer()
     {
-        return $this->belongsTo(\App\Models\Buyer::class, 'party_id');
+        return $this->belongsTo(\App\Models\RawSupplier::class, 'party_id');
     }
 
     public function supplier()

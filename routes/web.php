@@ -96,13 +96,31 @@ Route::get('/report/total-sales', [ReportController::class, 'totalSalesReport'])
      Route::get('/reports/total-purchases',[ReportController::class, 'totalPurchaseReport'])->name('reports.total_purchases');
  Route::get('/reports/purchase-returns', [ReportController::class, 'totalPurchaseReturnReport'])->name('reports.purchase_returns');
  Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
+ 
  Route::get('/reports/sales-summary',[ReportController::class, 'salesSummary'])->name('reports.sales_summary');
+ 
  Route::get('/reports/raw-supplier-purchases', [ReportController::class, 'rawSupplierPurchaseSummary'])
  ->name('reports.raw_supplier_purchase_summary');
+ 
  Route::get('/reports/raw_material_item_report', [ReportController::class, 'rawMaterialItemReport'])
  ->name('reports.raw_material_item_report');
+ 
  Route::get('/reports/orders_summary', [ReportController::class, 'ordersSummary'])
  ->name('report.orders_summary');
+ 
+ Route::get('/report/stock', [ReportController::class, 'stockReport'])
+ ->name('reports.stock');
+ 
+ Route::get('/report/sale_stock', [ReportController::class, 'saleStockReport'])
+ ->name('reports.sale_stock_report');
+ 
+ Route::get('/reports/sale-sheet', [ReportController::class, 'saleSheetReport'])->name('reports.sale_sheet');
+ 
+ Route::get('/reports/ledger', [ReportController::class, 'ledgerReport'])
+ ->name('reports.ledger');
+ // web.php
+Route::get('/reports/payments', [ReportController::class, 'paymentsReport'])->name('reports.payments');
+
 // Route::get('/reports/sales-detail', [ReportController::class, 'salesDetailReport'])->name('reports.sales_detail');
 // Route::get('/reports/purchases-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');
 // Route::get('/reports/stock', [ReportController::class, 'stockReport'])->name('reports.stock');

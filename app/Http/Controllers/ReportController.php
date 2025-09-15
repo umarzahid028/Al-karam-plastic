@@ -342,4 +342,218 @@ public function ordersSummary(Request $request)
     return view('report.orders_summary', compact('from', 'to', 'bySupplier', 'totals'));
 }
 
+public function salesSummary(Request $request)
+{
+    $type = $request->input('type', 'customer'); // customer or raw_supplier
+    $from = $request->input('from_date', null);
+    $to   = $request->input('to_date', null);
+    $week = $request->input('week', null); // new week input
+
+    // if week is selected, calculate start and end dates
+    if ($week) {
+        [$year, $weekNumber] = explode('-W', $week);
+        $from = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek()->toDateString();
+        $to   = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek()->toDateString();
+    } else {
+        $from = $from ?? Carbon::now()->startOfMonth()->toDateString();
+        $to   = $to   ?? Carbon::now()->endOfMonth()->toDateString();
+    }
+
+    if ($type === 'raw_supplier') {
+        // Raw Supplier Sales
+        $sales = DB::table('sales_invoices as si')
+            ->join('raw_suppliers as s', 'si.buyer_id', '=', 's.id')
+            ->join('sales_invoice_items as sii', 'si.id', '=', 'sii.sales_invoice_id')
+            ->select(
+                'si.id',
+                'si.invoice_no',
+                'si.invoice_date',
+                's.company_name as party_name',
+                's.email as party_email',
+                's.contact_no as party_phone',
+                DB::raw('SUM(sii.qty) as total_qty'),
+                DB::raw('SUM(sii.total) as gross_amount'),
+                DB::raw('SUM(si.total_amount) as net_amount')
+            )
+            ->whereBetween('si.invoice_date', [$from, $to])
+            ->groupBy(
+                'si.id','si.invoice_no','si.invoice_date',
+                's.company_name','s.email','s.contact_no'
+            )
+            ->orderByDesc('si.invoice_date')
+            ->get();
+
+        $totalDiscount = Schema::hasColumn('sales_invoices','discount')
+            ? DB::table('sales_invoices')->whereBetween('invoice_date', [$from, $to])->sum('discount')
+            : 0;
+
+        $totalTax = Schema::hasColumn('sales_invoices','tax')
+            ? DB::table('sales_invoices')->whereBetween('invoice_date', [$from, $to])->sum('tax')
+            : 0;
+
+    } else {
+        // Customer Sales
+        $sales = DB::table('customer_invoices as ci')
+            ->join('customers as c', 'ci.buyer_id', '=', 'c.id')
+            ->join('customer_invoice_items as cii', 'ci.id', '=', 'cii.customer_invoice_id')
+            ->select(
+                'ci.id',
+                'ci.invoice_no',
+                'ci.invoice_date',
+                'c.name as party_name',
+                'c.email as party_email',
+                'c.contact_no as party_phone',
+                DB::raw('SUM(cii.qty) as total_qty'),
+                DB::raw('SUM(cii.total) as gross_amount'),
+                DB::raw('SUM(ci.total_amount) as net_amount')
+            )
+            ->whereBetween('ci.invoice_date', [$from, $to])
+            ->groupBy(
+                'ci.id','ci.invoice_no','ci.invoice_date',
+                'c.name','c.email','c.contact_no'
+            )
+            ->orderByDesc('ci.invoice_date')
+            ->get();
+
+        $totalDiscount = Schema::hasColumn('customer_invoices','discount')
+            ? DB::table('customer_invoices')->whereBetween('invoice_date', [$from, $to])->sum('discount')
+            : 0;
+
+        $totalTax = Schema::hasColumn('customer_invoices','tax')
+            ? DB::table('customer_invoices')->whereBetween('invoice_date', [$from, $to])->sum('tax')
+            : 0;
+    }
+
+    $grossTotal = $sales->sum('gross_amount');
+    $grandTotal = $sales->sum('net_amount');
+
+    return view('report.sales_summary', compact(
+        'type','from','to','week','grossTotal','totalDiscount','totalTax','grandTotal','sales'
+    ));
+}
+
+public function stockReport(Request $request)
+{
+    $fromDate = $request->from_date ? Carbon::parse($request->from_date) : null;
+    $toDate   = $request->to_date ? Carbon::parse($request->to_date) : null;
+
+    // Get stock movements
+    $stocks = DB::table('raw_stocks')
+        ->join('raw_materials', 'raw_stocks.rawpro_id', '=', 'raw_materials.id')
+        ->leftJoin('raw_stock_logs', 'raw_stocks.rawpro_id', '=', 'raw_stock_logs.rawpro_id')
+        ->select(
+            'raw_materials.material_name',
+            DB::raw('SUM(raw_stocks.quantity_in) as total_in'),
+            DB::raw('SUM(raw_stocks.quantity_out) as total_out'),
+            DB::raw('AVG(raw_stock_logs.price) as avg_price') // average purchase price
+        )
+        ->groupBy('raw_stocks.rawpro_id', 'raw_materials.material_name')
+        ->orderBy('raw_materials.material_name')
+        ->get();
+
+    return view('report.stock_report', [
+        'stocks' => $stocks,
+        'fromDate' => $fromDate?->format('Y-m-d'),
+        'toDate' => $toDate?->format('Y-m-d'),
+    ]);
+}
+public function saleStockReport(Request $request)
+{
+    $fromDate = $request->from_date ? Carbon::parse($request->from_date) : null;
+    $toDate   = $request->to_date ? Carbon::parse($request->to_date) : null;
+
+    // Total sold per material
+    $soldQuery = DB::table('sales_invoice_items as sii')
+        ->join('products as p', 'sii.product_id', '=', 'p.id')
+        ->select(
+            'p.id as product_id',
+            'p.product_name',
+            DB::raw('SUM(sii.qty) as total_sold'),
+            DB::raw('p.cost_price as purchase_price')
+        )
+        ->groupBy('p.id', 'p.product_name', 'p.cost_price');
+
+    if ($fromDate) $soldQuery->whereDate('sii.created_at', '>=', $fromDate);
+    if ($toDate)   $soldQuery->whereDate('sii.created_at', '<=', $toDate);
+
+    $sold = $soldQuery->get();
+
+    // Sirf sold materials hi report me laao
+    $stocks = [];
+    foreach ($sold as $s) {
+        $stocks[] = (object)[
+            'material_name' => $s->product_name,
+            'total_in' => $s->total_sold,
+            'total_out' => $s->total_sold,
+            'current_stock' => 0,
+            'purchase_price' => $s->purchase_price,
+            'stock_value' => $s->total_sold * $s->purchase_price
+        ];
+    }
+
+    // Convert array to collection taake blade me sum(), count() use ho sake
+    $stocks = collect($stocks);
+
+    return view('report.sale_stock_report', compact('stocks'));
+}
+public function saleSheetReport(Request $request)
+{
+    $fromDate = $request->from_date ? Carbon::parse($request->from_date) : null;
+    $toDate   = $request->to_date ? Carbon::parse($request->to_date) : null;
+
+    $sales = DB::table('sales_invoices as si')
+    ->join('sales_invoice_items as sii', 'si.id', '=', 'sii.sales_invoice_id')
+    ->join('products as p', 'sii.product_id', '=', 'p.id')
+    ->join('customers as c', 'si.buyer_id', '=', 'c.id')
+    ->select(
+        'si.invoice_no',
+        'si.invoice_date',
+        'c.name as buyer_name',
+        'p.product_name',
+        'sii.qty',
+        DB::raw('p.sale_price as rate'),           // use sale_price from products
+        DB::raw('sii.qty * p.sale_price as total') // calculate total
+    )
+    ->when($fromDate, fn($q) => $q->whereDate('si.invoice_date', '>=', $fromDate))
+    ->when($toDate, fn($q) => $q->whereDate('si.invoice_date', '<=', $toDate))
+    ->orderBy('si.invoice_date', 'desc')
+    ->get();
+
+    return view('report.sale_sheet', compact('sales', 'fromDate', 'toDate'));
+}
+public function ledgerReport(Request $request)
+{
+    $fromDate = $request->from_date ? Carbon::parse($request->from_date) : null;
+    $toDate   = $request->to_date ? Carbon::parse($request->to_date) : null;
+
+    $query = DB::table('ledgers')
+        ->select('invoice_date', 'party_id', 'description', 'debit', 'credit')
+        ->orderBy('invoice_date', 'asc');
+
+    if ($fromDate) $query->whereDate('invoice_date', '>=', $fromDate);
+    if ($toDate)   $query->whereDate('invoice_date', '<=', $toDate);
+
+    $ledgers = $query->get();
+
+    return view('report.ledger_report', compact('ledgers', 'fromDate', 'toDate'));
+}
+public function paymentsReport(Request $request)
+{
+    $fromDate = $request->from_date ? Carbon::parse($request->from_date) : null;
+    $toDate   = $request->to_date ? Carbon::parse($request->to_date) : null;
+
+    $payments = DB::table('ledgers')
+        ->where('ref_type', 'payment') // only payments
+        ->when($fromDate, fn($q) => $q->whereDate('invoice_date', '>=', $fromDate))
+        ->when($toDate, fn($q) => $q->whereDate('invoice_date', '<=', $toDate))
+        ->orderBy('invoice_date', 'asc')
+        ->get();
+
+    return view('report.payments', [
+        'payments' => $payments,
+        'fromDate' => $fromDate,
+        'toDate'   => $toDate,
+    ]);
+}
+
 }

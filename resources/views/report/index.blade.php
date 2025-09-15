@@ -62,28 +62,29 @@ body {
 
         <!-- MAIN MENU -->
         <div id="mainMenu" class="report-buttons text-center">
-            <div class="row g-2"> <!-- g-2 = gap between columns -->
-                <div class="col-12 col-md-6">
-                    <a href="#" class="btn btn-outline-primary w-100" data-section="salesSection">
-                        <i class="bi bi-cart"></i> Sales/Pur Report
-                    </a>
-                </div>
-                <div class="col-12 col-md-6">
-                    <a href="#" class="btn btn-outline-success w-100" data-section="stockSection">
-                        <i class="bi bi-box-seam"></i> Stock Report
-                    </a>
-                </div>
-                <div class="col-12 col-md-6">
-                    <a href="#" class="btn btn-outline-success w-100" data-section="salemansection">
-                        <i class="bi bi-box-seam"></i> Saleman Report
-                    </a>
-                </div>
-                <div class="col-12 col-md-6">
-                    <a href="#" class="btn btn-outline-success w-100" data-section="stockSection">
-                        <i class="bi bi-box-seam"></i> ACCS Report
-                    </a>
-                </div>
+          <div class="row g-2">
+            <div class="col-8 col-md-6">
+              <a href="#" class="btn btn-outline-primary w-100" data-section="salesSection">
+                <i class="bi bi-cart"></i> Sales/Pur Report
+              </a>
             </div>
+            <div class="col-8 col-md-6">
+              <a href="#" class="btn btn-outline-success w-100" data-section="stockSection">
+                <i class="bi bi-box-seam"></i> Stock Report
+              </a>
+            </div>
+            <div class="col-8 col-md-6">
+              <a href="#" class="btn btn-outline-success w-100" data-section="salemansection">
+                <i class="bi bi-person"></i> Saleman Report
+              </a>
+            </div>
+            <div class="col-8 col-md-6">
+              <a href="#" class="btn btn-outline-success w-100" data-section="accsreportsection">
+                <i class="bi bi-journal-text"></i> ACCS Report
+              </a>
+            </div>
+          </div>
+          
         </div>
         
         <!-- SALES / PURCHASE SECTION -->
@@ -100,42 +101,42 @@ body {
             <div class="report-buttons">
               <div class="row g-2"> <!-- g-2 = gap between buttons -->
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.total_sales') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('reports.total_sales') }}" class="btn btn-primary w-50 text-start">
                     <span>Sales Report</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.returns_sales_report') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('reports.returns_sales_report') }}" class="btn btn-primary w-50 text-start">
                     <span>Sales Return Report</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.total_purchases') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('reports.total_purchases') }}" class="btn btn-primary w-50 text-start">
                     <span>Purchase Report</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.purchase_returns') }}" class="btn btn-primary w-100 text-start">
-                    <span>Purchase Return Report</span> <i class="bi bi-arrow-right float-end"></i>
+                  <a href="{{ route('reports.purchase_returns') }}" class="btn btn-primary w-50 text-start">
+                    <span>Purchase Return</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.sales_summary') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('reports.sales_summary') }}" class="btn btn-primary w-50 text-start">
                     <span>Sales Summary</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.raw_supplier_purchase_summary') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('reports.raw_supplier_purchase_summary') }}" class="btn btn-primary w-50 text-start">
                     <span>Sales Purchase</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.raw_material_item_report') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('reports.raw_material_item_report') }}" class="btn btn-primary w-50 text-start">
                     <span>Item Report</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('report.orders_summary') }}" class="btn btn-primary w-100 text-start">
+                  <a href="{{ route('report.orders_summary') }}" class="btn btn-primary w-50 text-start">
                     <span>Order Summary</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
@@ -156,12 +157,12 @@ body {
           <div class="report-buttons">
             <div   class="report-buttons row g-2 justify-content-center">
               <div class="col-12 col-md-6">
-                <a href="#" class="btn btn-success d-flex justify-content-between">
-                  <span>Stock Purchase Price</span><i class="bi bi-arrow-right"></i>
+                <a href="{{ route('reports.stock') }}" class="btn btn-success d-flex justify-content-between">
+                  <span>Stock Report</span><i class="bi bi-arrow-right"></i>
                 </a>
               </div>
               <div class="col-12 col-md-6">
-                <a href="#" class="btn btn-success d-flex justify-content-between">
+                <a href="{{route('reports.sale_stock_report')}}" class="btn btn-success d-flex justify-content-between">
                   <span>Sale Stock Report</span><i class="bi bi-arrow-right"></i>
                 </a>
               </div>
@@ -191,11 +192,11 @@ body {
             <div class="report-buttons">
               <div   class="report-buttons row g-2 justify-content-center">
                 <div class="col-12 col-md-6">
-                  <a href="#" class="btn btn-success d-flex justify-content-between">
-                    <span>Stock Purchase Price</span><i class="bi bi-arrow-right"></i>
+                  <a href="{{ route('reports.sale_sheet') }}" class="btn btn-success d-flex justify-content-between">
+                    <span>Sale Sheet</span><i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
-                <div class="col-12 col-md-6">
+                {{-- <div class="col-12 col-md-6">
                   <a href="#" class="btn btn-success d-flex justify-content-between">
                     <span>Sale Stock Report</span><i class="bi bi-arrow-right"></i>
                   </a>
@@ -209,11 +210,43 @@ body {
                   <a href="#" class="btn btn-success d-flex justify-content-between">
                     <span>Stock Summary</span><i class="bi bi-arrow-right"></i>
                   </a>
-                </div>
+                </div> --}}
               </div>
             </div>
           </div>
+          <div id="accsreportsection" class="section-hidden">
+            <button class="btn btn-link mb-3" data-section="mainMenu"><i class="bi bi-arrow-left"></i> Back</button>
   
+            <div class="position-relative modal-search mb-3">
+              <i class="bi bi-search"></i>
+              <input type="text" class="form-control section-search" placeholder="Search stock reports…">
+            </div>
+  
+            <div class="report-buttons">
+              <div   class="report-buttons row g-2 justify-content-center">
+                <div class="col-12 col-md-6">
+                  <a href="{{ route('reports.ledger') }}" class="btn btn-success d-flex justify-content-between">
+                    <span>Ledger</span><i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+                <div class="col-12 col-md-6">
+                  <a href="{{ route('reports.payments') }}" class="btn btn-success d-flex justify-content-between">
+                    <span>Payments</span><i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+                <div class="col-12 col-md-6">
+                  <a href="#" class="btn btn-success d-flex justify-content-between">
+                    <span>Daily Sheet</span><i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+                {{-- <div class="col-12 col-md-6">
+                  <a href="#" class="btn btn-success d-flex justify-content-between">
+                    <span>Stock Summary</span><i class="bi bi-arrow-right"></i>
+                  </a>
+                </div> --}}
+              </div>
+            </div>
+          </div>
       </div><!-- /modal-body -->
     </div>
   </div>
@@ -222,7 +255,7 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const sections = ['mainMenu','salesSection','stockSection'];
+  const sections = ['mainMenu','salesSection','stockSection','salemansection','accsreportsection'];
 
   function showSection(id){
     sections.forEach(sec => {
