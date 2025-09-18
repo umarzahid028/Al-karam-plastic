@@ -33,13 +33,14 @@ h3 { margin-bottom:20px; }
                 <label class="form-label">To Date</label>
                 <input type="date" name="to_date" value="{{ $toDate?->format('Y-m-d') }}" class="form-control">
             </div>
+            <div class="col-md-3 mt-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Invoice / Buyer / Product">
+            </div>
             <div class="col-md-3 d-flex gap-2">
                 <button class="btn btn-primary flex-fill">Filter</button>
                 <a href="{{ route('reports.sale_sheet') }}" class="btn btn-outline-danger flex-fill">Reset</a>
             </div>
-            <div class="col-md-3 mt-2">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search Invoice / Buyer / Product">
-            </div>
+
         </form>
     </div>
 
