@@ -68,7 +68,7 @@ h3           { margin-bottom:20px; }
         <div class="col-md-3"><strong>Total Orders:</strong> {{ $totals->total_orders }}</div>
         <div class="col-md-3 text-warning"><strong>Pending:</strong> {{ $totals->pending_orders }}</div>
         <div class="col-md-3 text-success"><strong>Completed:</strong> {{ $totals->completed_orders }}</div>
-        <div class="col-md-3"><strong>Grand Total:</strong> {{ number_format($totals->grand_total,2) }}</div>
+        <div class="col-md-3"><strong>Grand Total:</strong>{{rtrim(rtrim(number_format($totals->grand_total, 2), '0'), '.') }}</div>
     </div>
 
     <!-- DataTable -->
@@ -90,7 +90,7 @@ h3           { margin-bottom:20px; }
                     <td>{{ $row->total_orders }}</td>
                     <td>{{ $row->pending_orders }}</td>
                     <td>{{ $row->completed_orders }}</td>
-                    <td>{{ number_format($row->total_amount,2) }}</td>
+                 <td>{{rtrim(rtrim(number_format($row->total_amount, 2), '0'), '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>

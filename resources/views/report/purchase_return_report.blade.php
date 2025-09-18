@@ -46,7 +46,8 @@ h3 { margin-bottom:20px; }
     <!-- Grand Total -->
     <div class="mb-3">
         <strong>Total Returned Amount:</strong>
-        {{ number_format($grandTotal, 2) }}
+        {{rtrim(rtrim(number_format($grandTotal, 2), '0'), '.') }}
+       
     </div>
 
     <!-- Purchase Return Table -->
@@ -72,8 +73,8 @@ h3 { margin-bottom:20px; }
                     <td>{{ $r->supplier_name }}</td>
                     <td>{{ $r->material_name }}</td>
                     <td>{{ $r->quantity }}</td>
-                    <td>{{ number_format($r->price, 2) }}</td>
-                    <td>{{ number_format($r->subtotal, 2) }}</td>
+                    <td>{{rtrim(rtrim(number_format($r->price, 2), '0'), '.') }}</td>
+                    <td> {{rtrim(rtrim(number_format($r->subtotal, 2), '0'), '.') }}</td>
                     <td>{{ $r->remarks }}</td>
                 </tr>
             @endforeach

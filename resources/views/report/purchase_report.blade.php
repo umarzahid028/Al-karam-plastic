@@ -41,7 +41,8 @@ h3 { margin-bottom:20px; }
     <!-- Grand Total -->
     <div class="mb-3">
         <strong>Total Purchase Amount:</strong>
-        {{ number_format($grandTotal, 2) }}
+        {{rtrim(rtrim(number_format($grandTotal, 2), '0'), '.') }}
+     
     </div>
 
     <!-- Purchases Table -->
@@ -66,8 +67,8 @@ h3 { margin-bottom:20px; }
                     <td>{{ $p->supplier_name }}</td>
                     <td>{{ $p->material_name }}</td>
                     <td>{{ $p->quantity }}</td>
-                    <td>{{ number_format($p->unit_price, 2) }}</td>
-                    <td>{{ number_format($p->total_price, 2) }}</td>
+                    <td> {{rtrim(rtrim(number_format($p->unit_price, 2), '0'), '.') }}</td>
+                    <td> {{rtrim(rtrim(number_format($p->total_price, 2), '0'), '.') }}</td>
                 </tr>
             @endforeach
             </tbody>

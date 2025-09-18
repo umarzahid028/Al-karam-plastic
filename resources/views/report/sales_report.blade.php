@@ -63,10 +63,8 @@ h3 { margin-bottom:20px; }
                     <td>{{ \Carbon\Carbon::parse($r->invoice_date)->format('d M, Y') }}</td>
                     <td>{{ $r->invoice_no }}</td>
                     <td>{{ $r->buyer_name }}</td>
-                    <td>{{ $r->total_qty }}</td>
-                    <td>
-                        {{rtrim(rtrim(number_format($r->total_line, 2), '0'), '.') }}
-                       </td>
+                    <td>{{rtrim(rtrim(number_format($r->total_qty, 2), '0'), '.') }} </td>
+                    <td> {{rtrim(rtrim(number_format($r->total_line, 2), '0'), '.') }}</td>
                 </tr>
             @endforeach
             </tbody>

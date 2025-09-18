@@ -61,9 +61,9 @@ h3           { margin-bottom:20px; }
 
     <!-- Optional totals summary -->
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-4"><strong>Total Opening:</strong> {{ number_format($report->sum('opening_stock'),2) }}</div>
-        <div class="col-md-4"><strong>Total Issued:</strong>  {{ number_format($report->sum('total_issued'),2) }}</div>
-        <div class="col-md-4"><strong>Total Closing:</strong> {{ number_format($report->sum('closing_stock'),2) }}</div>
+        <div class="col-md-4"><strong>Total Opening:</strong>{{rtrim(rtrim(number_format($report->sum('opening_stock'),2), '0'), '.') }}</div>
+        <div class="col-md-4"><strong>Total Issued:</strong>{{rtrim(rtrim(number_format($report->sum('total_issued'),2), '0'), '.') }}</div>
+        <div class="col-md-4"><strong>Total Closing:</strong>{{rtrim(rtrim(number_format($report->sum('closing_stock'),2), '0'), '.') }}</div>
     </div>
 
     <!-- DataTable -->
@@ -89,9 +89,9 @@ h3           { margin-bottom:20px; }
                     <td>{{ $row->material_code }}</td>
                     <td>{{ $row->material_name }}</td>
                     <td>{{ $row->unit }}</td>
-                    <td>{{ number_format($row->opening_stock,2) }}</td>
-                    <td>{{ number_format($row->total_issued,2) }}</td>
-                    <td>{{ number_format($row->closing_stock,2) }}</td>
+                    <td>{{rtrim(rtrim(number_format($row->opening_stock, 2), '0'), '.') }}</td>
+                    <td>{{rtrim(rtrim(number_format($row->total_issued, 2), '0'), '.') }}</td>
+                    <td>{{rtrim(rtrim(number_format($row->closing_stock, 2), '0'), '.') }}</td>
                     <td>{{ $row->last_issue_date }}</td>
                     <td>{{ $row->store_name }}</td>
                     <td>{{ $row->issued_by }}</td>

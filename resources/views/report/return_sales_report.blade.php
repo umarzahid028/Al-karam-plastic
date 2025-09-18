@@ -39,7 +39,9 @@ h3 { margin-bottom: 20px; }
 
 <!-- Total Returns -->
 <div class="mb-3">
-    <strong>Total Returned Amount:</strong> {{ number_format($totalReturns, 2) }}
+    <strong>Total Returned Amount:</strong> 
+    {{rtrim(rtrim(number_format($totalReturns, 2), '0'), '.') }}
+  
 </div>
 
 <!-- Returns Table -->
@@ -63,8 +65,8 @@ h3 { margin-bottom: 20px; }
     <td>{{ $r->invoice_no }}</td>
     <td>{{ $r->buyer_name }}</td>
     <td>{{ $r->product_name }}</td>
-    <td>{{ $r->returned_qty }}</td>
-    <td>{{ number_format($r->return_amount, 2) }}</td>
+    <td> {{rtrim(rtrim(number_format($r->returned_qty, 2), '0'), '.') }}</td>
+    <td> {{rtrim(rtrim(number_format($r->return_amount, 2), '0'), '.') }} </td>
     <td>{{ $r->remarks }}</td>
 </tr>
 @endforeach

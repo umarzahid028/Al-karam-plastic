@@ -44,8 +44,8 @@ h3 { margin-bottom:20px; }
 
     <!-- Totals -->
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-6"><strong>Gross Amount:</strong> {{ number_format($grossTotal,2) }}</div>
-        <div class="col-md-6"><strong>Paid Amount:</strong> {{ number_format($paidTotal,2) }}</div>
+        <div class="col-md-6"><strong>Gross Amount:</strong> {{rtrim(rtrim(number_format($grossTotal,2), '0'), '.') }}</div>
+        <div class="col-md-6"><strong>Paid Amount:</strong>{{rtrim(rtrim(number_format($paidTotal,2), '0'), '.') }} </div>
     </div>
 
     <!-- Purchases Table -->
@@ -71,13 +71,15 @@ h3 { margin-bottom:20px; }
                     <td>{{ $purchase->supplier_name }}</td>
                     <td>{{ $purchase->payment_method }}</td>
                     <td>{{ $purchase->status }}</td>
-                    <td>{{ number_format($purchase->total_amount,2) }}</td>
-                    <td>{{ number_format($purchase->paid_amount,2) }}</td>
+                    <td>{{rtrim(rtrim(number_format($purchase->total_amount,2), '0'), '.') }}</td>
+                    <td>{{rtrim(rtrim(number_format($purchase->paid_amount,2), '0'), '.') }}</td>
                     <td>
                         @if(isset($purchaseItems[$purchase->id]))
                             <ul class="items-list">
                             @foreach($purchaseItems[$purchase->id] as $item)
-                                <li>{{ $item->material_name }} ({{ $item->quantity }} x {{ $item->unit_price }} = {{ $item->total_price }})</li>
+                                <li>{{ $item->material_name }} ({{ $item->quantity }} x 
+                                    {{rtrim(rtrim(number_format($item->unit_price ,2), '0'), '.') }}
+                                     =   {{rtrim(rtrim(number_format($item->total_price ,2), '0'), '.') }})</li>
                             @endforeach
                             </ul>
                         @else
