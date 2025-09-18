@@ -140,6 +140,11 @@ body {
                     <span>Order Summary</span> <i class="bi bi-arrow-right float-end"></i>
                   </a>
                 </div>
+                <div class="col-12 col-md-6">
+                  <a href="#" class="btn btn-primary w-50 text-start">
+                    <span>City Wise Sale</span> <i class="bi bi-arrow-right float-end"></i>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

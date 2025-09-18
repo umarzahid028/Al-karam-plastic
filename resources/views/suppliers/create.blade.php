@@ -64,6 +64,10 @@ textarea { min-height: 44px; resize: vertical; }
             <option value="onhold">On Hold</option>
           </select>
         </div>
+        <div class="col-md-6">
+          <label>City</label>
+          <input type="text" class="form-control" id="city" placeholder="Karachi" required>
+        </div>
       </div>
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-primary">Save Supplier</button>
@@ -77,14 +81,16 @@ textarea { min-height: 44px; resize: vertical; }
 document.getElementById("supplierForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data = {
-    supplier_code: document.getElementById("supplier_code").value,
-    company_name: document.getElementById("company_name").value,
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    contact_no: document.getElementById("contact_no").value,
-    opening_balance: document.getElementById("opening_balance").value,
-    status: document.getElementById("status").value
-  };
+  supplier_code: document.getElementById("supplier_code").value,
+  company_name: document.getElementById("company_name").value,
+  name: document.getElementById("name").value,
+  city: document.getElementById("city").value,          // ✅ add this
+  email: document.getElementById("email").value,
+  contact_no: document.getElementById("contact_no").value,
+  opening_balance: document.getElementById("opening_balance").value,
+  status: document.getElementById("status").value
+};
+
 
   fetch("{{ route('suppliers.api.store') }}", {
   method: "POST",
@@ -99,7 +105,7 @@ document.getElementById("supplierForm").addEventListener("submit", function(e){
   try {
     return JSON.parse(text);    
   } catch (e) {
-    throw new Error("Not JSON: " + text); 
+    throw new Error("Not JSON: " + text); // help debug if HTML comes back
   }
 })
 .then(resp => {

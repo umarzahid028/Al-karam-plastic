@@ -555,5 +555,7 @@ public function paymentsReport(Request $request)
         'toDate'   => $toDate,
     ]);
 }
-
+public function city_report(Request $request){
+    
+}
 }

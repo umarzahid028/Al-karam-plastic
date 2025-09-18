@@ -16,6 +16,7 @@ class RawSupplier extends Model
         'company_name',
         'name',
         'email',
+        'city',
         'contact_no',
         'opening_balance',
         'status',
