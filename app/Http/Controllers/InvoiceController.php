@@ -19,23 +19,17 @@ class InvoiceController extends Controller
     {
         $buyers = RawSupplier::select('id', 'company_name')->orderBy('company_name')->get();
         $salespersons = User::select('id', 'name')->orderBy('name')->get();
-    
-        $year = date('y'); // last two digits of year, e.g., 25
+        $year = date('y'); 
+        $userInput = ''; 
 
-        // Let user input the invoice prefix/number
-        $userInput = ''; // you can fill this from a form field if needed
-        
-        // Final invoice: user input + '-' + year
         $invoiceNo = $userInput . '-' . $year;
-       
     
         return view('sale-invoice', compact('buyers', 'salespersons', 'invoiceNo'));
     }
     public function search(Request $request)
     {
         $query = $request->get('q');
-        $type  = $request->get('type'); // id, name, group
-    
+        $type  = $request->get('type'); 
         $products = \DB::table('products');
     
         if ($type === 'id') {
@@ -129,7 +123,7 @@ public function store(Request $request)
         // Debit: Customer owes (Accounts Receivable)
         Ledger::create([
             'party_id'     => $invoice->buyer_id,
-            'party_type'   => 'supplier', // or 'customer' if you rename
+            'party_type'   => 'supplier', 
             'ref_type'     => 'sale',
             'invoice_no'   => $invoice->invoice_no,
             'invoice_date' => $invoice->invoice_date,
@@ -140,7 +134,7 @@ public function store(Request $request)
 
         // Credit: Revenue (system account)
         Ledger::create([
-            'party_id'     => 'SYS',  // system account
+            'party_id'     => 'SYS',  
             'party_type'   => 'user',
             'ref_type'     => 'sale',
             'invoice_no'   => $invoice->invoice_no,

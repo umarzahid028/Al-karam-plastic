@@ -25,7 +25,7 @@ body {
     transform:translateY(-50%);
     color:#6c757d;
 }
-/* remove old fixed widths so grid works */
+
 .report-buttons a {
    
     display:block;
@@ -99,7 +99,7 @@ body {
             </div>
           
             <div class="report-buttons">
-              <div class="row g-2"> <!-- g-2 = gap between buttons -->
+              <div class="row g-2"> 
                 <div class="col-12 col-md-6">
                   <a href="{{ route('reports.total_sales') }}" class="btn btn-primary w-50 text-start">
                     <span>Sales Report</span> <i class="bi bi-arrow-right float-end"></i>

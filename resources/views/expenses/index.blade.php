@@ -47,10 +47,10 @@
             font-weight: 600;
         }
         .amount.negative {
-            color: #e74a3b; /* red */
+            color: #e74a3b; 
         }
         .amount.positive {
-            color: #1cc88a; /* green */
+            color: #1cc88a;
         }
         .btn-back{
             background: #17a2b8;
@@ -89,7 +89,6 @@
 
     <!-- Table -->
     <div class="table-responsive">
-     <!-- Table -->
 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
     <table class="table table-bordered table-hover align-middle" id="expensesTable">
         <thead class="table-light" style="position: sticky; top: 0; z-index: 3;">
@@ -154,16 +153,16 @@
         const rows = document.querySelectorAll("#expensesTable tbody tr");
     
         rows.forEach(row => {
-            // Check if search input matches any cell
+            
             const textMatch = Array.from(row.cells).some(cell =>
                 cell.textContent.toLowerCase().includes(input)
             );
     
-            // Type column is index 2 (Expense No = 0, Date = 1, Type = 2)
+       
             const type = row.cells[2]?.textContent.toLowerCase();
             const typeMatch = !typeFilter || type === typeFilter;
     
-            // Show/hide row
+            
             row.style.display = (textMatch && typeMatch) ? "" : "none";
         });
     }

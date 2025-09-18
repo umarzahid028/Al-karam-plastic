@@ -16,7 +16,7 @@ class ExpenseController extends Controller
 
     public function create()
     {
-        $year = date('y'); // short year e.g. 25
+        $year = date('y'); 
         $prefix = 'EXP-' . $year . '-';
     
         return view('expenses.create', compact('prefix'));
@@ -36,7 +36,7 @@ class ExpenseController extends Controller
     $year = date('y');
     $prefix = 'EXP-' . $year . '-';
 
-    // Full expense number banayenge prefix + user input se
+   
     $expenseNo = $prefix . str_pad($request->expense_number, 5, '0', STR_PAD_LEFT);
 
     if (Expense::where('expense_no', $expenseNo)->exists()) {

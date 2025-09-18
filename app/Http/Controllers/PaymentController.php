@@ -147,7 +147,7 @@ class PaymentController extends Controller
         return view('reports.pending_receivables', compact('pendingInvoices'));
     }
 
-    // Pending Payables (payments to pay to suppliers)
+   
     public function pendingPayables(Request $request)
     {
         $query = Purchase::with('supplier')

@@ -13,7 +13,7 @@ class GatePassController extends Controller
     // Show all gate passes (index page)
     public function index()
     {
-        // Eager load relations to avoid N+1 problem
+        
         $gatePasses = GatePass::with(['invoice', 'user'])->orderBy('id', 'asc')->paginate(5);
         return view('gate_pass.index', compact('gatePasses'));
     }
@@ -45,7 +45,7 @@ class GatePassController extends Controller
         $invoice = SalesInvoice::find($request->invoice_id);
         $qty = $invoice->items->sum('qty');
 
-        // Generate random alphanumeric pass number
+        // random alphanumeric pass number
         $passNo = 'GP-' . strtoupper(Str::random(6));
 
         $gatePass = GatePass::create([

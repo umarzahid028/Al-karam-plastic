@@ -52,7 +52,7 @@
         </div>
         <div class="card-body p-4">
             <form action="/products/1" method="POST">
-                <!-- Laravel ke liye CSRF aur PUT method field add karni hoti hai -->
+               
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="_method" value="PUT">
 

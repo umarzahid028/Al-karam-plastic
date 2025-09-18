@@ -99,7 +99,7 @@
     <!-- Submit -->
     <div class="d-flex justify-content-between">
       <a href="{{ route('customers.index') }}" class="btn btn-secondary">⬅ Back</a>
-      <button type="submit" class="btn btn-success">💾 Save Invoice</button>
+      <button type="submit" class="btn btn-success">Save Invoice</button>
     </div>
   </form>
 </div>

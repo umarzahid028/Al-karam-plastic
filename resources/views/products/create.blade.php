@@ -121,10 +121,10 @@ document.getElementById("productForm").addEventListener("submit", function(e){
     .then(res=>res.json())
     .then(resp=>{
         if(resp.success){
-            alert("✅ Product added successfully!");
+            alert("Product added successfully!");
             document.getElementById("productForm").reset();
         }else{
-            alert("❌ Error: "+resp.message);
+            alert("Error: "+resp.message);
         }
     })
     .catch(err=>alert("Request failed: "+err));

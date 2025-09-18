@@ -11,15 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    // Web view
+    
     public function index() {
-        // 10 products per page
         $products = Product::paginate(5);
         return view('products.index', compact('products'));
     }
 
     public function indesx() {
-        // 10 products per page
         $products = Product::paginate(5);
         return view('products.update-index', compact('products'));
     }

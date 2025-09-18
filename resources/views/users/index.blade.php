@@ -152,9 +152,9 @@ document.querySelectorAll('.status-select').forEach(select => {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                console.log("Status updated ✅ to " + data.status);
+                console.log("Status updated to " + data.status);
             } else {
-                alert("Update failed ❌");
+                alert("Update failed");
             }
         })
         .catch(err => console.error("Error:", err));

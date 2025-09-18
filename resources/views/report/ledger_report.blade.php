@@ -33,13 +33,14 @@ h3 { margin-bottom:20px; }
                 <label class="form-label">To Date</label>
                 <input type="date" name="to_date" value="{{ $toDate?->format('Y-m-d') }}" class="form-control">
             </div>
+            <div class="col-md-3 mt-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Description / Account">
+            </div>
             <div class="col-md-3 d-flex gap-2">
                 <button class="btn btn-primary flex-fill">Filter</button>
                 <a href="{{ route('reports.ledger') }}" class="btn btn-outline-danger flex-fill">Reset</a>
             </div>
-            <div class="col-md-3 mt-2">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search Description / Account">
-            </div>
+           
         </form>
     </div>
 
@@ -70,7 +71,7 @@ h3 { margin-bottom:20px; }
                     @php $runningBalance += $entry->debit - $entry->credit; @endphp
                     <tr>
                         <td>{{ $entry->invoice_date }}</td>
-                        <td>{{ $entry->party_id }}</td> <!-- yahan party name bhi aa sakta hai agar join karen -->
+                        <td>{{ $entry->party_id }}</td> 
                         <td>{{ $entry->description }}</td>
                         <td>{{ number_format($entry->debit,2) }}</td>
                         <td>{{ number_format($entry->credit,2) }}</td>

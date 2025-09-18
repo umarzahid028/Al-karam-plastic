@@ -4,11 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Purchase Return</title>
-
-<!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
@@ -54,9 +50,9 @@
     overflow: hidden;
   }
 
-  /* Lighter modal backdrop */
+ 
   .modal-backdrop.show {
-    opacity: 0.4 !important; /* default is 0.5, you can adjust */
+    opacity: 0.4 !important; 
     background-color: #000;
   }
 </style>
@@ -68,10 +64,6 @@
         <div class="card-body"> <i class="bi bi-arrow-counterclockwise"></i> <div>
            <p class="action-title">Purchase Return</p> <p class="action-sub">Return purchased items</p> </div> 
           </div> </a> </div>
-
-  <!-- Purchase Return Card -->
-
-    
   
   <!-- Purchase Return Modal -->
   <div class="modal fade" id="purchaseReturnModal" tabindex="-1" aria-labelledby="purchaseReturnLabel" aria-hidden="true">
@@ -115,7 +107,6 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Auto open modal if there is an error -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       @if(session('purchase_return_error'))

@@ -53,7 +53,7 @@ body { font-family: Arial; background:#f5f7fa; }
                 <tr>
                     <td>{{ $purchases->firstItem() + $loop->index }}</td>
                     <td>{{ $purchase->purchase_code }}</td>
-                    <td>{{ $purchase->supplier_id }}</td> {{-- Replace with supplier name if relationship exists --}}
+                    <td>{{ $purchase->supplier_id }}</td> 
                     <td>{{ $purchase->purchase_date }}</td>
                     <td>{{ number_format($purchase->total_amount, 2) }}</td>
                     <td>{{ ucfirst($purchase->status) }}</td>

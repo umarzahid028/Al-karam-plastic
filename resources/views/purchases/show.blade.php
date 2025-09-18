@@ -77,7 +77,6 @@ h3 {
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Subtotal</th>
-                    {{-- <th>Description</th> --}}
                 </tr>
             </thead>
             <tbody>

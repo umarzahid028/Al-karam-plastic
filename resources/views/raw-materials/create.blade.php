@@ -127,7 +127,7 @@ document.getElementById("rawMaterialForm").addEventListener("submit", function(e
         store_id: document.getElementById("store_id").value
     };
 
-    fetch("/api/raw-material", { // make sure URL matches route
+    fetch("/api/raw-material", { 
     method: "POST",
     headers: {
         "Content-Type": "application/json",

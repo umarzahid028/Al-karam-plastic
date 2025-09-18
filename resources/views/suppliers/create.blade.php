@@ -95,11 +95,11 @@ document.getElementById("supplierForm").addEventListener("submit", function(e){
   body: JSON.stringify(data)
 })
 .then(async res => {
-  const text = await res.text(); // get raw response
+  const text = await res.text(); 
   try {
-    return JSON.parse(text);     // try to parse JSON
+    return JSON.parse(text);    
   } catch (e) {
-    throw new Error("Not JSON: " + text); // help debug if HTML comes back
+    throw new Error("Not JSON: " + text); 
   }
 })
 .then(resp => {

@@ -65,7 +65,7 @@
     <!-- Back Button -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <button class="btn btn-back" onclick="window.history.back()">← Back to Expenses</button>
-        <button class="btn btn-outline-dark" onclick="window.print()">🖨 Print</button>
+        <button class="btn btn-outline-dark" onclick="window.print()">Print</button>
     </div>
 
     <!-- Expense Info -->
