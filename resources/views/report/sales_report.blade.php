@@ -41,7 +41,8 @@ h3 { margin-bottom:20px; }
     <!-- Grand Total -->
     <div class="mb-3">
         <strong>Total Sales Amount:</strong>
-        {{ number_format($grandTotal, 2) }}
+        {{rtrim(rtrim(number_format($grandTotal,2), '0'), '.') }}
+       
     </div>
 
     <!-- Sales Table -->
@@ -63,7 +64,9 @@ h3 { margin-bottom:20px; }
                     <td>{{ $r->invoice_no }}</td>
                     <td>{{ $r->buyer_name }}</td>
                     <td>{{ $r->total_qty }}</td>
-                    <td>{{ number_format($r->total_line, 2) }}</td>
+                    <td>
+                        {{rtrim(rtrim(number_format($r->total_line, 2), '0'), '.') }}
+                       </td>
                 </tr>
             @endforeach
             </tbody>

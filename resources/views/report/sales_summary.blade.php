@@ -49,10 +49,19 @@ h3 { margin-bottom:20px; }
 
     <!-- Grand Totals -->
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-3"><strong>Gross Sales:</strong> {{ number_format($grossTotal, 2) }}</div>
-        <div class="col-md-3"><strong>Total Discount:</strong> {{ number_format($totalDiscount, 2) }}</div>
-        <div class="col-md-3"><strong>Total Tax:</strong> {{ number_format($totalTax, 2) }}</div>
-        <div class="col-md-3"><strong>Net Sales:</strong> {{ number_format($grandTotal, 2) }}</div>
+        <div class="col-md-3"><strong>Gross Sales:</strong>
+            {{rtrim(rtrim(number_format($grossTotal, 2), '0'), '.') }}
+           </div>
+        <div class="col-md-3"><strong>Total Discount:</strong> 
+            {{rtrim(rtrim(number_format($totalDiscount,2), '0'), '.') }}
+           </div>
+        <div class="col-md-3"><strong>Total Tax:</strong> 
+            {{rtrim(rtrim(number_format($totalTax, 2), '0'), '.') }}
+            </div>
+        <div class="col-md-3"><strong>Net Sales:</strong> 
+            {{rtrim(rtrim(number_format($grandTotal,2), '0'), '.') }}
+           
+        </div>
     </div>
 
     <!-- Sales Table -->
@@ -79,8 +88,11 @@ h3 { margin-bottom:20px; }
                 <td>{{ $s->party_email ?? '-' }}</td>
                 <td>{{ $s->party_phone ?? '-' }}</td>
                 <td>{{ $s->total_qty }}</td>
-                <td>{{ number_format($s->gross_amount,2) }}</td>
-                <td>{{ number_format($s->net_amount,2) }}</td>
+
+                <td>{{rtrim(rtrim(number_format($s->gross_amount,2), '0'), '.') }}</td>
+                <td>
+                    {{rtrim(rtrim(number_format($s->net_amount,2), '0'), '.') }}
+                   </td>
               </tr>
             @endforeach
           </tbody>

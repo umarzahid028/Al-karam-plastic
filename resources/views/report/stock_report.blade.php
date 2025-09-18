@@ -10,8 +10,13 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 
 <style>
-body { background:#f8f9fa; font-family:Arial,sans-serif; }
-.container { margin-top:40px; }
+body { 
+    background:#f8f9fa; 
+    font-family:Arial,sans-serif;
+ }
+.container { 
+    margin-top:40px; 
+}
 h3 { margin-bottom:20px; }
 .table thead { background:#0d6efd; color:#fff; }
 .table-hover tbody tr:hover { background:#f1f1f1; }
@@ -33,22 +38,29 @@ h3 { margin-bottom:20px; }
                 <label class="form-label">To Date</label>
                 <input type="date" name="to_date" value="{{ request('to_date') }}" class="form-control">
             </div>
+            <div class="col-md-3 mt-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Material">
+            </div>
             <div class="col-md-3 d-flex gap-2">
                 <button class="btn btn-primary flex-fill">Filter</button>
                 <a href="{{ route('reports.stock') }}" class="btn btn-outline-danger flex-fill">Reset</a>
             </div>
-            <div class="col-md-3 mt-2">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search Material">
-            </div>
+            
         </form>
     </div>
 
     <!-- Totals Summary -->
     <div class="row mb-3 summary-box text-center">
         <div class="col-md-3"><strong>Total Materials:</strong> {{ $stocks->count() }}</div>
-        <div class="col-md-3 text-success"><strong>Total In:</strong> {{ number_format($stocks->sum('total_in'),2) }}</div>
-        <div class="col-md-3 text-danger"><strong>Total Out:</strong> {{ number_format($stocks->sum('total_out'),2) }}</div>
-        <div class="col-md-3"><strong>Total Stock Value:</strong> {{ number_format($stocks->sum(fn($s)=>($s->total_in-$s->total_out)*$s->avg_price),2) }}</div>
+        <div class="col-md-3 text-success"><strong>Total In:</strong>
+            {{rtrim(rtrim(number_format($stocks->sum('total_in'),2), '0'), '.') }}
+        </div>
+        <div class="col-md-3 text-danger"><strong>Total Out:</strong> 
+            {{rtrim(rtrim(number_format($stocks->sum('total_out'),2), '0'), '.') }}
+        </div>
+        <div class="col-md-3"><strong>Total Stock Value:</strong> 
+            {{rtrim(rtrim(number_format($stocks->sum(fn($s)=>($s->total_in-$s->total_out)*$s->avg_price),2), '0'), '.') }}
+            
     </div>
 
     <!-- Stock Table -->
@@ -68,11 +80,15 @@ h3 { margin-bottom:20px; }
                 @foreach($stocks as $stock)
                 <tr>
                     <td>{{ $stock->material_name }}</td>
-                    <td>{{ number_format($stock->total_in,2) }}</td>
-                    <td>{{ number_format($stock->total_out,2) }}</td>
-                    <td>{{ number_format($stock->total_in - $stock->total_out,2) }}</td>
-                    <td>{{ number_format($stock->avg_price,2) }}</td>
-                    <td>{{ number_format(($stock->total_in - $stock->total_out) * $stock->avg_price,2) }}</td>
+                    <td>{{rtrim(rtrim(number_format($stock->total_in,2), '0'), '.') }} </td>
+                    <td>{{rtrim(rtrim(number_format($stock->total_out,2), '0'), '.') }}  </td>
+                    <td> {{rtrim(rtrim(number_format($stock->total_in - $stock->total_out,2), '0'), '.') }}  </td>
+                    <td> {{rtrim(rtrim(number_format($stock->avg_price,2), '0'), '.') }} </td>
+
+
+                    <td>{{rtrim(rtrim(number_format(($stock->total_in - $stock->total_out) * $stock->avg_price,2), '0'), '.') }}
+                       
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
@@ -93,22 +109,52 @@ h3 { margin-bottom:20px; }
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
 <script>
-$(function(){
+$(function () {
     var table = $('#stockTable').DataTable({
-        paging:true,
-        ordering:true,
-        order:[[0,'asc']],
-        pageLength:25,
-        responsive:true,
-        dom:'Bfrtip',
-        buttons:['copy','csv','excel','pdf','print']
+        paging: true,
+        ordering: true,
+        order: [[0, 'asc']],
+        pageLength: 25,
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                title: 'Stock Report'
+            },
+            {
+                extend: 'csv',
+                title: 'Stock Report'
+            },
+            {
+                extend: 'excel',
+                title: 'Stock Report'
+            },
+            {
+                extend: 'pdf',
+                title: 'Stock Report',
+                orientation: 'landscape',
+                pageSize: 'A4'
+            },
+            {
+                extend: 'print',
+                title: 'Stock Report'
+            },
+            'colvis' // <-- column visibility toggle
+        ],
+        language: {
+            search: "Quick Search:",
+            lengthMenu: "Show _MENU_ rows",
+            info: "Showing _START_ to _END_ of _TOTAL_ materials"
+        }
     });
 
-    // live search
-    $('#searchInput').on('keyup', function(){
+    // Live search in separate input
+    $('#searchInput').on('keyup', function () {
         table.search(this.value).draw();
     });
 });
+
 </script>
 </body>
 </html>

@@ -33,21 +33,28 @@ h3 { margin-bottom:20px; }
                 <label class="form-label">To Date</label>
                 <input type="date" name="to_date" value="{{ request('to_date') }}" class="form-control">
             </div>
+            <div class="col-md-3 mt-2">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Material">
+            </div>
             <div class="col-md-3 d-flex gap-2">
                 <button class="btn btn-primary flex-fill">Filter</button>
                 <a href="{{ route('reports.sale_stock_report') }}" class="btn btn-outline-danger flex-fill">Reset</a>
             </div>
-            <div class="col-md-3 mt-2">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search Material">
-            </div>
+           
         </form>
     </div>
 
     <!-- Totals Summary -->
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-3"><strong>Total Materials Sold:</strong> {{ count($stocks) }}</div>
-        <div class="col-md-3 text-success"><strong>Total Sold:</strong> {{ number_format($stocks->sum('total_out'),2) }}</div>
-        <div class="col-md-3"><strong>Total Stock Value:</strong> {{ number_format($stocks->sum(fn($s)=>$s->stock_value),2) }}</div>
+        <div class="col-md-3"><strong>Total Materials Sold:</strong> {{ count($stocks) }}
+        </div>
+        <div class="col-md-3 text-success"><strong>Total Sold:</strong>  {{rtrim(rtrim(number_format($stocks->sum('total_out'),2), '0'), '.')}} </div>
+        <div class="col-md-3"><strong>Total Stock Value:</strong> 
+          
+
+            {{rtrim(rtrim(number_format($stocks->sum(fn($s)=>$s->stock_value),2), '0'), '.')}}
+
+           </div>
     </div>
 
     <!-- Sale Stock Table -->
@@ -67,11 +74,11 @@ h3 { margin-bottom:20px; }
                 @foreach($stocks as $stock)
                 <tr>
                     <td>{{ $stock->material_name }}</td>
-                    <td>{{ number_format($stock->total_in,2) }}</td>
-                    <td>{{ number_format($stock->total_out,2) }}</td>
-                    <td>{{ number_format($stock->current_stock,2) }}</td>
-                    <td>{{ number_format($stock->purchase_price,2) }}</td>
-                    <td>{{ number_format($stock->stock_value,2) }}</td>
+                      <td>{{rtrim(rtrim(number_format($stock->total_in, 2), '0'), '.')}}</td>
+                    <td>{{rtrim(rtrim(number_format($stock->total_out, 2), '0'), '.')}}</td>
+                    <td>{{rtrim(rtrim(number_format($stock->current_stock, 2), '0'), '.')}} </td>
+                    <td>{{rtrim(rtrim(number_format($stock->purchase_price, 2), '0'), '.')}} </td>
+                    <td>{{rtrim(rtrim(number_format($stock->stock_value, 2), '0'), '.')}}</td>
                 </tr>
                 @endforeach
             </tbody>

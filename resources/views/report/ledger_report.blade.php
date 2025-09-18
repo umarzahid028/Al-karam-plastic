@@ -46,9 +46,16 @@ h3 { margin-bottom:20px; }
 
     <!-- Ledger Summary -->
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-3"><strong>Total Debit:</strong> {{ number_format($ledgers->sum('debit'), 2) }}</div>
-        <div class="col-md-3"><strong>Total Credit:</strong> {{ number_format($ledgers->sum('credit'), 2) }}</div>
-        <div class="col-md-3"><strong>Balance:</strong> {{ number_format($ledgers->sum('debit') - $ledgers->sum('credit'), 2) }}</div>
+        <div class="col-md-3"><strong>Total Debit:</strong> 
+            {{rtrim(rtrim(number_format($ledgers->sum('debit'), 2), '0'), '.') }}</div>
+        <div class="col-md-3"><strong>Total Credit:</strong> 
+           
+            {{rtrim(rtrim(number_format($ledgers->sum('credit'), 2), '0'), '.') }}
+        </div>
+        <div class="col-md-3"><strong>Balance:</strong> 
+            {{-- {{ number_format($ledgers->sum('debit') - $ledgers->sum('credit'), 2) }} --}}
+             {{rtrim(rtrim(number_format($ledgers->sum('debit') - $ledgers->sum('credit'), 2), '0'), '.') }}
+        </div>
         <div class="col-md-3"><strong>Transactions:</strong> {{ $ledgers->count() }}</div>
     </div>
 
@@ -73,9 +80,10 @@ h3 { margin-bottom:20px; }
                         <td>{{ $entry->invoice_date }}</td>
                         <td>{{ $entry->party_id }}</td> 
                         <td>{{ $entry->description }}</td>
-                        <td>{{ number_format($entry->debit,2) }}</td>
-                        <td>{{ number_format($entry->credit,2) }}</td>
-                        <td>{{ number_format($runningBalance,2) }}</td>
+                      <td>{{rtrim(rtrim(number_format($entry->debit,2), '0'), '.') }}</td>
+                      <td>{{rtrim(rtrim(number_format($entry->credit,2), '0'), '.') }}</td>
+                      <td>{{rtrim(rtrim(number_format($runningBalance,2), '0'), '.') }}</td>
+                       
                     </tr>
                 @endforeach
             </tbody>
