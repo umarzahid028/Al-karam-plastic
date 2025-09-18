@@ -26,6 +26,7 @@ class InvoiceController extends Controller
     
         return view('sale-invoice', compact('buyers', 'salespersons', 'invoiceNo'));
     }
+
     public function search(Request $request)
     {
         $query = $request->get('q');
@@ -57,100 +58,98 @@ class InvoiceController extends Controller
         return response()->json($products);
     }
     
-public function getBalance($id)
-{
-    $buyer = \App\Models\RawSupplier::find($id);
+    public function getBalance($id)
+    {
+        $buyer = \App\Models\RawSupplier::find($id);
 
-    if (!$buyer) {
-        return response()->json(['success' => false, 'balance' => 0]);
-    }
-
-    return response()->json([
-        'success' => true,
-        'balance' => $buyer->opening_balance
-    ]);
-}
-public function store(Request $request)
-{
-    DB::beginTransaction();
-    try {
-        // 1️⃣ Save invoice
-        $invoice = SalesInvoice::create([
-            'buyer_id'     => $request->buyer_id,
-            'invoice_no'   => $request->invoice_no,
-            'invoice_date' => $request->invoice_date,
-            'total_amount' => $request->total_amount,
-            'remarks'      => $request->remarks ?? null,
-        ]);
-
-        // 2️⃣ Save invoice items & update stock
-        foreach ($request->items as $item) {
-            $productId = is_numeric($item['product_id']) 
-                ? $item['product_id'] 
-                : optional(Product::where('product_code', $item['product_id'])->first())->id;
-
-            SalesInvoiceItem::create([
-                'sales_invoice_id' => $invoice->id,
-                'product_id'       => $productId,
-                'qty'              => $item['qty'],
-                'price'            => $item['price'],
-                'total'            => $item['total'],
-            ]);
-
-            // Stock update
-            $stock = RawStock::firstOrCreate(
-                ['rawpro_id' => $productId],
-                ['quantity_in' => 0, 'quantity_out' => 0]
-            );
-
-            $stock->quantity_out += $item['qty'];
-            $stock->save();
-
-            RawStockLog::create([
-                'rawpro_id'    => $productId,
-                'trans_type'   => 'out',
-                'qty'          => $item['qty'],
-                'price'        => $item['price'],
-                'total_amount' => $item['total'],
-                'remarks'      => 'Sale Invoice #' . $invoice->invoice_no,
-                'user_id'      => auth()->id() ?? 1,
-                'trans_date'   => $request->invoice_date,
-            ]);
+        if (!$buyer) {
+            return response()->json(['success' => false, 'balance' => 0]);
         }
 
-        // 3️⃣ DOUBLE-ENTRY LEDGER
-
-        // Debit: Customer owes (Accounts Receivable)
-        Ledger::create([
-            'party_id'     => $invoice->buyer_id,
-            'party_type'   => 'supplier', 
-            'ref_type'     => 'sale',
-            'invoice_no'   => $invoice->invoice_no,
-            'invoice_date' => $invoice->invoice_date,
-            'description'  => 'Sale Invoice #' . $invoice->invoice_no,
-            'debit'        => $invoice->total_amount,
-            'credit'       => 0,
+        return response()->json([
+            'success' => true,
+            'balance' => $buyer->opening_balance
         ]);
-
-        // Credit: Revenue (system account)
-        Ledger::create([
-            'party_id'     => 'SYS',  
-            'party_type'   => 'user',
-            'ref_type'     => 'sale',
-            'invoice_no'   => $invoice->invoice_no,
-            'invoice_date' => $invoice->invoice_date,
-            'description'  => 'Revenue from Sale Invoice #' . $invoice->invoice_no,
-            'debit'        => 0,
-            'credit'       => $invoice->total_amount,
-        ]);
-
-        DB::commit();
-        return response()->json(['success' => true, 'id' => $invoice->id]);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json(['success' => false, 'message' => $e->getMessage()]);
     }
-}
 
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            // ✅ 1️⃣ Save invoice with salesperson_id
+            $invoice = SalesInvoice::create([
+                'buyer_id'       => $request->buyer_id,
+                'salesperson_id' => $request->salesperson_id,   // <-- Added
+                'invoice_no'     => $request->invoice_no,
+                'invoice_date'   => $request->invoice_date,
+                'total_amount'   => $request->total_amount,
+                'remarks'        => $request->remarks ?? null,
+            ]);
+
+            // 2️⃣ Save invoice items & update stock
+            foreach ($request->items as $item) {
+                $productId = is_numeric($item['product_id']) 
+                    ? $item['product_id'] 
+                    : optional(Product::where('product_code', $item['product_id'])->first())->id;
+
+                SalesInvoiceItem::create([
+                    'sales_invoice_id' => $invoice->id,
+                    'product_id'       => $productId,
+                    'qty'              => $item['qty'],
+                    'price'            => $item['price'],
+                    'total'            => $item['total'],
+                ]);
+
+                // Stock update
+                $stock = RawStock::firstOrCreate(
+                    ['rawpro_id' => $productId],
+                    ['quantity_in' => 0, 'quantity_out' => 0]
+                );
+
+                $stock->quantity_out += $item['qty'];
+                $stock->save();
+
+                RawStockLog::create([
+                    'rawpro_id'    => $productId,
+                    'trans_type'   => 'out',
+                    'qty'          => $item['qty'],
+                    'price'        => $item['price'],
+                    'total_amount' => $item['total'],
+                    'remarks'      => 'Sale Invoice #' . $invoice->invoice_no,
+                    'user_id'      => auth()->id() ?? 1,
+                    'trans_date'   => $request->invoice_date,
+                ]);
+            }
+
+            // 3️⃣ DOUBLE-ENTRY LEDGER
+            Ledger::create([
+                'party_id'     => $invoice->buyer_id,
+                'party_type'   => 'supplier', 
+                'ref_type'     => 'sale',
+                'invoice_no'   => $invoice->invoice_no,
+                'invoice_date' => $invoice->invoice_date,
+                'description'  => 'Sale Invoice #' . $invoice->invoice_no,
+                'debit'        => $invoice->total_amount,
+                'credit'       => 0,
+            ]);
+
+            Ledger::create([
+                'party_id'     => 'SYS',  
+                'party_type'   => 'user',
+                'ref_type'     => 'sale',
+                'invoice_no'   => $invoice->invoice_no,
+                'invoice_date' => $invoice->invoice_date,
+                'description'  => 'Revenue from Sale Invoice #' . $invoice->invoice_no,
+                'debit'        => 0,
+                'credit'       => $invoice->total_amount,
+            ]);
+
+            DB::commit();
+            return response()->json(['success' => true, 'id' => $invoice->id]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 }
