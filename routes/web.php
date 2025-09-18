@@ -18,7 +18,8 @@ Route::get('/sales', [InvoiceController::class, 'create'])->name('invoice.create
 Route::get('/products/search', [InvoiceController::class, 'search'])->name('products.search');
 Route::get('/buyers/{id}/balance', [InvoiceController::class, 'getBalance']);
 Route::post('/sales-invoices', [InvoiceController::class, 'store']);
-
+Route::get('/invoices', [InvoiceController::class, 'index'])
+     ->name('invoices.index');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products', [ProductController::class, 'list']);   
 Route::post('/products', [ProductController::class, 'store']); 
@@ -120,6 +121,10 @@ Route::get('/report/total-sales', [ReportController::class, 'totalSalesReport'])
  ->name('reports.ledger');
  // web.php
 Route::get('/reports/payments', [ReportController::class, 'paymentsReport'])->name('reports.payments');
+Route::get('/reports/stock-summary', [ReportController::class, 'stockSummary'])
+     ->name('reports.stock-summary');
+     Route::get('/reports/daily-sheet', [ReportController::class, 'dailySheet'])
+     ->name('reports.daily-sheet');
 
 // Route::get('/reports/sales-detail', [ReportController::class, 'salesDetailReport'])->name('reports.sales_detail');
 // Route::get('/reports/purchases-detail', [ReportController::class, 'purchaseDetailReport'])->name('reports.purchase_detail');

@@ -77,9 +77,12 @@ h3 { margin-bottom:20px; }
                         @if(isset($purchaseItems[$purchase->id]))
                             <ul class="items-list">
                             @foreach($purchaseItems[$purchase->id] as $item)
-                                <li>{{ $item->material_name }} ({{ $item->quantity }} x 
-                                    {{rtrim(rtrim(number_format($item->unit_price ,2), '0'), '.') }}
-                                     =   {{rtrim(rtrim(number_format($item->total_price ,2), '0'), '.') }})</li>
+                            <li>
+                                {{ $item->material_name }} ({{ $item->quantity }} x
+                                {{ rtrim(rtrim(number_format($item->unit_price, 2), '0'), '.') }}
+                                = {{ rtrim(rtrim(number_format($item->quantity * $item->unit_price, 2), '0'), '.') }})
+                              </li>
+                              
                             @endforeach
                             </ul>
                         @else

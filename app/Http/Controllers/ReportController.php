@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Schema; 
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\RawStock;    // ✅ Add this
+use App\Models\Product;     // ✅ Add this if using Product
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -555,7 +557,132 @@ public function paymentsReport(Request $request)
         'toDate'   => $toDate,
     ]);
 }
-public function city_report(Request $request){
+
+
+public function stockSummary(Request $request)
+{
+    $from = $request->input('from_date');   // e.g. 2025-09-01
+    $to   = $request->input('to_date');     // optional range end
+
+    // Base product query
+    $products = Product::select('id','product_code','product_name','unit')->get();
+
+    foreach ($products as $p) {
+        // --- Opening up to "from" date ---
+        $p->opening_qty = DB::table('raw_stock_logs')
+            ->where('rawpro_id', $p->id)
+            ->when($from, fn($q) => $q->where('trans_date', '<', $from))
+            ->selectRaw("COALESCE(SUM(CASE WHEN trans_type='in' THEN qty ELSE -qty END),0) as opening")
+            ->value('opening');
+
+        // --- Purchased & Sold inside the selected date range ---
+        $p->purchased_qty = DB::table('raw_stock_logs')
+            ->where('rawpro_id', $p->id)
+            ->when($from, fn($q) => $q->where('trans_date','>=',$from))
+            ->when($to,   fn($q) => $q->where('trans_date','<=',$to))
+            ->where('trans_type','in')
+            ->sum('qty');
+
+        $p->sold_qty = DB::table('raw_stock_logs')
+            ->where('rawpro_id', $p->id)
+            ->when($from, fn($q) => $q->where('trans_date','>=',$from))
+            ->when($to,   fn($q) => $q->where('trans_date','<=',$to))
+            ->where('trans_type','out')
+            ->sum('qty');
+
+        $p->closing_qty = ($p->opening_qty + $p->purchased_qty) - $p->sold_qty;
+    }
+
+    // Totals for the summary row
+    $totals = [
+        'opening'   => $products->sum('opening_qty'),
+        'purchased' => $products->sum('purchased_qty'),
+        'sold'      => $products->sum('sold_qty'),
+        'closing'   => $products->sum('closing_qty'),
+    ];
+
+    return view('report.stock-summary',
+        compact('products','totals','from','to'));
+}
+
+
+public function dailySheet(Request $request)
+{
+    $date = $request->input('date', Carbon::today()->toDateString());
+
+    // ---- Summary totals ----
+    $sales = DB::table('sales_invoices')
+        ->whereDate('invoice_date', $date)
+        ->selectRaw('COUNT(*) as invoices,
+                     SUM(total_amount) as gross,
+                     SUM(paid_amount)  as paid')
+        ->first();
+
+    $purchases = DB::table('purchases')
+        ->whereDate('purchase_date', $date)
+        ->selectRaw('COUNT(*) as invoices,
+                     SUM(total_amount) as gross,
+                     SUM(paid_amount)  as paid')
+        ->first();
+
+    $expenses = DB::table('expenses')
+        ->whereDate('expense_date', $date)
+        ->sum('amount');
+
+    $stock = DB::table('raw_stock_logs')
+        ->whereDate('trans_date', $date)
+        ->selectRaw("
+            SUM(CASE WHEN trans_type='in'  THEN qty ELSE 0 END) as qty_in,
+            SUM(CASE WHEN trans_type='out' THEN qty ELSE 0 END) as qty_out
+        ")->first();
+
+    // ---- Sales detail: join to raw_suppliers (buyer_id) ----
+    $salesList = DB::table('sales_invoices as si')
+        ->join('raw_suppliers as rs', 'si.buyer_id', '=', 'rs.id')
+        ->whereDate('si.invoice_date', $date)
+        ->select(
+            'si.invoice_no',
+            'rs.name as buyer_name',    // change to rs.company_name if you prefer
+            'si.total_amount',
+            'si.paid_amount'
+        )
+        ->orderBy('si.id', 'desc')
+        ->get();
+
+    // ---- Purchase detail: also join to raw_suppliers ----
+    $purchaseList = DB::table('purchases as p')
+        ->join('raw_suppliers as rs', 'p.supplier_id', '=', 'rs.id')
+        ->whereDate('p.purchase_date', $date)
+        ->select(
+            'p.invoice_no',
+            'rs.name as supplier_name', // or rs.company_name if that’s your display name
+            'p.total_amount',
+            'p.paid_amount'
+        )
+        ->orderBy('p.id', 'desc')
+        ->get();
+
+        $expenseList = DB::table('expenses')
+        ->whereDate('expense_date', $date)
+        ->select(
+            'expense_category',
+            'description',
+            'amount',
+            'vendor',
+            'payment_method'
+        )
+        ->orderBy('id', 'desc')
+        ->get();
     
+    return view('report.daily-sheet', compact(
+        'date',
+        'sales',
+        'purchases',
+        'expenses',
+        'stock',
+        'salesList',
+        'purchaseList',
+        'expenseList'
+    ));
 }
 }

@@ -66,28 +66,28 @@
   <nav class="navbar navbar-expand-lg brand-navbar">
     <div class="container container-narrow">
       <a class="navbar-brand d-flex align-items-center" href="{{route('welcome')}}">
-        <i class="bi bi-capsule me-2"></i>
-        Admin Dashboard
+        <h2>  <i class="bi bi-capsule me-2"></i>
+      Al-Karam Plastic </h2>
       </a>
-      {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button> --}}
+      </button>
 
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: 200px;">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Products</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Add New Product</a></li>
-              <li><a class="dropdown-item" href="#">Update Product</a></li>
+              <li><a class="dropdown-item" href="{{route('products.index')}}">Add New Product</a></li>
+              <li><a class="dropdown-item" href="{{route('products.update-index')}}">Update Product</a></li>
               <li><a class="dropdown-item" href="#">All Products</a></li>
             </ul>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sales</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Create Invoice</a></li>
-              <li><a class="dropdown-item" href="#">Invoices</a></li>
+              <li><a class="dropdown-item" href="{{route('invoice.create')}}">Create Invoice</a></li>
+              <li><a class="dropdown-item" href="{{route('invoices.index')}}">Invoices</a></li>
               <li><a class="dropdown-item" href="#">Payments</a></li>
             </ul>
           </li>
@@ -355,6 +355,7 @@
   </div>
 
   <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Include Bootstrap JS -->

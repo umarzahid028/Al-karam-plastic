@@ -177,7 +177,7 @@ body {
                 </a>
               </div>
               <div class="col-12 col-md-6">
-                <a href="#" class="btn btn-success d-flex justify-content-between">
+                <a href="{{route('reports.stock-summary')}}" class="btn btn-success d-flex justify-content-between">
                   <span>Stock Summary</span><i class="bi bi-arrow-right"></i>
                 </a>
               </div>
@@ -240,7 +240,7 @@ body {
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="#" class="btn btn-success d-flex justify-content-between">
+                  <a href="{{route('reports.daily-sheet')}}" class="btn btn-success d-flex justify-content-between">
                     <span>Daily Sheet</span><i class="bi bi-arrow-right"></i>
                   </a>
                 </div>

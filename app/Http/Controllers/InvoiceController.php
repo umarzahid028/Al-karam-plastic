@@ -15,6 +15,15 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+    public function index()
+    {
+        $invoices = SalesInvoice::with(['buyer:id,company_name', 'salesperson:id,name'])
+        ->orderBy('invoice_date', 'desc')
+        ->paginate(15);
+    
+        return view('sale-invoice-list', compact('invoices'));
+    }
+    
     public function create()
     {
         $buyers = RawSupplier::select('id', 'company_name')->orderBy('company_name')->get();
