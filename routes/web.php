@@ -138,9 +138,7 @@ Route::get('/reports/stock-summary', [ReportController::class, 'stockSummary'])
 use App\Http\Controllers\ExpenseController;
 
 Route::resource('expenses', ExpenseController::class);
-Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
-Route::post('/expenses/store-multiple', [ExpenseController::class, 'storeMultiple'])->name('expenses.storeMultiple');
-// Route::get('/expenses/{id}', [ExpenseController::class, 'show'])->name('expenses.show');
+
 use App\Http\Controllers\GatePassController;
 Route::get('/gate-pass', [GatePassController::class, 'index'])->name('gatepass.index');
 Route::get('/gate-pass/create', [GatePassController::class, 'create'])->name('gatepass.create');
