@@ -53,10 +53,10 @@ h3 { margin-bottom:20px; }
 
     {{-- ===== Totals ===== --}}
     <div class="row mb-3 summary-box text-center">
-        <div class="col-md-3"><strong>Opening:</strong> {{ number_format($totals['opening'],2) }}</div>
-        <div class="col-md-3"><strong>Purchased:</strong> {{ number_format($totals['purchased'],2) }}</div>
-        <div class="col-md-3"><strong>Sold:</strong> {{ number_format($totals['sold'],2) }}</div>
-        <div class="col-md-3"><strong>Closing:</strong> {{ number_format($totals['closing'],2) }}</div>
+        <div class="col-md-3"><strong>Opening:</strong>  {{ rtrim(rtrim(number_format($totals['opening'],2),'0'),'.') }}</div>
+        <div class="col-md-3"><strong>Purchased:</strong>   {{ rtrim(rtrim(number_format($totals['purchased'],2),'0'),'.') }}</div>
+        <div class="col-md-3"><strong>Sold:</strong>  {{ rtrim(rtrim(number_format($totals['sold'],2),'0'),'.') }}</div>
+        <div class="col-md-3"><strong>Closing:</strong>  {{ rtrim(rtrim(number_format($totals['closing'],2),'0'),'.') }}</div>
     </div>
 
     {{-- ===== Stock Table ===== --}}
@@ -87,10 +87,16 @@ h3 { margin-bottom:20px; }
                         <td>{{ $p->product_code }}</td>
                         <td>{{ $p->product_name }}</td>
                         <td>{{ $p->unit }}</td>
-                        <td class="text-end">{{ number_format($opening,2) }}</td>
-                        <td class="text-end">{{ number_format($purchased,2) }}</td>
-                        <td class="text-end">{{ number_format($sold,2) }}</td>
-                        <td class="text-end fw-bold">{{ number_format($closing,2) }}</td>
+                        <td class="text-end">
+                            {{ rtrim(rtrim(number_format($opening,2),'0'),'.') }}
+                         </td>
+                        <td class="text-end">
+                            {{ rtrim(rtrim(number_format($purchased,2),'0'),'.') }}
+                          </td>
+                        <td class="text-end">
+                            {{ rtrim(rtrim(number_format($sold,2),'0'),'.') }}</td>
+                        <td class="text-end fw-bold">
+                            {{ rtrim(rtrim(number_format($closing,2),'0'),'.') }}</td>
                     </tr>
                 @endforeach
             </tbody>

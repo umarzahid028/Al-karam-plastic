@@ -48,8 +48,12 @@ h3 { margin-bottom:20px; }
     <div class="row mb-3 summary-box text-center">
         <div class="col-md-3"><strong>Total Invoices:</strong> {{ $sales->count() }}</div>
         <div class="col-md-3"><strong>Total Quantity:</strong> {{ $sales->sum('qty') }}</div>
-        <div class="col-md-3"><strong>Total Amount:</strong> {{ number_format($sales->sum(fn($s) => $s->qty * $s->rate), 2) }}</div>
-        <div class="col-md-3"><strong>Average Rate:</strong> {{ number_format($sales->avg('rate'), 2) }}</div>
+        <div class="col-md-3"><strong>Total Amount:</strong> 
+            {{ rtrim(rtrim(number_format($sales->sum(fn($s) => $s->qty * $s->rate), 2),'0'),'.') }}
+           </div>
+        <div class="col-md-3"><strong>Average Rate:</strong> 
+            {{ rtrim(rtrim(number_format($sales->avg('rate'), 2),'0'),'.') }}
+          </div>
     </div>
 
     <!-- Sale Sheet Table -->
@@ -74,8 +78,12 @@ h3 { margin-bottom:20px; }
                     <td>{{ $s->buyer_name }}</td>
                     <td>{{ $s->product_name }}</td>
                     <td>{{ $s->qty }}</td>
-                    <td>{{ number_format($s->rate, 2) }}</td>
-                    <td>{{ number_format($s->qty * $s->rate, 2) }}</td>
+                    <td>
+                        {{ rtrim(rtrim(number_format($s->rate,2),'0'),'.') }}
+                       </td>
+                    <td>
+                        {{ rtrim(rtrim(number_format($s->qty * $s->rate, 2),'0'),'.') }}
+                        </td>
                 </tr>
                 @endforeach
             </tbody>
