@@ -15,7 +15,7 @@
     }
     .table-hover tbody tr:hover { background-color: #f1f1f1; }
     .btn-info {
-        background: linear-gradient(135deg, #85a8de 0%, #3f74e7 100%); /* bright indigo/blue gradient */
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); /
     border: none;
     color: #fff;
     font-weight: 600;
@@ -23,10 +23,12 @@
     box-shadow: 0 4px 12px rgba(115, 149, 224, 0.25);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .btn-info:hover { background:#138496; }
+    .btn-info:hover { background:#85a8de ; }
 
     
-    #searchInput { margin-bottom: 15px; max-width: 300px; }
+    #searchInput { 
+        margin-bottom: 15px; max-width: 300px;
+     }
     @media (max-width: 768px) {
         .table-responsive { overflow-x: auto; }
     }
@@ -38,8 +40,8 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Purchases</h3>
         <div class="d-flex gap-2">
-            <a href="{{ route('purchases.create') }}" class="btn btn-info">+ Add Purchase</a>
-            <a href="{{ url('/') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('purchases.create') }}" class="btn btn-info text-white">+ Add Purchase</a>
+            <a href="{{ url('/') }}" class="btn btn-secondary text-white">Back</a>
         </div>
     </div>
 
@@ -72,7 +74,7 @@
                     <td>{{ ucfirst($purchase->status) }}</td>
                     <td>{{ $purchase->description }}</td>
                     <td class="d-flex gap-1">
-                        <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm text-white">View</a>
                         <form action="{{ route('purchases.destroy', $purchase->id) }}"
                               method="POST" onsubmit="return confirm('Delete this purchase?')">
                             @csrf

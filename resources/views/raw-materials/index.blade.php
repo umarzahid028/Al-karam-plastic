@@ -98,7 +98,7 @@
     <input type="text"
            id="searchInput"
            class="form-control"
-           placeholder="🔍 Search material..."
+           placeholder="Search material..."
            onkeyup="filterTable()">
 
     {{-- Table --}}
@@ -124,12 +124,25 @@
                         <td>{{ $entry->unit }}</td>
                         <td>{{ rtrim(rtrim(number_format($entry->purchase_price, 2), '0'), '.') }}</td>
                         <td>{{ $entry->stocks }}</td>
-                        <td class="text-center">
+                        <td class="d-flex gap-2"> {{-- gap-2 gives consistent spacing --}}
+                            {{-- View Button --}}
                             <a href="{{ url('/raw-material-issues?material_id='.$entry->id) }}"
                                class="btn btn-info btn-sm text-white">
                                View
                             </a>
+                        
+                            {{-- Delete Button --}}
+                            <form action="{{ url('/raw-material/'.$entry->id) }}" {{-- proper delete URL --}}
+                                  method="POST"
+                                  onsubmit="return confirm('Are you sure you want to delete this material?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
+                        
                     </tr>
                 @endforeach
             </tbody>
@@ -144,7 +157,7 @@
     {{-- Back Button --}}
     <div class="d-flex justify-content-start mt-3">
         <a href="{{ url('/') }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left me-1"></i> Back
+         Back
         </a>
     </div>
 </div>
