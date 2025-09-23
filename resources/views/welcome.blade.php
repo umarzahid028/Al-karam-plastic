@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Ledger Dashboard')
+@section('title','Dashboard')
 
 @push('styles')
 <style>
@@ -48,7 +48,6 @@ body{
 .ledger-success .ledger-icon{ background:#10b981; }
 .ledger-warning .ledger-icon{ background:#f59e0b; }
 
-/* Charts card */
 .card-header{
   background:#fff;
   font-weight:600;
@@ -59,7 +58,18 @@ body{
 
 @section('content')
 <div class="container-xl py-4">
-  <div class="row g-4 mb-4">
+
+  {{-- Page Heading --}}
+ {{-- Page Heading --}}
+<div class="mb-4">
+  <h4 class="fw-bold" style="letter-spacing:.5px;">
+    Admin Dashboard
+  </h4>
+  <p class="text-muted">Overview of sales, purchases and current stock</p>
+</div>
+
+
+  <div class="row g-4 mb-5">
     <div class="col-md-4">
       <div class="ledger-card ledger-primary">
         <div>

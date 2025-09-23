@@ -28,16 +28,41 @@ body {
     border-color: #0d6efd;
     box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
 }
+/* Primary dashboard-style button */
 .btn-primary {
-    background: #0d6efd;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
-    padding: 10px 25px;
-    border-radius: 6px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.btn-primary:hover {
-    background: #0b5ed7;
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
 }
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(29, 78, 216, 0.3);
+}
+
+/* Secondary button muted dashboard style */
+.btn-secondary {
+    background: #64748b;  /* slate gray */
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+}
+
 label {
     font-weight: 500;
     color: #555;

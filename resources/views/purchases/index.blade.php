@@ -15,10 +15,17 @@
     }
     .table-hover tbody tr:hover { background-color: #f1f1f1; }
     .btn-info {
-        background:#17a2b8; color:white; border-radius:6px;
-        box-shadow:0 2px 5px rgba(0,0,0,0.15);
+        background: linear-gradient(135deg, #85a8de 0%, #3f74e7 100%); /* bright indigo/blue gradient */
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(115, 149, 224, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     .btn-info:hover { background:#138496; }
+
+    
     #searchInput { margin-bottom: 15px; max-width: 300px; }
     @media (max-width: 768px) {
         .table-responsive { overflow-x: auto; }
