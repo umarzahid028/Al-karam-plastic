@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Create Supplier</title>
+@extends('layouts.app')
+
+@section('title', 'Create Supplier')
+
+@push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
@@ -19,11 +17,13 @@ textarea { min-height: 44px; resize: vertical; }
 .btn-secondary { border-radius: 6px; }
 .d-flex.gap-2 > .btn { flex: 1; }
 </style>
-</head>
-<body>
+@endpush
+
+@section('content')
 <div class="container">
   <div class="card">
     <h3>Create New Supplier</h3>
+
     <form id="supplierForm">
       <div class="row mb-3">
         <div class="col-md-6">
@@ -35,6 +35,7 @@ textarea { min-height: 44px; resize: vertical; }
           <input type="text" class="form-control" id="company_name" placeholder="Company Name" required>
         </div>
       </div>
+
       <div class="row mb-3">
         <div class="col-md-6">
           <label>Contact Name</label>
@@ -45,6 +46,7 @@ textarea { min-height: 44px; resize: vertical; }
           <input type="tel" class="form-control" id="contact_no" placeholder="+92-300-1234567" required>
         </div>
       </div>
+
       <div class="row mb-3">
         <div class="col-md-6">
           <label>Email</label>
@@ -55,6 +57,7 @@ textarea { min-height: 44px; resize: vertical; }
           <input type="number" class="form-control" id="opening_balance" value="0">
         </div>
       </div>
+
       <div class="row mb-3">
         <div class="col-md-6">
           <label>Status</label>
@@ -69,56 +72,54 @@ textarea { min-height: 44px; resize: vertical; }
           <input type="text" class="form-control" id="city" placeholder="Karachi" required>
         </div>
       </div>
+
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-primary">Save Supplier</button>
-        <button type="button" class="btn btn-secondary" onclick="window.location.href='/suppliers'">Back</button>
+        <a href="{{ route('suppliers.index') }}" class="btn btn-secondary">Back</a>
       </div>
     </form>
   </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
 document.getElementById("supplierForm").addEventListener("submit", function(e){
   e.preventDefault();
-  const data = {
-  supplier_code: document.getElementById("supplier_code").value,
-  company_name: document.getElementById("company_name").value,
-  name: document.getElementById("name").value,
-  city: document.getElementById("city").value,          // ✅ add this
-  email: document.getElementById("email").value,
-  contact_no: document.getElementById("contact_no").value,
-  opening_balance: document.getElementById("opening_balance").value,
-  status: document.getElementById("status").value
-};
 
+  const data = {
+    supplier_code: document.getElementById("supplier_code").value,
+    company_name: document.getElementById("company_name").value,
+    name: document.getElementById("name").value,
+    city: document.getElementById("city").value,
+    email: document.getElementById("email").value,
+    contact_no: document.getElementById("contact_no").value,
+    opening_balance: document.getElementById("opening_balance").value,
+    status: document.getElementById("status").value
+  };
 
   fetch("{{ route('suppliers.api.store') }}", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-  },
-  body: JSON.stringify(data)
-})
-.then(async res => {
-  const text = await res.text(); 
-  try {
-    return JSON.parse(text);    
-  } catch (e) {
-    throw new Error("Not JSON: " + text); // help debug if HTML comes back
-  }
-})
-.then(resp => {
-  if(resp.success){
-    alert(resp.message);
-    location.href = "/suppliers";
-  } else {
-    alert("Error: " + resp.message);
-  }
-})
-.catch(err => alert("Request failed: " + err));
-
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify(data)
+  })
+  .then(async res => {
+    const text = await res.text(); 
+    try { return JSON.parse(text); } 
+    catch (e) { throw new Error("Not JSON: " + text); }
+  })
+  .then(resp => {
+    if(resp.success){
+      alert(resp.message);
+      window.location.href = "{{ route('suppliers.index') }}";
+    } else {
+      alert("Error: " + resp.message);
+    }
+  })
+  .catch(err => alert("Request failed: " + err));
 });
 </script>
-</body>
-</html>
+@endpush

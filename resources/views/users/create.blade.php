@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add User</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')
 
+@section('title', 'Add User')
+
+@push('styles')
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -49,8 +46,8 @@
             color: #555;
         }
     </style>
-</head>
-<body>
+    @endpush
+    @section('content')
 <div class="container">
     <div class="card">
         <h3>Add New User</h3>
@@ -116,5 +113,4 @@
         </form>
     </div>
 </div>
-</body>
-</html>
+@endsection

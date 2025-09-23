@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Create Customer Invoice</title>
+
+@extends('layouts.app')
+
+@section('title', 'Create Customer Invoices')
+@push('styles')
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { background:#f8f9fa; font-family: Arial, sans-serif; }
@@ -13,8 +13,8 @@
     .btn-sm { padding: 3px 8px; }
     .grand-total { font-size: 1.2rem; font-weight: bold; }
   </style>
-</head>
-<body>
+@endpush
+@section('content')
 <div class="container">
   <h3 class="mb-4 text-primary">Create Customer Invoice</h3>
 
@@ -103,7 +103,8 @@
     </div>
   </form>
 </div>
-
+@endsection()
+@push('scripts')
 <script>
 let rowIndex = 1;
 
@@ -155,5 +156,4 @@ function calculateTotals() {
 
 attachListeners();
 </script>
-</body>
-</html>
+@endpush

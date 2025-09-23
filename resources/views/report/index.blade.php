@@ -33,8 +33,19 @@ body {
 </style>
 </head>
 <body>
-
-<div class="col-12 col-sm-6 col-lg-4">
+  <nav>
+  
+        <a href="#" 
+           class="nav-link d-flex align-items-center" 
+           data-bs-toggle="modal" 
+           data-bs-target="#reportModal">
+          <i class="bi bi-bar-chart-line me-2"></i>
+          <span>View Reports</span>
+        </a>
+    
+  </nav>
+  
+{{-- <div class="col-12 col-sm-6 col-lg-4">
     <a class="card action-card text-decoration-none"
        href="#"
        data-bs-toggle="modal"
@@ -47,7 +58,7 @@ body {
           </div>
         </div>
     </a>
-</div>
+</div> --}}
 
 <!-- Modal -->
 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">

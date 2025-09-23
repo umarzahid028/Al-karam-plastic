@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Create Raw Material</title>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')   {{-- uses the sidebar + navbar master layout --}}
+
+@section('title','Add New Raw Material')
+
+@push('styles')
 <style>
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -45,8 +43,9 @@ label {
     color: #555;
 }
 </style>
-</head>
-<body>
+@endpush
+
+@section('content')
 <div class="container">
     <div class="card">
         <h3>Create New Raw Material</h3>
@@ -97,7 +96,8 @@ label {
         </form>
     </div>
 </div>
-
+@endsection
+@push('scripts')
 <script>
 let stores = [];
 // Fetch stores
@@ -147,5 +147,4 @@ document.getElementById("rawMaterialForm").addEventListener("submit", function(e
 .catch(err => alert("Request failed: " + err));
 });
 </script>
-</body>
-</html>
+@endpush

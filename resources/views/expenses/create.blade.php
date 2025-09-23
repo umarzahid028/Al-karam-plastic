@@ -1,41 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Expense</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')
 
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f9;
-        }
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-        }
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .card-header {
-            color: black;
-            font-weight: 600;
-            font-size: 1.2rem;
-            border-radius: 12px 12px 0 0;
-            padding: 15px 20px;
-        }
-    </style>
-</head>
-<body>
+@section('title', 'Add Expense')
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f9;
+}
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+}
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+.card-header {
+    color: black;
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-radius: 12px 12px 0 0;
+    padding: 15px 20px;
+}
+.form-label {
+    font-weight: 500;
+}
+</style>
+@endpush
+
+@section('content')
 <div class="container">
     <div class="card">
-        <div class="card-header"> Add Expense</div>
+        <div class="card-header">Add Expense</div>
         <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger mb-3">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('expenses.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label">Category</label>
@@ -49,11 +60,12 @@
                             <option value="Other">Other</option>
                         </select>
                     </div>
+
                     <div class="col-md-4">
                         <label class="form-label">Expense #</label>
-                        <input type="text" name="expense_no" class="form-control" value="{{ $prefix }}" required>
+                        <input type="text" name="expense_no" class="form-control" value="{{ $prefix ?? '' }}" required>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <label class="form-label">Expense Type</label>
                         <input type="text" name="expense_type" class="form-control" placeholder="e.g. Electricity" required>
@@ -118,5 +130,4 @@
         </div>
     </div>
 </div>
-</body>
-</html>
+@endsection

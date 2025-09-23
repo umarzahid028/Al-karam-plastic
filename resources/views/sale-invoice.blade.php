@@ -1,36 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Sale Invoice</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')
 
+@section('title', 'Sale Invoice')
+@push('styles')
 <style>
-body { background: #f5f7fa; font-family: Arial, sans-serif; }
 .invoice-box { background: rgba(255,255,255,0.95); border-radius: 12px; padding:25px; max-width:900px; margin:50px auto; box-shadow:0 6px 20px rgba(0,0,0,0.15);}
 .small-muted { font-size:0.85rem; font-weight:500; color:#555;}
 .btn-purple { background:#6366f1; color:white;}
 .btn-purple:hover { background:#4f46e5; color:white;}
 .list-group-item { cursor:pointer; }
-.duplicate-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #17a2b8;
-    color: white;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
-    z-index: 1000;
-}
+.duplicate-badge { position: absolute; top: 10px; right: 10px; background: #17a2b8; color: white; font-weight: bold; padding: 5px 10px; border-radius: 5px; z-index: 1000;}
 .card-body { position: relative; }
 @media print { .no-print { display: none; } }
 </style>
-</head>
-<body>
+@endpush
+
+@section('content')
 <div class="invoice-box">
     <h4 class="mb-4">Sale Invoice</h4>
 
@@ -46,7 +30,6 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
                     </option>
                 @endforeach
             </select>
-            
         </div>
         <div class="col-md-3">
             <label class="form-label small-muted">Salesperson</label>
@@ -94,21 +77,11 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
             <input id="group" class="form-control" placeholder="Group" autocomplete="off">
             <div id="groupList" class="list-group position-absolute w-100" style="z-index:1000;"></div>
         </div>
-        <div class="col-md-2">
-            <input id="size" class="form-control" placeholder="Size">
-        </div>
-        <div class="col-md-1">
-            <input id="qty" type="number" class="form-control" placeholder="Qty" min="1">
-        </div>
-        <div class="col-md-1">
-            <input id="price" type="number" class="form-control" placeholder="Price" min="0">
-        </div>
-        <div class="col-md-1">
-            <input id="weight" type="number" class="form-control" placeholder="W">
-        </div>
-        <div class="col-md-1 d-grid">
-            <button id="addBtn" class="btn btn-purple">Add</button>
-        </div>
+        <div class="col-md-2"><input id="size" class="form-control" placeholder="Size"></div>
+        <div class="col-md-1"><input id="qty" type="number" class="form-control" placeholder="Qty" min="1"></div>
+        <div class="col-md-1"><input id="price" type="number" class="form-control" placeholder="Price" min="0"></div>
+        <div class="col-md-1"><input id="weight" type="number" class="form-control" placeholder="W"></div>
+        <div class="col-md-1 d-grid"><button id="addBtn" class="btn btn-purple">Add</button></div>
     </div>
 
     <!-- Product Table -->
@@ -130,10 +103,10 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
     </div>
 
     <!-- Buttons -->
-    <div class="d-flex justify-content-between mt-4">
+    <div class="d-flex justify-content-between mt-4 no-print">
         <button class="btn btn-purple" id="generatePDF">Generate PDF</button>
         <button class="btn btn-success" id="submitBtn">Submit Invoice</button>
-        <a class="btn btn-secondary" href="{{route('welcome')}}" >Back</a>
+        <a class="btn btn-secondary" href="{{ route('welcome') }}">Back</a>
     </div>
 </div>
 
@@ -145,9 +118,7 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
         <h5 class="modal-title">Gate Pass</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" id="gatePassContent">
-        <!-- Dynamic Slip -->
-      </div>
+      <div class="modal-body" id="gatePassContent"></div>
       <div class="modal-footer d-flex justify-content-between">
         <button id="savePassBtn" class="btn btn-secondary">Back</button>
         <button id="printPassBtn" class="btn btn-primary">Print</button>
@@ -155,11 +126,14 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
     </div>
   </div>
 </div>
+@endsection
 
+@section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 let rowCount = 0, invoiceTotal = 0, prevBalance = 0;
 
-// ================= Search =================
+// ====== Setup Search ======
 function setupSearch(inputId, listId, type){
     const input=document.getElementById(inputId);
     const list=document.getElementById(listId);
@@ -167,7 +141,6 @@ function setupSearch(inputId, listId, type){
     input.addEventListener("keyup",function(){
         const q=this.value.trim();
         if(q.length<1){ list.innerHTML=""; return; }
-
         fetch(`/products/search?q=${q}&type=${type}`)
         .then(res=>res.json())
         .then(data=>{
@@ -193,15 +166,14 @@ function setupSearch(inputId, listId, type){
         });
     });
 }
-
 setupSearch("productId","productList","id");
 setupSearch("name","nameList","name");
 setupSearch("group","groupList","group");
 
-// ================= Buyer Balance =================
-function fetchBuyerBalance(buyerId){
+// ====== Buyer Balance ======
+document.getElementById("buyer").addEventListener("change", function(){
+    const buyerId = this.value;
     if(!buyerId){ prevBalance=0; document.getElementById("prevBalance").textContent="0"; updateTotals(); return; }
-
     fetch(`/buyers/${buyerId}/balance`)
     .then(res=>res.json())
     .then(data=>{
@@ -209,11 +181,9 @@ function fetchBuyerBalance(buyerId){
         document.getElementById("prevBalance").textContent=prevBalance.toFixed(2);
         updateTotals();
     });
-}
+});
 
-document.getElementById("buyer").addEventListener("change", function(){ fetchBuyerBalance(this.value); });
-
-// ================= Add Product =================
+// ====== Add Product ======
 document.getElementById("addBtn").addEventListener("click", function(e){
     e.preventDefault();
     const productId=document.getElementById("productId").value.trim();
@@ -248,7 +218,7 @@ document.getElementById("addBtn").addEventListener("click", function(e){
     ["productId","name","group","size","qty","price","weight"].forEach(id=>document.getElementById(id).value="");
 });
 
-// ================= Delete Product =================
+// ====== Delete Product ======
 document.getElementById("productTable").addEventListener("click", function(e){
     if(e.target.classList.contains("deleteBtn")){
         const row=e.target.closest("tr");
@@ -258,7 +228,7 @@ document.getElementById("productTable").addEventListener("click", function(e){
     }
 });
 
-// ================= Submit Invoice =================
+// ====== Submit Invoice ======
 document.getElementById("submitBtn").addEventListener("click", function(e){
     e.preventDefault();
     const buyerId=document.getElementById("buyer").value;
@@ -282,7 +252,7 @@ document.getElementById("submitBtn").addEventListener("click", function(e){
         method:"POST",
         headers:{
             "Content-Type":"application/json",
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
         },
         body: JSON.stringify({
             buyer_id: parseInt(buyerId),
@@ -326,8 +296,6 @@ document.getElementById("submitBtn").addEventListener("click", function(e){
                   <p><strong>User:</strong> Current User</p>
                   <p><strong>Total Items:</strong> ${document.querySelectorAll("#productTable tr").length}</p>
                   <p><strong>Customer:</strong> ${buyerText}</p>
-                 <p><strong>Contact No:</strong> {{ $gatePass->invoice->buyer->contact_no ?? 'N/A' }}</p>
-
                 </div>
                 <h5 class="mt-4">Invoice Items</h5>
                 <table class="table table-bordered table-striped">
@@ -336,7 +304,6 @@ document.getElementById("submitBtn").addEventListener("click", function(e){
                   </thead>
                   <tbody>${productRows}</tbody>
                 </table>
-               
               </div>
             </div>`;
             document.getElementById("gatePassContent").innerHTML=slipHtml;
@@ -346,20 +313,20 @@ document.getElementById("submitBtn").addEventListener("click", function(e){
     });
 });
 
-// ================= Update Totals =================
+// ====== Update Totals ======
 function updateTotals(){
     document.getElementById("invoiceTotal").textContent=invoiceTotal.toFixed(2);
     document.getElementById("grandTotal").textContent=(invoiceTotal+prevBalance).toFixed(2);
 }
 
-// ================= Save Gate Pass =================
+// ====== Save Gate Pass ======
 document.getElementById("savePassBtn").addEventListener("click", function(){
     const invoiceNo=document.getElementById("invoiceNo").value;
     fetch("/gate-passes", {
         method:"POST",
         headers:{
             "Content-Type":"application/json",
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
         },
         body: JSON.stringify({ invoice_no: invoiceNo, status: "saved" })
     })
@@ -367,12 +334,12 @@ document.getElementById("savePassBtn").addEventListener("click", function(){
     .then(data=>{
         if(data.success){
             alert("Gate pass saved successfully!");
-            location.href="{{route('welcome')}}";
+            location.href="{{ route('welcome') }}";
         }
     });
 });
 
-// ================= Print Gate Pass =================
+// ====== Print Gate Pass ======
 document.getElementById("printPassBtn").addEventListener("click", function(){
     const content=document.getElementById("gatePassContent").innerHTML;
     const printWin=window.open("","","width=800,height=600");
@@ -381,7 +348,7 @@ document.getElementById("printPassBtn").addEventListener("click", function(){
     printWin.print();
 });
 
-// ================= Generate PDF =================
+// ====== Generate PDF ======
 document.getElementById("generatePDF").addEventListener("click", function(){
     const { jsPDF }=window.jspdf;
     const doc=new jsPDF();
@@ -418,5 +385,5 @@ document.getElementById("generatePDF").addEventListener("click", function(){
     doc.save(`Invoice-${invoiceNo||"0001"}.pdf`);
 });
 </script>
-</body>
-</html>
+@endsection
+

@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Products List</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app') {{-- Replace with your main layout --}}
+
+@section('title', 'Products List')
+
+@push('styles')
 <style>
-body {
-     background:#f5f7fa; 
-     font-family: Arial, sans-serif; 
-}
-.container { 
-    background:white; 
-    border-radius:12px; 
-    padding:25px; 
-    max-width:1000px; 
-    margin:50px auto; 
-    box-shadow:0 6px 20px rgba(0,0,0,0.1);
-}
 .table-hover tbody tr:hover { 
     background:#f1f1f1; 
 }
@@ -35,14 +22,14 @@ body {
     color:white; 
 }
 </style>
-</head>
-<body>
-<div class="container">
+@endpush
+@section('content')
+<div class="container mt-5 p-4 bg-white rounded shadow-sm" style="max-width:1000px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Products List</h3>
-        <a href="{{ route('products.create') }}" class="btn btn-info">
+        {{-- <a href="{{ route('products.create') }}" class="btn btn-info">
             + Add New Product
-        </a>
+        </a> --}}
     </div>
 
     <div class="table-responsive">
@@ -68,17 +55,11 @@ body {
                     <td>{{ $p->product_name }}</td>
                     <td>{{ $p->product_group ?? '-' }}</td>
                     <td>{{ $p->unit }}</td>
-                    <td>
-                        {{rtrim(rtrim(number_format($p->sale_price, 2), '0'), '.') }}
-                       </td>
-                    <td>
-                        {{rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}
-                      </td>
+                    <td>{{ rtrim(rtrim(number_format($p->sale_price, 2), '0'), '.') }}</td>
+                    <td>{{ rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}</td>
                     <td>{{ $p->current_stock }}</td>
                     <td>
-                        <a href="{{ route('products.update', $p->id) }}" class="btn btn-sm btn-info">
-                            Edit
-                        </a>
+                        <a href="{{ route('products.update', $p->id) }}" class="btn btn-sm btn-info">Edit</a>
                     </td>
                 </tr>
                 @endforeach
@@ -90,11 +71,11 @@ body {
             {{ $products->links('pagination::bootstrap-5') }}
         </div>
     </div>
+
     <div class="d-flex justify-content-between mt-3">
-        <button class="btn btn-secondary" onclick="window.location.href='/'">
-            Back
-        </button>
+        <button class="btn btn-secondary" onclick="window.location.href='/'">Back</button>
     </div>
 </div>
-</body>
-</html>
+@endsection
+
+

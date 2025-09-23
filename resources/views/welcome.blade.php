@@ -1,364 +1,233 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> Admin Dashboard</title>
+@extends('layouts.app')
+@section('title','Ledger Dashboard')
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-
-  <style>
-    :root {
-      --brand-start: #0a4abf;
-      --brand-end: #132b7a;
-      --card-shadow: 0 8px 20px rgba(16, 24, 40, 0.08);
+@push('styles')
+<style>
+    body {
+        background: #f3f4f6;
+        font-family: 'Inter', sans-serif;
     }
-    body { background: #f6f8fb; }
 
-    /* Brand Topbar */
-    .brand-navbar {
-      background: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+    /* --- Ledger Card --- */
+    .ledger-card {
+        position: relative;
+        border: none;
+        border-radius: 1.25rem;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 6px 20px rgba(0,0,0,.08);
+        transition: all .35s ease;
+        overflow: hidden;
     }
-    .brand-navbar .navbar-brand {
-      font-weight: 700;
-      letter-spacing: .3px;
-      color: #fff;
+    .ledger-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0,0,0,.12);
     }
-    .brand-navbar .nav-link,
-    .brand-navbar .navbar-text { color: rgba(255,255,255,.9); }
-    .brand-navbar .nav-link:hover { color: #fff; }
 
-    /* Page header */
-    .page-header { padding: 18px 0; }
-    .page-header h1 { font-size: 1.4rem; margin: 0; color: #111827; }
-
-    /* Action grid cards */
-    .action-card {
-      border: 0;
-      border-radius: 1rem;
-      box-shadow: var(--card-shadow);
-      transition: transform .12s ease, box-shadow .12s ease;
-      background: #fff;
+    /* Moving top gradient bar */
+    .ledger-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 6px;
+        background-size: 300% 100%;
+        border-top-left-radius: 1.25rem;
+        border-top-right-radius: 1.25rem;
+        animation: barSlide 6s linear infinite;
     }
-    .action-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(16,24,40,.12); }
-    .action-card .card-body { display: flex; align-items: center; gap: 14px; padding: 18px; }
-    .action-card .bi {
-      font-size: 28px;
-      padding: 14px;
-      border-radius: 12px;
-      background: #eff4ff;
+    @keyframes barSlide {
+        0%   { background-position: 0% 0%; }
+        100% { background-position: 300% 0%; }
     }
-    .action-title { font-weight: 600; margin: 0; color: #0f172a; }
-    .action-sub { margin: 2px 0 0 0; color: #64748b; font-size: .9rem; }
 
-    .container-narrow { max-width: 1150px; }
-
-    @media (max-width: 575.98px) {
-      .action-card .card-body { padding: 16px; }
+    /* Theme Colors */
+    .ledger-primary::before {
+        background: linear-gradient(90deg,#4f46e5,#6366f1,#818cf8);
     }
-  </style>
-</head>
-<body>
-  <!-- Top Navigation -->
-  <nav class="navbar navbar-expand-lg brand-navbar">
-    <div class="container container-narrow">
-      <a class="navbar-brand d-flex align-items-center" href="{{route('welcome')}}">
-        <h2>  <i class="bi bi-capsule me-2"></i>
-      Al-Karam Plastic </h2>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    .ledger-success::before {
+        background: linear-gradient(90deg,#059669,#10b981,#34d399);
+    }
+    .ledger-warning::before {
+        background: linear-gradient(90deg,#f59e0b,#fbbf24,#f97316);
+    }
 
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left: 200px;">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Products</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{{route('products.index')}}">Add New Product</a></li>
-              <li><a class="dropdown-item" href="{{route('products.update-index')}}">Update Product</a></li>
-              <li><a class="dropdown-item" href="#">All Products</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sales</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{{route('invoice.create')}}">Create Invoice</a></li>
-              <li><a class="dropdown-item" href="{{route('invoices.index')}}">Invoices</a></li>
-              <li><a class="dropdown-item" href="#">Payments</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Stock</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Add Raw Material</a></li>
-              <li><a class="dropdown-item" href="#">Purchase/Issue Raw Material</a></li>
-              <li><a class="dropdown-item" href="#">View Stock</a></li>
-            </ul>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Make Payment</a></li>
-              <li><a class="dropdown-item" href="#">Payment Ledger</a></li>
-            </ul>
-          </li>
-        </ul>
+    /* Content Typography */
+    .ledger-card h6 {
+        font-size: .9rem;
+        letter-spacing: .3px;
+        color: #6b7280;
+        margin-bottom: .35rem;
+    }
+    .ledger-card h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
 
-        <div class="d-flex align-items-center  gap-3">
-          {{-- <span class="navbar-text d-none d-md-inline">Guest</span> --}}
-          <a class="btn btn-light btn-sm d-flex align-items-center" href="#">
-            <i class="bi bi-person-circle me-1"></i>
-            Login
-          </a>
+    /* Icon */
+    .ledger-card .icon {
+        font-size: 2.8rem;
+        padding: .5rem .6rem;
+        border-radius: 1rem;
+        background: rgba(255,255,255,0.35);
+        color: #374151;
+        transition: background .3s ease;
+    }
+    .ledger-card:hover .icon {
+        background: rgba(255,255,255,0.55);
+    }
+
+    /* Chart Containers */
+    .chart-container .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 6px 16px rgba(0,0,0,.06);
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="container-fluid">
+    {{-- Ledger Summary --}}
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card ledger-card ledger-primary">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Total Ledger Sales</h6>
+                        <h3>₨ {{ number_format($totalSales) }}</h3>
+                    </div>
+                    <i class="bi bi-bar-chart-line icon"></i>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="col-md-4">
+            <div class="card ledger-card ledger-success">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Total Ledger Purchases</h6>
+                        <h3>₨ {{ number_format($totalPurchases) }}</h3>
+                    </div>
+                    <i class="bi bi-cart-check icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card ledger-card ledger-warning">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Stock Available</h6>
+                        <h3>{{ number_format($totalStock) }} Units</h3>
+                    </div>
+                    <i class="bi bi-box icon"></i>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
 
-  <!-- Page Heading -->
-  <div class="container container-narrow">
-    <div class="page-header d-flex justify-content-between align-items-center">
-      <h1 class="mb-0">Admin Dashboard</h1>
+    {{-- Charts --}}
+    <div class="row g-4">
+        <div class="col-lg-8 chart-container">
+            <div class="card">
+                <div class="card-header fw-semibold">Monthly Sales & Purchases</div>
+                <div class="card-body">
+                    <canvas id="salesPurchaseChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 chart-container">
+            <div class="card">
+                <div class="card-header fw-semibold">Stock Distribution</div>
+                <div class="card-body">
+                    <canvas id="stockChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Action Grid -->
-    <div class="row g-3 g-md-4">
-      <!-- Row 1 -->
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('raw_materials.index')}}">
-          <div class="card-body">
-            <i class="bi bi-bricks"></i>
-            <div>
-              <p class="action-title">Add Raw Material</p>
-              <p class="action-sub">Create items for stock</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('purchases.index')}}">
-          <div class="card-body">
-            <i class="bi bi-box-seam"></i>
-            <div>
-              <p class="action-title">Purchase/Issue Raw Material</p>
-              <p class="action-sub">Record incoming & usage</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('invoice.create')}}">
-          <div class="card-body">
-            <i class="bi bi-receipt"></i>
-            <div>
-              <p class="action-title">Create Invoice</p>
-              <p class="action-sub">Generate customer invoices</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- Row 2 -->
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="#">
-          <div class="card-body">
-            <i class="bi bi-credit-card"></i>
-            <div>
-              <p class="action-title">Make Payment</p>
-              <p class="action-sub">Log customer payments</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      @include('report.index')
-      {{-- <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="#">
-          <div class="card-body">
-            <i class="bi bi-bar-chart-line"></i>
-            <div>
-              <p class="action-title">View Reports</p>
-              <p class="action-sub">Sales & stock analytics</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      --}}
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('users.index')}}">
-          <div class="card-body">
-            <i class="bi bi-person-plus"></i>
-            <div>
-              <p class="action-title">Add Users</p>
-              <p class="action-sub">Create system users</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- Row 3 -->
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="#">
-          <div class="card-body">
-            <i class="bi bi-people"></i>
-            <div>
-              <p class="action-title">Manage Users</p>
-              <p class="action-sub">Roles & permissions</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('suppliers.index')}}">
-          <div class="card-body">
-            <i class="bi bi-truck"></i>
-            <div>
-              <p class="action-title">Add New Supplier</p>
-              <p class="action-sub">Create vendor profiles</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('products.index')}}">
-          <div class="card-body">
-            <i class="bi bi-box"></i>
-            <div>
-              <p class="action-title">Add New Product</p>
-              <p class="action-sub">Add catalog items</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <!-- Row 4 -->
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('products.update-index')}}">
-          <div class="card-body">
-            <i class="bi bi-arrow-repeat"></i>
-            <div>
-              <p class="action-title">Update Product</p>
-              <p class="action-sub">Edit existing items</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('customers.index')}}">
-          <div class="card-body">
-            <i class="bi bi-buildings"></i>
-            <div>
-              <p class="action-title">Add/Update Customer</p>
-              <p class="action-sub">Manage customers</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a class="card action-card text-decoration-none" href="{{route('ledger.index')}}">
-          <div class="card-body">
-            <i class="bi bi-journal-text"></i>
-            <div>
-              <p class="action-title">View Ledger</p>
-              <p class="action-sub">Receivables & balances</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Row 5 -->
-<div class="row g-3 g-md-4 mt-2">
-  <div class="col-12 col-sm-6 col-lg-4">
-    <a class="card action-card text-decoration-none" href="{{route('expenses.index')}}">
-      <div class="card-body">
-        <i class="bi bi-cash-stack"></i>
-        <div>
-          <p class="action-title">Add Expense</p>
-          <p class="action-sub">Record company expenses</p>
-        </div>
-      </div>
-    </a>
-  </div>
-
-  <div class="col-12 col-sm-6 col-lg-4">
-    <a class="card action-card text-decoration-none" href="{{route('gatepass.index')}}">
-      <div class="card-body">
-        <i class="bi bi-key"></i>
-        <div>
-          <p class="action-title">Generate Pass</p>
-          <p class="action-sub">Create suppliers/customer passes</p>
-        </div>
-      </div>
-    </a>
-  </div>
-
- 
-<!-- Dashboard Cards -->
-
-
-  <!-- Purchase Return Card -->
-  {{-- <div class="col-12 col-sm-6 col-lg-4">
-    <a class="card action-card text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#purchaseReturnModal">
-      <div class="card-body">
-        <i class="bi bi-arrow-counterclockwise"></i>
-        <div>
-          <p class="action-title">Purchase Return</p>
-          <p class="action-sub">Return purchased items</p>
-        </div>
-      </div>
-    </a>--}}
-    @include('purchase_returns.index')
 </div>
+@endsection
 
-    
-  
-  <!-- Include the modal from sales_returns.index -->
-  
-  @include('sales_returns.index')
- 
-<!-- Purchase Return Modal -->
-{{-- <div class="modal fade" id="purchaseReturnModal" tabindex="-1" aria-labelledby="purchaseReturnLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="{{ route('purchase_returns.search.get') }}" method="POST">
-        @csrf
-        <div class="modal-header">
-          <h5 class="modal-title" id="purchaseReturnLabel">Search Purchase Invoice</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          @if(session('error'))
-          <div class="alert alert-danger">{{ session('error') }}</div>
-          @endif
-          <input type="text" name="invoice_no" class="form-control" placeholder="Enter Invoice No" required>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
- --}}
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const months      = @json($months);
+    const sales       = @json($sales);
+    const purchases   = @json($purchases);
+    const stockLabels = @json($stockLabels);
+    const stockData   = @json($stockData);
 
-    <div class="py-4"></div>
-  </div>
+    // Line Chart
+    const ctxSales = document.getElementById('salesPurchaseChart').getContext('2d');
+    const gradientSales = ctxSales.createLinearGradient(0,0,0,300);
+    gradientSales.addColorStop(0,'#6366f1');
+    gradientSales.addColorStop(1,'#a5b4fc');
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    const gradientPurchase = ctxSales.createLinearGradient(0,0,0,300);
+    gradientPurchase.addColorStop(0,'#10b981');
+    gradientPurchase.addColorStop(1,'#6ee7b7');
 
-<!-- Include Bootstrap JS -->
+    new Chart(ctxSales,{
+        type:'line',
+        data:{
+            labels: months,
+            datasets:[
+                {
+                    label: 'Sales',
+                    data: sales,
+                    borderColor: '#6366f1',
+                    backgroundColor: gradientSales,
+                    fill: true,
+                    tension: .35,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#6366f1'
+                },
+                {
+                    label: 'Purchases',
+                    data: purchases,
+                    borderColor: '#10b981',
+                    backgroundColor: gradientPurchase,
+                    fill: true,
+                    tension: .35,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#10b981'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { color:'#374151' } },
+                tooltip: { backgroundColor: '#1f2937', titleColor:'#fff', bodyColor:'#e5e7eb' }
+            },
+            scales: {
+                y: { beginAtZero:true, ticks:{ color:'#4b5563' }, grid:{ color:'rgba(0,0,0,0.05)' } },
+                x: { ticks:{ color:'#4b5563' }, grid:{ color:'rgba(0,0,0,0.05)' } }
+            }
+        }
+    });
 
-</body>
-</html>
+    // Doughnut Chart
+    const ctxStock = document.getElementById('stockChart').getContext('2d');
+    new Chart(ctxStock,{
+        type:'doughnut',
+        data:{
+            labels: stockLabels,
+            datasets:[{
+                data: stockData,
+                backgroundColor: ['#6366f1','#10b981','#f59e0b','#fb7185','#38bdf8','#84cc16'],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options:{
+            cutout: '65%',
+            plugins: {
+                legend: { position: 'bottom', labels: { color:'#374151' } },
+                tooltip: { backgroundColor: '#1f2937', titleColor:'#fff', bodyColor:'#e5e7eb' }
+            }
+        }
+    });
+});
+</script>
+@endpush

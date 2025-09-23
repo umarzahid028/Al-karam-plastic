@@ -38,12 +38,17 @@
   </style>
 </head>
 <body>
+<nav>
 
-<div class="container py-5">
-
-  <!-- Card -->
-
-  <div class="row">
+        <a class="nav-link d-flex align-items-center"
+           href="javascript:void(0);"
+           data-bs-toggle="modal"
+           data-bs-target="#salesReturnModal">
+          <i class="bi bi-arrow-repeat me-2"></i>
+          <span>Sales Return</span>
+        </a>
+</nav>
+  {{-- <div class="row">
     <div class="col-12 col-sm-6 col-lg-4">
       <a class="card action-card text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#salesReturnModal">
         <div class="card-body text-center">
@@ -55,8 +60,8 @@
         </div>
       </a>
     </div>
-  </div>
-
+  </div> --}}
+<div class="container py-5">
   <!-- Modal -->
   <div class="modal fade" id="salesReturnModal" tabindex="-1" aria-labelledby="salesReturnLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

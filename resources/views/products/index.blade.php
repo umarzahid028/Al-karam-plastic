@@ -1,42 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Products List</title>
+@extends('layouts.app')
+
+@section('title', 'Products List')
+
+@push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-     background:#f5f7fa; 
-     font-family: Arial, sans-serif; 
+    background: #f5f7fa;
+    font-family: Arial, sans-serif;
 }
-.container { 
-    background:white; 
-    border-radius:12px; 
-    padding:25px; 
-    max-width:1000px; 
-    margin:50px auto; 
-    box-shadow:0 6px 20px rgba(0,0,0,0.1);
+.container {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 1000px;
+    margin: 50px auto;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
-.table-hover tbody tr:hover { 
-    background:#f1f1f1; 
+.table-hover tbody tr:hover {
+    background: #f1f1f1;
 }
-.btn-info { 
-    background:#17a2b8; 
-    color:white; 
+.btn-info {
+    background: #17a2b8;
+    color: white;
 }
-.btn-info:hover { 
-    background:#138496; 
+.btn-info:hover {
+    background: #138496;
 }
-.btn-warning {
-    color: #fff;
-}
-.btn-warning:hover {
-    background:#17a2b8; 
-    color:white; 
+.btn-secondary {
+    border-radius: 6px;
 }
 </style>
-</head>
-<body>
+@endpush
+
+@section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Products List</h3>
@@ -57,7 +54,6 @@ body {
                     <th>Sale Price</th>
                     <th>Cost Price</th>
                     <th>Stock</th>
-                    {{-- <th>Actions</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -68,18 +64,9 @@ body {
                     <td>{{ $p->product_name }}</td>
                     <td>{{ $p->product_group ?? '-' }}</td>
                     <td>{{ $p->unit }}</td>
-                    <td>
-                        {{rtrim(rtrim(number_format($p->sale_price, 2), '0'), '.') }}
-                       </td>
-                    <td>
-                        {{rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}
-                      </td>
+                    <td>{{ rtrim(rtrim(number_format($p->sale_price, 2), '0'), '.') }}</td>
+                    <td>{{ rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}</td>
                     <td>{{ $p->current_stock }}</td>
-                    {{-- <td>
-                        <a href="{{ route('products.update', $p->id) }}" class="btn btn-sm btn-info">
-                            Edit
-                        </a>
-                    </td> --}}
                 </tr>
                 @endforeach
             </tbody>
@@ -90,11 +77,10 @@ body {
             {{ $products->links('pagination::bootstrap-5') }}
         </div>
     </div>
-    <div class="d-flex justify-content-between mt-3">
-        <button class="btn btn-secondary" onclick="window.location.href='/'">
-            Back
-        </button>
+
+    <!-- Back Button -->
+    <div class="d-flex justify-content-start mt-3">
+        <a href="{{ route('welcome') }}" class="btn btn-secondary">Back</a>
     </div>
 </div>
-</body>
-</html>
+@endsection

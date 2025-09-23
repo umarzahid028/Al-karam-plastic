@@ -1,34 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Purchases List</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')   {{-- uses your master layout with navbar & sidebar --}}
+
+@section('title','Purchases List')
+
+@push('styles')
 <style>
-body { font-family: Arial; background:#f5f7fa; }
-.container { max-width: 1000px; margin: 50px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 6px 25px rgba(0,0,0,0.15);}
-.table-hover tbody tr:hover { background-color: #f1f1f1; }
-.btn-info { background:#17a2b8; color:white; border-radius:6px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);}
-.btn-info:hover { background:#138496; color:white; }
-#searchInput { margin-bottom: 15px; max-width: 300px; }
-@media (max-width: 768px) {
-    .table-responsive { overflow-x: auto; }
-}
+    body { background:#f5f7fa; }
+    .purchase-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    }
+    .table-hover tbody tr:hover { background-color: #f1f1f1; }
+    .btn-info {
+        background:#17a2b8; color:white; border-radius:6px;
+        box-shadow:0 2px 5px rgba(0,0,0,0.15);
+    }
+    .btn-info:hover { background:#138496; }
+    #searchInput { margin-bottom: 15px; max-width: 300px; }
+    @media (max-width: 768px) {
+        .table-responsive { overflow-x: auto; }
+    }
 </style>
-</head>
-<body>
-<div class="container">
+@endpush
+
+@section('content')
+<div class="purchase-container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Purchases</h3>
         <div class="d-flex gap-2">
-            <button class="btn btn-info" onclick="window.location.href='{{ route('purchases.create') }}'">
-                + Add Purchase
-            </button>
-            <button class="btn btn-secondary" onclick="window.location.href='/'">
-                Back
-            </button>
+            <a href="{{ route('purchases.create') }}" class="btn btn-info">+ Add Purchase</a>
+            <a href="{{ url('/') }}" class="btn btn-secondary">Back</a>
         </div>
-        
     </div>
 
     <!-- Search input -->
@@ -49,22 +54,23 @@ body { font-family: Arial; background:#f5f7fa; }
                 </tr>
             </thead>
             <tbody>
-                @forelse($purchases as $index => $purchase)
+                @forelse($purchases as $purchase)
                 <tr>
                     <td>{{ $purchases->firstItem() + $loop->index }}</td>
                     <td>{{ $purchase->purchase_code }}</td>
-                    <td>{{ $purchase->supplier_id }}</td> 
+                    {{-- show supplier name if relationship is set --}}
+                    <td>{{ $purchase->supplier->name ?? 'N/A' }}</td>
                     <td>{{ $purchase->purchase_date }}</td>
                     <td>{{ number_format($purchase->total_amount, 2) }}</td>
                     <td>{{ ucfirst($purchase->status) }}</td>
                     <td>{{ $purchase->description }}</td>
-                    <td>
+                    <td class="d-flex gap-1">
                         <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm">View</a>
-
-                        <form action="#" method="POST" style="display:inline;">
+                        <form action="{{ route('purchases.destroy', $purchase->id) }}"
+                              method="POST" onsubmit="return confirm('Delete this purchase?')">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this purchase?')">Delete</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -75,24 +81,25 @@ body { font-family: Arial; background:#f5f7fa; }
                 @endforelse
             </tbody>
         </table>
-          <!-- Pagination -->
-          <div class="d-flex justify-content-end mt-3">
-            {{  $purchases->links('pagination::bootstrap-5') }}
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-end mt-3">
+            {{ $purchases->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
-// Search/filter function
 function filterTable() {
     const input = document.getElementById("searchInput").value.toLowerCase();
     const rows = document.querySelectorAll("#purchasesTable tbody tr");
     rows.forEach(row => {
-        row.style.display = Array.from(row.cells).some(cell => 
+        row.style.display = Array.from(row.cells).some(cell =>
             cell.textContent.toLowerCase().includes(input)
         ) ? "" : "none";
     });
 }
 </script>
-</body>
-</html>
+@endpush

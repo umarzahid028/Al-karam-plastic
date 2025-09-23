@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Raw Materials List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+@extends('layouts.app')   {{-- uses the sidebar + navbar master layout --}}
+
+@section('title','Raw Material')
+
+@push('styles')
+<style>
         body { font-family: Arial; background:#f5f7fa; }
         .container { max-width: 1000px; margin: 50px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 6px 25px rgba(0,0,0,0.15);}
         .table-hover tbody tr:hover { background-color: #f1f1f1; }
@@ -15,8 +14,9 @@
             .table-responsive { overflow-x: auto; }
         }
     </style>
-</head>
-<body>
+@endpush
+
+@section('content')
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Raw Materials</h3>
@@ -72,7 +72,8 @@
             </div>
         </div>
     </div>
-
+@endsection
+@push('scripts')
     <script>
     // Search/filter function
     function filterTable() {
@@ -85,5 +86,4 @@
         });
     }
     </script>
-</body>
-</html>
+@endpush

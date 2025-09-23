@@ -1,68 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Expense Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fa;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        h3 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .detail-label {
-            font-weight: 600;
-            color: #495057;
-        }
-        .detail-value {
-            color: #212529;
-        }
-        .btn-back {
-            background: #17a2b8;
-            color: white;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-        .btn-back:hover {
-            background: #138496;
-            color: white;
-        }
-        .amount-box {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #dc3545;
-        }
-        @media print {
-            body {
-                background: white !important;
-            }
-            .btn {
-                display: none !important;
-            }
-            .container {
-                box-shadow: none !important;
-                margin: 0;
-                padding: 0;
-                max-width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Expense Details')
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+}
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+.detail-label {
+    font-weight: 600;
+    color: #495057;
+}
+.detail-value {
+    color: #212529;
+}
+.btn-back {
+    background: #17a2b8;
+    color: white;
+    border-radius: 6px;
+}
+.btn-back:hover {
+    background: #138496;
+    color: white;
+}
+.amount-box {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #dc3545;
+}
+@media print {
+    body { background: white !important; }
+    .btn { display: none !important; }
+    .container { box-shadow: none !important; margin: 0; padding: 0; max-width: 100%; }
+}
+</style>
+@endpush
+
+@section('content')
 <div class="container">
 
-    <!-- Back Button -->
+    <!-- Back & Print Buttons -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <button class="btn btn-back" onclick="window.history.back()">← Back to Expenses</button>
         <button class="btn btn-outline-dark" onclick="window.print()">Print</button>
@@ -104,6 +95,6 @@
             <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">📎 View File</a>
         </div>
     @endif
+
 </div>
-</body>
-</html>
+@endsection

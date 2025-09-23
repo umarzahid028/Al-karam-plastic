@@ -10,7 +10,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CustomerController;
 // Home
-Route::get('/', function () {return view('welcome');})->name('welcome');
+// Route::get('/', function () {return view('welcome');})->name('welcome');
 // Invoice
 Route::get('/sales', [InvoiceController::class, 'create'])->name('invoice.create');
 
@@ -189,3 +189,9 @@ Route::post('/purchase-returns/{purchase}', [PurchaseReturnController::class, 's
         Route::post('/sales-returns/{invoice}', [SalesReturnController::class, 'store'])
             ->name('sales_returns.store');
         
+
+            use App\Http\Controllers\DashboardController;
+
+            // Root route now runs the controller
+            Route::get('/', [DashboardController::class, 'index'])->name('welcome');
+            

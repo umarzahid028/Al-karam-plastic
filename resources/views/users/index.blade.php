@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Users List</title>
+@extends('layouts.app')
+
+@section('title', 'User List')
+@push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body { 
@@ -44,8 +43,8 @@ thead th {
     min-width: 110px;  
 }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="m-0">Users</h3>
@@ -119,7 +118,8 @@ thead th {
         </div>
     </div>
 </div>
-
+@endsection
+@push('script')
 <script>
 function filterTable() {
     const input = document.getElementById("searchInput").value.toLowerCase();
@@ -161,5 +161,4 @@ document.querySelectorAll('.status-select').forEach(select => {
     });
 });
 </script>
-</body>
-</html>
+@endpush

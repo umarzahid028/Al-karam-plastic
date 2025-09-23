@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Sale Invoice</title>
+@extends('layouts.app')
+
+@section('title', 'Suppliers List')
+
+@push('styles')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@endpush
+@section('content')
 <div class="container">
     <h3>Raw Product Stock</h3>
 
@@ -78,6 +77,8 @@
     </div>
 
 </div>
+@endsection
+@push('scripts')
 
 <script>
 document.getElementById('search').addEventListener('keyup', function() {
@@ -139,5 +140,5 @@ document.addEventListener('click', function(e){
 });
 
 </script>
-</body>
-</html>
+
+@endpush

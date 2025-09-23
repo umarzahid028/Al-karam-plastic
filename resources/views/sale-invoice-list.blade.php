@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Sales Invoices</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app') {{-- Replace with your main layout --}}
+
+@section('title', 'invoice list')
+
+@push('styles')
 <style>
 body {
     background:#f5f7fa;
@@ -45,8 +44,8 @@ body {
 }
 .search-box { max-width: 280px; }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
 <div class="container">
 
     <div class="d-flex justify-content-between align-items-center page-title">
@@ -102,5 +101,4 @@ body {
     </div>
 
 </div>
-</body>
-</html>
+@endsection

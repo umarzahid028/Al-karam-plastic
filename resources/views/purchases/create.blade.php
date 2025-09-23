@@ -1,24 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Create Purchase</title>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')   {{-- master layout with navbar & sidebar --}}
+
+@section('title','Create Purchase')
+
+@push('styles')
 <style>
-body { font-family: Arial; background:#f5f7fa; padding:20px; }
-.container { max-width: 900px; margin:50px auto; background:white; padding:30px; border-radius:12px; box-shadow:0 6px 25px rgba(0,0,0,0.15); }
-.row-item { display:flex; gap:10px; margin-bottom:10px; align-items:center; background:#f9f9f9; padding:5px 10px; border-radius:6px; }
-.row-item select, .row-item input { flex:1; }
-.btn-add { margin-bottom:20px; }
-.btn-remove { background:#dc3545; color:white; border:none; padding:0 10px; border-radius:4px; }
-.btn-remove:hover { background:#c82333; }
+    body { background:#f5f7fa; }
+    .purchase-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    }
+    .row-item {
+        display:flex; gap:10px; margin-bottom:10px;
+        align-items:center; background:#f9f9f9;
+        padding:5px 10px; border-radius:6px;
+    }
+    .row-item select, .row-item input { flex:1; }
+    .btn-add { margin-bottom:20px; }
+    .btn-remove {
+        background:#dc3545; color:white; border:none;
+        padding:0 10px; border-radius:4px;
+    }
+    .btn-remove:hover { background:#c82333; }
 </style>
-</head>
-<body>
-<div class="container">
+@endpush
+
+@section('content')
+<div class="purchase-container">
     <h3 class="mb-4">Create New Purchase</h3>
+
     <form id="purchaseForm">
+        @csrf
         <div class="row mb-3">
             <div class="col-md-4">
                 <label>Purchase Code</label>
@@ -36,7 +51,6 @@ body { font-family: Arial; background:#f5f7fa; padding:20px; }
             </div>
         </div>
 
-        <!-- Added Missing Columns -->
         <div class="row mb-3">
             <div class="col-md-4">
                 <label>Invoice No</label>
@@ -81,24 +95,28 @@ body { font-family: Arial; background:#f5f7fa; padding:20px; }
 
         <div class="d-flex gap-2 mt-3">
             <button type="submit" class="btn btn-primary">Save Purchase</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='/purchases'">Back</button>
+            <a href="{{ route('purchases.index') }}" class="btn btn-secondary">Back</a>
         </div>
     </form>
 </div>
+@endsection
 
+@push('scripts')
 <script>
 let suppliers = [];
 let materials = [];
 
 // Load suppliers & materials
 Promise.all([
-    fetch("/api/suppliers").then(res => res.json()),
-    fetch("/api/raw-materials").then(res => res.json())
+    fetch("{{ url('/api/suppliers') }}").then(res => res.json()),
+    fetch("{{ url('/api/raw-materials') }}").then(res => res.json())
 ])
 .then(([supData, matData]) => {
     suppliers = supData;
     materials = matData;
-    document.getElementById("supplier_id").innerHTML = `<option value="">Select Supplier</option>` + suppliers.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    document.getElementById("supplier_id").innerHTML =
+        `<option value="">Select Supplier</option>` +
+        suppliers.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
 })
 .catch(err => console.error(err));
 
@@ -111,7 +129,10 @@ document.getElementById("addItemBtn").addEventListener("click", () => {
     row.innerHTML = `
         <select class="form-select item-material" required>
             <option value="">Select Material</option>
-            ${materials.map(m => `<option value="${m.id}" data-unit="${m.unit}" data-price="${m.purchase_price}">${m.material_name} (${m.material_code})</option>`).join('')}
+            ${materials.map(m =>
+                `<option value="${m.id}" data-unit="${m.unit}" data-price="${m.purchase_price}">
+                    ${m.material_name} (${m.material_code})
+                 </option>`).join('')}
         </select>
         <input type="number" class="form-control item-qty" placeholder="Qty" min="1" required>
         <input type="text" class="form-control item-unit" placeholder="Unit" readonly>
@@ -139,7 +160,6 @@ document.getElementById("addItemBtn").addEventListener("click", () => {
     });
 });
 
-// Calculate total_amount
 function calculateTotal() {
     let total = 0;
     document.querySelectorAll("#itemsContainer .row-item").forEach(row => {
@@ -150,7 +170,6 @@ function calculateTotal() {
     document.getElementById("total_amount").value = total.toFixed(2);
 }
 
-// Submit form
 document.getElementById("purchaseForm").addEventListener("submit", function(e){
     e.preventDefault();
     const items = [];
@@ -179,31 +198,27 @@ document.getElementById("purchaseForm").addEventListener("submit", function(e){
         items: items
     };
 
-    fetch("/purchases", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json", // ✅ add this
-        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify(data)
-})
-
-.then(res => res.json())
-.then(resp => {
-    if(resp.success){
-        alert(resp.message);
-        location.href = "/purchases";
-    } else if(resp.errors) {
-        // show validation errors
-        alert("Validation Error:\n" + Object.values(resp.errors).flat().join("\n"));
-    } else {
-        alert("Error: " + (resp.message || "Unknown error"));
-    }
-})
-.catch(err => alert("Request failed: " + err));
-
+    fetch("{{ route('purchases.store') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(resp => {
+        if(resp.success){
+            alert(resp.message);
+            window.location.href = "{{ route('purchases.index') }}";
+        } else if(resp.errors) {
+            alert("Validation Error:\n" + Object.values(resp.errors).flat().join("\n"));
+        } else {
+            alert("Error: " + (resp.message || "Unknown error"));
+        }
+    })
+    .catch(err => alert("Request failed: " + err));
 });
 </script>
-</body>
-</html>
+@endpush
