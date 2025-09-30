@@ -40,7 +40,7 @@
  
       /* === Sidebar active link color === */
       .sidebar .nav-link.active {
-          background: #0ea5e9;      /* your chosen color */
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);       /* your chosen color */
           color: #ffffff;
           font-weight: 600;
           box-shadow: inset 3px 0 0 #0284c7;

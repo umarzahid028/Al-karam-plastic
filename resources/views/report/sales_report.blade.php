@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Total Sales Report</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+{{-- resources/views/reports/total_sales.blade.php --}}
+@extends('layouts.app')
+
+@section('title', 'Total Sales Report')
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
@@ -14,8 +16,9 @@ h3 { margin-bottom:20px; }
 .table thead { background:#0d6efd; color:#fff; }
 .table-hover tbody tr:hover { background:#f1f1f1; }
 </style>
-</head>
-<body>
+
+@endpush
+@section('content')
 <div class="container">
     <h3>Total Sales Report</h3>
 
@@ -71,7 +74,9 @@ h3 { margin-bottom:20px; }
         </table>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -101,5 +106,4 @@ $(function(){
     });
 });
 </script>
-</body>
-</html>
+@endpush

@@ -125,7 +125,7 @@ body {
 <body>
 
 <nav class="">
-    <a href="#" class="nav-link "
+    <a href="#"  id="reportLink" class="nav-link "
        data-bs-toggle="modal" data-bs-target="#reportModal">
       <i class="bi bi-bar-chart-line me-2 fs-5"></i>
       <span class="fw-semibold">View Reports</span>
@@ -233,17 +233,17 @@ body {
             <div class="report-buttons">
               <div class="row g-3 justify-content-center">
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.stock') }}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{ route('reports.stock') }}" class="btn btn-primary d-flex justify-content-between w-100">
                     Stock Report <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{route('reports.sale_stock_report')}}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{route('reports.sale_stock_report')}}" class="btn btn-primary d-flex justify-content-between w-100">
                     Sale Stock Report <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{route('reports.stock-summary')}}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{route('reports.stock-summary')}}" class="btn btn-primary d-flex justify-content-between w-100">
                     Stock Summary <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -261,7 +261,7 @@ body {
             <div class="report-buttons">
               <div class="row g-3 justify-content-center">
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.sale_sheet') }}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{ route('reports.sale_sheet') }}" class="btn btn-primary d-flex justify-content-between w-100">
                     Sale Sheet <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -279,17 +279,17 @@ body {
             <div class="report-buttons">
               <div class="row g-3 justify-content-center">
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.ledger') }}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{ route('reports.ledger') }}" class="btn btn-primary d-flex justify-content-between w-60">
                     Ledger <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{ route('reports.payments') }}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{ route('reports.payments') }}" class="btn btn-primary d-flex justify-content-between w-60">
                     Payments <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
                 <div class="col-12 col-md-6">
-                  <a href="{{route('reports.daily-sheet')}}" class="btn btn-success d-flex justify-content-between w-100">
+                  <a href="{{route('reports.daily-sheet')}}" class="btn btn-primary d-flex justify-content-between w-60">
                     Daily Sheet <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
@@ -338,6 +338,18 @@ document.addEventListener('DOMContentLoaded', () => {
     showSection('mainMenu');
   });
 });
+</script>
+<script>
+  const reportModal = document.getElementById('reportModal');
+  const reportLink = document.getElementById('reportLink');
+
+  reportModal.addEventListener('show.bs.modal', function () {
+    reportLink.classList.add('active');
+  });
+
+  reportModal.addEventListener('hidden.bs.modal', function () {
+    reportLink.classList.remove('active');
+  });
 </script>
 
 </body>

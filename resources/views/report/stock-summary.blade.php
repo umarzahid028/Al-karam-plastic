@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stock Summary Report</title>
+@extends('layouts.app')
 
-{{-- Bootstrap & DataTables --}}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+@section('title', 'Total Sales Report')
 
+@push('styles')
 <style>
 body { background:#f8f9fa; font-family:Arial,sans-serif; }
 .container { margin-top:40px; }
@@ -20,8 +13,9 @@ h3 { margin-bottom:20px; }
 .low-stock { background:#fff3cd !important; }   /* highlight low stock */
 .logo img { height:50px; }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
+
 <div class="container">
 
     {{-- ===== Header / Logo ===== --}}
@@ -103,7 +97,9 @@ h3 { margin-bottom:20px; }
         </table>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 {{-- ===== Scripts ===== --}}
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -139,5 +135,4 @@ $(function(){
     });
 });
 </script>
-</body>
-</html>
+@endpush

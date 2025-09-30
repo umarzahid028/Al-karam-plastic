@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Daily Sheet – {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</title>
+@extends('layouts.app')
+
+@section('title', 'Daily Sheet')
+
+@push('styles')
+{{-- <title>Daily Sheet – {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</title> --}}
 
 {{-- Bootstrap & DataTables CSS --}}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -58,8 +58,9 @@ body.dark-mode {
 .dark-mode .table thead { background:#333; color:#fff; }
 .dark-mode .table tbody tr:hover { background:rgba(255,255,255,.05); }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
+
 <div class="container-fluid py-4">
 
     {{-- Header --}}
@@ -212,9 +213,10 @@ body.dark-mode {
             </div>
         </div>
     </section>
-
 </div>
+@endsection
 
+@push('scripts')
 {{-- JS --}}
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -252,5 +254,4 @@ $(function(){
     });
 });
 </script>
-</body>
-</html>
+@endpush

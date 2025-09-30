@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payments Report</title>
+@extends('layouts.app')
 
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+@section('title', 'Total Sales Report')
 
+@push('styles')
 <style>
 body { background: #f8f9fa; font-family: Arial, sans-serif; }
 .container { margin-top: 40px; }
@@ -32,8 +24,8 @@ h3 { margin-bottom: 25px; }
 }
 .summary-box strong { display: block; font-size: 1.1rem; }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
 
 <div class="container">
     <h3><i class="bi bi-cash-stack me-2"></i>Payments Report</h3>
@@ -96,7 +88,9 @@ h3 { margin-bottom: 25px; }
         </table>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -145,6 +139,4 @@ $(function(){
     updateSummary();
 });
 </script>
-
-</body>
-</html>
+@endpush

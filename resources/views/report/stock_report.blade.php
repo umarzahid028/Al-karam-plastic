@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Stock Report</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
+@section('title', 'Total Sales Report')
+
+@push('styles')
 <!-- Bootstrap & DataTables CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
@@ -45,8 +43,9 @@ h3 {
     text-align:left;
 }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
+
 <div class="container">
     <h3>Stock Report</h3>
 
@@ -114,7 +113,9 @@ h3 {
         </table>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -160,5 +161,4 @@ $(function () {
     });
 });
 </script>
-</body>
-</html>
+@endpush
