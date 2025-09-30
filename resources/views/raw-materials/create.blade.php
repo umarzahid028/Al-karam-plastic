@@ -5,11 +5,7 @@
 
 @push('styles')
 <style>
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f0f2f5;
-    padding: 20px;
-}
+
 .container {
     max-width: 700px;
     margin: 50px auto;

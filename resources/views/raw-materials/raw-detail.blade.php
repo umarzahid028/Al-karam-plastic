@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raw Material Details</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')
+
+@section('title', 'Raw Material Detail')
+
+@push('styles')
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f7fa;
-}
+
 .container {
     max-width: 1000px;
     margin: 50px auto;
@@ -34,15 +29,24 @@ h3 {
 .table-hover tbody tr:hover {
     background-color: #f1f1f1;
 }
-.btn-back {
-    background: #17a2b8;
-    color: white;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-.btn-back:hover {
-    background: #138496;
-    color: white;
+
+.btn-info {
+        background: linear-gradient(135deg, #3b82f6 0%, #4579e9 100%); 
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(115, 149, 224, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-info:hover { 
+        background:#3b82f6 ;
+     }
+     .btn-info:hover,
+.btn-info:focus {
+    background: linear-gradient(135deg, #4b72c7 0%, #526eba 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
 }
 @media (max-width: 768px) {
     .table-responsive {
@@ -50,12 +54,12 @@ h3 {
     }
 }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
 <div class="container">
 
     <!-- Back Button -->
-    <button class="btn btn-back" onclick="window.history.back()">← Back to Materials</button>
+    <button class="btn btn-info mb-3" onclick="window.history.back()">← Back to Materials</button>
 
     <!-- Material Info -->
     <h3>
@@ -103,5 +107,4 @@ h3 {
         </table>
     </div>
 </div>
-</body>
-</html>
+@endsection

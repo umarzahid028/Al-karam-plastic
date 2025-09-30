@@ -6,7 +6,6 @@
 <style>
 body {
     background: #f0f2f5;
-    font-family: 'Segoe UI', Arial, sans-serif;
 }
 .table-hover tbody tr:hover { 
     background: #f9fafb; 

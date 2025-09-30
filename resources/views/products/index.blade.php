@@ -7,7 +7,7 @@
 <style>
 body {
     background: #f0f2f5;
-    font-family: 'Segoe UI', Arial, sans-serif;
+   
 }
 .container {
     background: #fff;

@@ -3,10 +3,10 @@
 
 @push('styles')
 <style>
-body{
+/* body{
   background:#f6f8fa;
   font-family:'Inter',sans-serif;
-}
+} */
 
 .ledger-card{
   border:none;

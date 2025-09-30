@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-body { font-family: Arial, sans-serif; background:#f5f7fa; }
+
 .issue-container {
     max-width: 950px;
     margin: 0 auto;

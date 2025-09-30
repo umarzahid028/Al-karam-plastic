@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    body { background:#f5f7fa; }
+   
     .purchase-container {
         max-width: 1000px;
         margin: 40px auto;
@@ -14,8 +14,9 @@
         box-shadow: 0 6px 25px rgba(0,0,0,0.15);
     }
     .table-hover tbody tr:hover { background-color: #f1f1f1; }
+
     .btn-info {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); /
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
     border: none;
     color: #fff;
     font-weight: 600;
@@ -23,8 +24,15 @@
     box-shadow: 0 4px 12px rgba(115, 149, 224, 0.25);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .btn-info:hover { background:#85a8de ; }
-
+    .btn-info:hover { 
+        background:#3b82f6 ;
+     }
+     .btn-info:hover,
+.btn-info:focus {
+    background: linear-gradient(135deg, #4b72c7 0%, #526eba 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
+}
     
     #searchInput { 
         margin-bottom: 15px; max-width: 300px;

@@ -7,7 +7,6 @@
 <style>
 body {
     background:#f5f7fa;
-    font-family: Arial, sans-serif;
 }
 .container {
     max-width: 1100px;

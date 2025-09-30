@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Purchase Details</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.app')
+
+@section('title', 'Purchase Detail')
+
+@push('styles')
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f7fa;
-}
+
 .container {
     max-width: 1000px;
     margin: 50px auto;
@@ -34,15 +29,25 @@ h3 {
 .table-hover tbody tr:hover {
     background-color: #f1f1f1;
 }
-.btn-back {
-    background: #17a2b8;
-    color: white;
-    border-radius: 6px;
-    margin-bottom: 20px;
+
+       /* Primary dashboard-style button */
+       .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 28px;       /* bigger button */
+    border-radius: 8px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.btn-back:hover {
-    background: #138496;
-    color: white;
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
 }
 @media (max-width: 768px) {
     .table-responsive {
@@ -50,12 +55,12 @@ h3 {
     }
 }
 </style>
-</head>
-<body>
+@endpush
+@section('content')
 <div class="container">
 
     <!-- Back Button -->
-    <button class="btn btn-back" onclick="window.history.back()">← Back to Purchases</button>
+    <button class="btn btn-primary mb-3" onclick="window.history.back()">← Back to Purchases</button>
 
     <!-- Purchase Info -->
     <h3>Purchase: {{ $purchase->purchase_code }}</h3>
@@ -100,5 +105,4 @@ h3 {
         </table>
     </div>
 </div>
-</body>
-</html>
+@endsection

@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    body { background:#f5f7fa; }
+   
     .purchase-container {
         max-width: 900px;
         margin: 40px auto;

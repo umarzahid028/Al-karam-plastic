@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-body { background: #f8f9fa; font-family: Arial, sans-serif; }
+
 .container { margin-top: 40px; }
 h3 { margin-bottom: 25px; }
 

@@ -5,10 +5,8 @@
 @push('styles')
 <style>
     /* ===== Page Styling ===== */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f7fa;
-    }
+
+    
     .raw-container {
         max-width: 1100px;
         margin: 40px auto;

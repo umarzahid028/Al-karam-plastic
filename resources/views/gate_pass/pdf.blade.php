@@ -2,7 +2,7 @@
 <html>
 <head>
     <style>
-        body { font-family: Arial, sans-serif; }
+      
         .duplicate {
             position: absolute;
             top: 40%;

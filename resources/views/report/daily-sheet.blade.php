@@ -24,7 +24,7 @@
 }
 body {
     background: var(--background-color);
-    font-family: 'Inter', sans-serif;
+   
     color: #333;
     transition: background .3s, color .3s;
 }

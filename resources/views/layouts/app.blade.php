@@ -13,7 +13,9 @@
 
     <style>
       /* GLOBAL */
-      body { background:#f8fafc; }
+      body { background:#f8fafc; 
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
 
       /* NAVBAR */
       .brand-navbar {

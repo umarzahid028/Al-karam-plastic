@@ -6,7 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+   
     background: #f4f6f9;
 }
 .container {

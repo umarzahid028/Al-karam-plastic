@@ -9,7 +9,7 @@
 
 <style>
   body {
-    font-family: Arial, sans-serif;
+  
     background: #f5f7fa;
   }
 
@@ -54,7 +54,7 @@
 </head>
 <body>
   <nav class="">
-    <a class="nav-link" 
+    <a class="nav-link" id="purchaseReturnLink" 
        href="javascript:void(0);" 
        data-bs-toggle="modal" 
        data-bs-target="#purchaseReturnModal">
@@ -110,6 +110,21 @@
     @endif
   });
 </script>
-
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      var salesReturnModal = document.getElementById('purchaseReturnModal');
+      var salesReturnLink = document.getElementById('purchaseReturnLink');
+  
+      // Jab modal open ho
+      salesReturnModal.addEventListener('show.bs.modal', function () {
+          salesReturnLink.classList.add('active');
+      });
+  
+      // Jab modal close ho
+      salesReturnModal.addEventListener('hidden.bs.modal', function () {
+          salesReturnLink.classList.remove('active');
+      });
+  });
+  </script>
 </body>
 </html>

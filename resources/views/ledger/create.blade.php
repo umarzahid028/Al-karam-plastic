@@ -5,11 +5,7 @@
   <title>Add Ledger Entry</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f0f2f5;
-      padding: 20px;
-    }
+ 
     .container {
       max-width: 750px;
       margin: 50px auto;

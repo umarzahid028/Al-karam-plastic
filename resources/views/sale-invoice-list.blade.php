@@ -4,10 +4,7 @@
 
 @push('styles')
 <style>
-body {
-    background:#f5f7fa;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+
 .container {
     background:#fff;
     border-radius:12px;
