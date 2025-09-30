@@ -120,7 +120,7 @@ body{
 </div>
 <div class="col-lg-6">
   <div class="card shadow-sm h-100">
-    <div class="card-header fw-bold">🚨 Low Stock Alerts</div>
+    <div class="card-header fw-bold">Low Stock Alerts</div>
     <div class="card-body">
       @forelse($lowStockProducts as $p)
         <div class="mb-4">
@@ -144,6 +144,14 @@ body{
     </div>
   </div>
 </div>
+{{-- <div class="col-lg-6">
+  <div class="card shadow-sm">
+    <div class="card-header">Top Selling Products</div>
+    <div class="card-body">
+      <canvas id="topProductsChart" height="250"></canvas>
+    </div>
+  </div>
+</div> --}}
 
 @endsection
 
