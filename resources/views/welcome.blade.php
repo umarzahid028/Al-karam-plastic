@@ -73,7 +73,7 @@ body{
     <div class="col-md-4">
       <div class="ledger-card ledger-primary">
         <div>
-          <h6>Total Ledger Sales</h6>
+          <h6>Total Sales</h6>
           <h3>₨ {{ number_format($totalSales) }}</h3>
         </div>
         <div class="ledger-icon"><i class="bi bi-bar-chart-line"></i></div>
@@ -82,7 +82,7 @@ body{
     <div class="col-md-4">
       <div class="ledger-card ledger-success">
         <div>
-          <h6>Total Ledger Purchases</h6>
+          <h6>Total Purchases</h6>
           <h3>₨ {{ number_format($totalPurchases) }}</h3>
         </div>
         <div class="ledger-icon"><i class="bi bi-cart-check"></i></div>
@@ -118,6 +118,33 @@ body{
     </div>
   </div>
 </div>
+<div class="col-lg-6">
+  <div class="card shadow-sm h-100">
+    <div class="card-header fw-bold">🚨 Low Stock Alerts</div>
+    <div class="card-body">
+      @forelse($lowStockProducts as $p)
+        <div class="mb-4">
+          <div class="d-flex justify-content-between">
+            <span class="fw-semibold">{{ $p->product_name }}</span>
+            <span class="badge bg-danger">{{ $p->stock }} left</span>
+          </div>
+          <div class="progress mt-2" style="height:6px;">
+            <div class="progress-bar bg-danger" 
+                 role="progressbar" 
+                 style="width: {{ $p->stock > 20 ? 100 : max(5, $p->stock*5) }}%;" 
+                 aria-valuenow="{{ $p->stock }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="20">
+            </div>
+          </div>
+        </div>
+      @empty
+        <p class="text-muted text-center mb-0">✅ All products are sufficiently stocked</p>
+      @endforelse
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @push('scripts')

@@ -56,6 +56,25 @@ class DashboardController extends Controller
             $stockData[]   = $s->qty;
         }
 
+        $lowStockProducts = DB::table('raw_stocks')
+        ->join('products', 'raw_stocks.rawpro_id', '=', 'products.id')
+        ->select(
+            'products.product_name',
+            DB::raw('COALESCE(SUM(raw_stocks.quantity_in - raw_stocks.quantity_out),0) as stock')
+        )
+        ->groupBy('products.id', 'products.product_name')
+        ->havingRaw('stock < 20') // yahan threshold apni marzi se rakh lo
+        ->get();
+        $lowStockProducts = DB::table('raw_stocks')
+        ->join('products', 'raw_stocks.rawpro_id', '=', 'products.id')
+        ->select(
+            'products.product_name',
+            DB::raw('COALESCE(SUM(raw_stocks.quantity_in - raw_stocks.quantity_out),0) as stock')
+        )
+        ->groupBy('products.id', 'products.product_name')
+        ->havingRaw('stock < 20') // yahan threshold apni marzi se rakh lo
+        ->get();
+    
         return view('welcome', compact(
             'totalSales',
             'totalPurchases',
@@ -64,7 +83,9 @@ class DashboardController extends Controller
             'sales',
             'purchases',
             'stockLabels',
-            'stockData'
+            'stockData',
+            'lowStockProducts'
         ));
+        
     }
 }
