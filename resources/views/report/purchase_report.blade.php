@@ -1,7 +1,7 @@
 {{-- resources/views/reports/total_sales.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Total Sales Report')
+@section('title', 'Total Purchase Report')
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

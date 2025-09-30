@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Total Sales Report')
+@section('title', 'Total Stock Report')
 
 @push('styles')
 <!-- Bootstrap & DataTables CSS -->
