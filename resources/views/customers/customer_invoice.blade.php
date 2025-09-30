@@ -5,13 +5,67 @@
 @push('styles')
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { background:#f8f9fa; font-family: Arial, sans-serif; }
-    .container { max-width: 1100px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
-    h3 { font-weight: bold; }
-    .form-label { font-weight: 500; }
-    .table th, .table td { vertical-align: middle; }
-    .btn-sm { padding: 3px 8px; }
-    .grand-total { font-size: 1.2rem; font-weight: bold; }
+    body { 
+      background:#f8f9fa; 
+      font-family: Arial, sans-serif; 
+    }
+    .container {
+       max-width: 1100px; 
+       margin: 40px auto; 
+       background: #fff; 
+       padding: 30px; 
+       border-radius: 12px; 
+       box-shadow: 0 6px 20px rgba(0,0,0,0.1); 
+      }
+    h3 { 
+      font-weight: bold; 
+    }
+    .form-label { 
+      font-weight: 500; 
+    }
+    .table th, .table td {
+       vertical-align: middle; 
+      }
+    .btn-sm { 
+      padding: 3px 8px; 
+    }
+    .grand-total { 
+      font-size: 1.2rem; font-weight: bold; 
+    }
+    /* Primary button (Add User, View) */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
+}
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
+}
+
   </style>
 @endpush
 @section('content')
@@ -97,9 +151,9 @@
     </div>
 
     <!-- Submit -->
-    <div class="d-flex justify-content-between">
-      <a href="{{ route('customers.index') }}" class="btn btn-secondary">⬅ Back</a>
-      <button type="submit" class="btn btn-success">Save Invoice</button>
+    <div class="gap-2">
+      <a href="{{ route('customers.index') }}" class="btn btn-secondary">Back</a>
+      <button type="submit" class="btn btn-info text-white">Save Invoice</button>
     </div>
   </form>
 </div>

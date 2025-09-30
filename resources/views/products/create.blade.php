@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between mt-4">
+            <div class="gap-2 mt-4">
                 <button type="submit" class="btn btn-primary">Save Product</button>
                 <a href="{{ route('products.index') }}" class="btn btn-secondary">Back</a>
             </div>

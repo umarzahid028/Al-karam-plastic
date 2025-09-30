@@ -21,15 +21,22 @@ h3 {
     font-weight: 600;
     color: #2c3e50;
 }
-.btn-add {
-    background: #17a2b8;
-    color:white;
-    border-radius:6px;
-    padding: 8px 18px;
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
-.btn-add:hover {
-    background: #138496;
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
 }
+
 #searchInput {
     max-width: 300px;
 }
@@ -42,8 +49,7 @@ thead th {
 .table-hover tbody tr:hover {
     background:#f9f9f9;
 }
-.badge-duplicate {
-    background: #17a2b8;
+.badge-duplicate { background: linear-gradient(135deg, #2563eb, #1d4ed8); 
     color: white;
     font-size: 0.65rem;
     margin-left: 5px;
@@ -68,7 +74,7 @@ tfoot {
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="m-0">Gate Passes</h3>
-        <button class="btn btn-add" onclick="window.location.href='{{ route('gatepass.create') }}'">
+        <button class="btn btn-info text-white" onclick="window.location.href='{{ route('gatepass.create') }}'">
             + Generate Pass
         </button>
     </div>

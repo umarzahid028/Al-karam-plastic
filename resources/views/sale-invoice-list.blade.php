@@ -95,7 +95,7 @@ body {
         </table>
     </div>
 
-    <div class="d-flex justify-content-between mt-4">
+    <div class="gap-3 mt-4">
         <button class="btn btn-back" onclick="window.location.href='{{ url('/') }}'">Back</button>
         {{ $invoices->links('pagination::bootstrap-5') }}
     </div>

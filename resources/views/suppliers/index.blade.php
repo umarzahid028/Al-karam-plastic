@@ -20,14 +20,42 @@ body {
 .table-hover tbody tr:hover {
      background-color: #f9f9f9;
      }
-.btn-info { 
-    background:#17a2b8; 
-    color:white; 
-    border-radius:6px; 
+/* Primary dashboard-style button */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;    /* bigger */
+    border-radius: 8px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.btn-info:hover { 
-    background:#138496; 
+.btn-info:hover,
+.btn-info:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #3560d7 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
 }
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71, 85, 105, 0.3);
+}
+
 .badge { 
     font-size: 0.85rem; 
     padding: 6px 10px; 
@@ -51,7 +79,7 @@ thead th {
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="m-0">Suppliers</h3>
-        <button class="btn btn-info" onclick="window.location.href='/suppliers/create'">
+        <button class="btn btn-info text-white" onclick="window.location.href='/suppliers/create'">
             + Add Supplier
         </button>
         
@@ -109,8 +137,8 @@ thead th {
                         <td>
                             {{rtrim(rtrim(number_format($s->opening_balance, 2), '0'), '.') }}
                         </td>
-                        <td class="text-center">
-                            <a href="/suppliers/{{ $s->id }}" class="btn btn-sm btn-info">View</a>
+                        <td class="text-center text-white">
+                            <a href="/suppliers/{{ $s->id }}" class="btn btn-sm btn-info text-white">View</a>
                         </td>
                     </tr>
                 @endforeach

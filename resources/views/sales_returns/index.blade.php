@@ -19,6 +19,8 @@
     }
     .modal-title i {
       margin-right: 8px;
+      background: linear-gradient(135deg, #3b82f6, #497be6);
+      color: white;
     }
     .action-card {
       transition: transform 0.2s, box-shadow 0.2s;
@@ -38,16 +40,16 @@
   </style>
 </head>
 <body>
-<nav>
-
-        <a class="nav-link d-flex align-items-center"
-           href="javascript:void(0);"
-           data-bs-toggle="modal"
-           data-bs-target="#salesReturnModal">
-          <i class="bi bi-arrow-repeat me-2"></i>
-          <span>Sales Return</span>
-        </a>
-</nav>
+  <nav>
+    <a id="salesReturnLink" 
+       class="nav-link d-flex align-items-center" 
+       href="javascript:void(0);" 
+       data-bs-toggle="modal"  
+       data-bs-target="#salesReturnModal">
+      <i class="bi bi-arrow-repeat me-2"></i>
+      <span>Sales Return</span>
+    </a>
+  </nav>
   {{-- <div class="row">
     <div class="col-12 col-sm-6 col-lg-4">
       <a class="card action-card text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#salesReturnModal">
@@ -61,7 +63,7 @@
       </a>
     </div>
   </div> --}}
-<div class="container py-5">
+<div class="">
   <!-- Modal -->
   <div class="modal fade" id="salesReturnModal" tabindex="-1" aria-labelledby="salesReturnLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -69,8 +71,8 @@
         <form action="{{ route('sales_returns.search') }}" method="POST">
           @csrf
           <div class="modal-header">
-            <h5 class="modal-title" id="salesReturnLabel">
-              <i class="bi bi-search"></i> Search Sales Invoice
+            <h5 class="modal-title text-white" id="salesReturnLabel">
+               Search Sales Invoice
             </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -112,6 +114,22 @@
       @endif
   });
   </script>
-  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var salesReturnModal = document.getElementById('salesReturnModal');
+        var salesReturnLink = document.getElementById('salesReturnLink');
+    
+        // Jab modal open ho
+        salesReturnModal.addEventListener('show.bs.modal', function () {
+            salesReturnLink.classList.add('active');
+        });
+    
+        // Jab modal close ho
+        salesReturnModal.addEventListener('hidden.bs.modal', function () {
+            salesReturnLink.classList.remove('active');
+        });
+    });
+    </script>
+    
 </body>
 </html>

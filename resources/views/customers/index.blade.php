@@ -20,14 +20,40 @@ body {
 .table-hover tbody tr:hover {
     background-color: #f9f9f9;
 }
+/* Primary button (Add User, View) */
 .btn-info {
-    background: #17a2b8;
-    color: white;
-    border-radius: 6px;
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
 .btn-info:hover {
-    background: #138496;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
 }
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
+}
+
 #searchInput { max-width: 300px; }
 thead th {
     position: sticky;
@@ -44,8 +70,8 @@ thead th {
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="m-0">Customers</h3>
         <div class="d-flex gap-2">
-            <a href="{{ route('customers.create') }}" class="btn btn-info">+ Add Customer</a>
-            <a href="{{ route('customers.customer_invoice') }}" class="btn btn-info">+ Create Customer Invoice</a>
+            <a href="{{ route('customers.create') }}" class="btn btn-info text-white">+ Add Customer</a>
+            <a href="{{ route('customers.customer_invoice') }}" class="btn btn-info text-white">+ Create Customer Invoice</a>
         </div>
     </div>
 
@@ -92,7 +118,7 @@ thead th {
                         </select>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('customers.show', $c->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('customers.show', $c->id) }}" class="btn btn-sm btn-info text-white">View</a>
                     </td>
                 </tr>
                 @endforeach

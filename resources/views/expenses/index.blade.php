@@ -21,14 +21,7 @@ h3 {
     font-weight: 600;
     color: #2c3e50;
 }
-.btn-add, .btn-back {
-    background: #17a2b8;
-    color:white;
-    border-radius:6px;
-}
-.btn-add:hover, .btn-back:hover {
-    background: #138496;
-}
+
 #searchInput {
     max-width: 300px;
 }
@@ -37,6 +30,39 @@ h3 {
 }
 .amount {
     font-weight: 600;
+}
+/* Primary button (Add User, View) */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
+}
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
 }
 .amount.negative { color: #e74a3b; }
 .amount.positive { color: #1cc88a; }
@@ -53,7 +79,7 @@ tfoot { bottom: 0; background: #f8f9fc; font-weight: bold; font-size: 16px; }
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="m-0">Expenses Report</h3>
-        <a href="{{ route('expenses.create') }}" class="btn btn-add">+ Add Expense</a>
+        <a href="{{ route('expenses.create') }}" class="btn btn-info text-white">+ Add Expense</a>
     </div>
 
     <!-- Search & Filter -->
@@ -92,7 +118,7 @@ tfoot { bottom: 0; background: #f8f9fc; font-weight: bold; font-size: 16px; }
                         {{ rtrim(rtrim(number_format($exp->amount, 2), '0'), '.') }}
                     </td>
                     <td>
-                        <a href="{{ route('expenses.show', $exp->id) }}" class="btn btn-sm btn-back">View</a>
+                        <a href="{{ route('expenses.show', $exp->id) }}" class="btn btn-info text-white">View</a>
                     </td>
                 </tr>
                 @empty
@@ -121,7 +147,7 @@ tfoot { bottom: 0; background: #f8f9fc; font-weight: bold; font-size: 16px; }
     </div>
 
     <div class="d-flex justify-content-start mt-3">
-        <a href="/" class="btn btn-back">Back</a>
+        <a href="/" class="btn btn-secondary">Back</a>
     </div>
 </div>
 

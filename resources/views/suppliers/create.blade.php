@@ -5,16 +5,48 @@
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-.container { max-width: 700px; margin: 50px auto; }
-.card { background: #fff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); padding: 30px; }
-.card h3 { margin-bottom: 25px; color: #333; }
-.form-control:focus, .form-select:focus, textarea:focus { border-color: #0d6efd; box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25); }
-label { font-weight: 500; color: #555; }
-textarea { min-height: 44px; resize: vertical; }
-.btn-primary { background: #0d6efd; border: none; padding: 10px 25px; border-radius: 6px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
-.btn-primary:hover { background: #0b5ed7; }
-.btn-secondary { border-radius: 6px; }
+body { 
+  font-family: 'Segoe UI', Arial, sans-serif; 
+background: #f0f2f5; 
+padding: 20px; 
+}
+.container {
+   max-width: 700px; 
+   margin: 50px auto; 
+  }
+.card { 
+  background: #fff; 
+  border-radius: 12px;
+   box-shadow: 0 6px 20px rgba(0,0,0,0.1); 
+   padding: 30px; 
+  }
+.card h3 { 
+  margin-bottom: 25px; 
+  color: #333; 
+}
+.form-control:focus, .form-select:focus, textarea:focus { 
+  border-color: #0d6efd; 
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25); 
+}
+label { 
+  font-weight: 500; 
+  color: #555;
+ }
+textarea { min-height: 44px; 
+  resize: vertical;
+ }
+.btn-primary { 
+  background: #0d6efd; 
+  border: none; 
+  padding: 10px 25px; 
+  border-radius: 6px; 
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+.btn-primary:hover {
+   background: #0b5ed7; 
+  }
+.btn-secondary { 
+  border-radius: 6px; 
+}
 .d-flex.gap-2 > .btn { flex: 1; }
 </style>
 @endpush
@@ -73,7 +105,7 @@ textarea { min-height: 44px; resize: vertical; }
         </div>
       </div>
 
-      <div class="d-flex gap-2">
+      <div class="gap-2">
         <button type="submit" class="btn btn-primary">Save Supplier</button>
         <a href="{{ route('suppliers.index') }}" class="btn btn-secondary">Back</a>
       </div>

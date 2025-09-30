@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Purchase Return - Invoice {{ $purchase->invoice_no }}</title>
+@extends('layouts.app')
 
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+@section('title', 'Expenses Report')
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -45,21 +40,21 @@ h3 {
     font-weight: 600;
     font-size: 1.1rem;
 }
-.btn-return {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    border-radius: 6px;
+/* Primary button (Add User, View) */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
-.btn-back {
-    background: #17a2b8;
-    color: white;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-.btn-back:hover {
-    background: #138496;
-    color: white;
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
 }
 @media (max-width: 768px) {
     .table-responsive {
@@ -67,9 +62,9 @@ h3 {
     }
 }
 </style>
-</head>
-<body>
+@endpush
 
+@section('content')
 <div class="container">
     @php
         $baseTotal = 0;
@@ -80,7 +75,7 @@ h3 {
     @endphp
 
     <!-- Back Button -->
-    <button class="btn btn-back mb-3" onclick="window.history.back()">
+    <button class="btn btn-info  mb-3" onclick="window.history.back()">
         <i class="bi bi-arrow-left"></i> Back to Purchases
     </button>
 
@@ -187,5 +182,4 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

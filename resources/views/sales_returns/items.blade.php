@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sales Return - Invoice {{ $invoice->invoice_no }}</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+@extends('layouts.app')
 
+@section('title', 'Expenses Report')
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -49,15 +46,21 @@ h3 {
     gap: 6px;
     border-radius: 6px;
 }
-.btn-back {
-    background: #17a2b8;
-    color: white;
-    border-radius: 6px;
-    margin-bottom: 20px;
+
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
-.btn-back:hover {
-    background: #138496;
-    color: white;
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
 }
 @media (max-width: 768px) {
     .table-responsive {
@@ -65,7 +68,9 @@ h3 {
     }
 }
 </style>
-</head>
+@endpush
+
+@section('content')
 <body>
 
 <div class="container">
@@ -74,7 +79,7 @@ h3 {
     @endphp
 
     <!-- Back Button -->
-    <button class="btn btn-back" onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back to Invoices</button>
+    <button class="btn btn-info " onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back to Invoices</button>
 
     <!-- Invoice Info -->
     <h3>Invoice: {{ $invoice->invoice_no }}</h3>
@@ -172,5 +177,5 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
+

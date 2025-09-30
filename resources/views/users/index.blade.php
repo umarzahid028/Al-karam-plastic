@@ -19,14 +19,40 @@ body {
 .table-hover tbody tr:hover {
      background-color: #f9f9f9;
      }
-.btn-info { 
-    background:#17a2b8; 
-    color:white; 
-    border-radius:6px; 
+/* Primary button (Add User, View) */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
-.btn-info:hover { 
-    background:#138496; 
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
 }
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
+}
+
 .badge { 
     font-size: 0.85rem; 
     padding: 6px 10px; 
@@ -48,7 +74,7 @@ thead th {
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="m-0">Users</h3>
-        <button class="btn btn-info" onclick="window.location.href='/users/create'">
+        <button class="btn btn-info text-white" onclick="window.location.href='/users/create'">
             + Add User
         </button>
     </div>
@@ -102,7 +128,7 @@ thead th {
                             </select>
                         </td>
                         <td class="text-center">
-                            <a href="/users/{{ $u->id }}" class="btn btn-sm btn-info">View</a>
+                            <a href="/users/{{ $u->id }}" class="text-white btn btn-info">View</a>
                         </td>
                     </tr>
                 @endforeach

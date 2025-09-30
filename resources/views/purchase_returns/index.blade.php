@@ -38,8 +38,7 @@
   /* Modal customizations */
   .modal-header {
     color: #fff;
-    background: #17a2b8;
-  }
+    background: linear-gradient(135deg, #3b82f6, #497be6);}
   .btn-close-white {
     filter: invert(1);
   }
@@ -71,8 +70,8 @@
       <form action="{{ route('purchase_returns.search.get') }}" method="POST">
         @csrf
         <div class="modal-header">
-          <h5 class="modal-title" id="purchaseReturnLabel">
-            <i class="bi bi-search"></i> Search Purchase Invoice
+          <h5 class="modal-title text-white" id="purchaseReturnLabel">
+            Search Purchase Invoice
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>

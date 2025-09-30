@@ -28,14 +28,38 @@ h3 {
 .detail-value {
     color: #212529;
 }
-.btn-back {
-    background: #17a2b8;
-    color: white;
-    border-radius: 6px;
+/* Primary button (Add User, View) */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
-.btn-back:hover {
-    background: #138496;
-    color: white;
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
+}
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
 }
 .amount-box {
     font-size: 1.2rem;
@@ -43,10 +67,33 @@ h3 {
     color: #dc3545;
 }
 @media print {
-    body { background: white !important; }
-    .btn { display: none !important; }
-    .container { box-shadow: none !important; margin: 0; padding: 0; max-width: 100%; }
+    body {
+        background: white !important;
+    }
+
+    /* Hide sidebar, navbar, footer, buttons etc */
+    .btn,
+    nav.sidebar,           /* <nav class="sidebar ..."> */
+    .sidebar,              /* generic */
+    .sidebar-heading,
+    .navbar,
+    .main-header,
+    .main-footer {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Print only main container cleanly */
+    .container {
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
 }
+
+
 </style>
 @endpush
 
@@ -55,7 +102,7 @@ h3 {
 
     <!-- Back & Print Buttons -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="btn btn-back" onclick="window.history.back()">← Back to Expenses</button>
+        <button class="btn btn-info" onclick="window.history.back()">Back to Expenses</button>
         <button class="btn btn-outline-dark" onclick="window.print()">Print</button>
     </div>
 

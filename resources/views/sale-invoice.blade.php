@@ -10,6 +10,22 @@
 .list-group-item { cursor:pointer; }
 .duplicate-badge { position: absolute; top: 10px; right: 10px; background: #17a2b8; color: white; font-weight: bold; padding: 5px 10px; border-radius: 5px; z-index: 1000;}
 .card-body { position: relative; }
+/* Primary button (Add User, View) */
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #497be6);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;    /* bigger */
+    font-size: 15px;       /* slightly larger */
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-info:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
+}
 @media print { .no-print { display: none; } }
 </style>
 @endpush
@@ -103,8 +119,8 @@
     </div>
 
     <!-- Buttons -->
-    <div class="d-flex justify-content-between mt-4 no-print">
-        <button class="btn btn-purple" id="generatePDF">Generate PDF</button>
+    <div class="gap-3 no-print">
+        <button class="btn btn-info text-white" id="generatePDF">Generate PDF</button>
         <button class="btn btn-success" id="submitBtn">Submit Invoice</button>
         <a class="btn btn-secondary" href="{{ route('welcome') }}">Back</a>
     </div>

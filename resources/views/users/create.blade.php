@@ -27,20 +27,50 @@
             border-color: #0d6efd;
             box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
         }
-        .btn-primary {
-            background: #0d6efd;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 6px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-        .btn-primary:hover {
-            background: #0b5ed7;
-        }
-        .btn-secondary {
-            border-radius: 6px;
-            padding: 10px 25px;
-        }
+
+       /* Primary dashboard-style button */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 28px;       /* bigger button */
+    border-radius: 8px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(29, 78, 216, 0.3);
+}
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;  /* slate gray */
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71, 85, 105, 0.3);
+}
+
         label {
             font-weight: 500;
             color: #555;

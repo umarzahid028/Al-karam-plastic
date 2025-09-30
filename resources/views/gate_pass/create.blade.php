@@ -11,7 +11,7 @@ body {
     background: #f4f6f9;
 }
 .container {
-    max-width: 900px;
+    max-width: 800px;
     margin: 40px auto;
 }
 .card {
