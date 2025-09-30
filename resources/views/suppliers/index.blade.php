@@ -135,7 +135,7 @@ thead th {
                             {{rtrim(rtrim(number_format($s->opening_balance, 2), '0'), '.') }}
                         </td>
                         <td class="text-center text-white">
-                            <a href="/suppliers/{{ $s->id }}" class="btn btn-sm btn-info text-white">View</a>
+                            <a href="#" class="btn btn-sm btn-info text-white">View</a>
                         </td>
                     </tr>
                 @endforeach

@@ -125,7 +125,7 @@ thead th {
                             </select>
                         </td>
                         <td class="text-center">
-                            <a href="/users/{{ $u->id }}" class="text-white btn btn-info">View</a>
+                            <a href="#" class="text-white btn btn-info">View</a>
                         </td>
                     </tr>
                 @endforeach
