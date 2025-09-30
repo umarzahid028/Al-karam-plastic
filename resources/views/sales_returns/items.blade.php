@@ -62,6 +62,23 @@ h3 {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(37,99,235,0.25);
 }
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #64748b;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
+}
 @media (max-width: 768px) {
     .table-responsive {
         overflow-x: auto;
@@ -79,7 +96,7 @@ h3 {
     @endphp
 
     <!-- Back Button -->
-    <button class="btn btn-info " onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back to Invoices</button>
+    <button class="btn btn-info mb-3" onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back to Invoices</button>
 
     <!-- Invoice Info -->
     <h3>Invoice: {{ $invoice->invoice_no }}</h3>
@@ -140,6 +157,10 @@ h3 {
         </div>
 
         <button class="btn btn-danger btn-return" type="submit"><i class="bi bi-arrow-counterclockwise"></i> Return Selected Items</button>
+    
+        <button class="btn btn-secondary" onclick="window.location.href='{{ url('/') }}'">Back</button>
+           
+      
     </form>
 
 </div>
