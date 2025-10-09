@@ -55,13 +55,15 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
-    // Update status via AJAX
     public function updateStatus(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        $user->status = $request->status;
-        $user->save();
+{
+    $user = User::findOrFail($id);
+    $user->status = $request->status;
+    $user->save();
 
-        return response()->json(['success' => true, 'status' => $user->status]);
-    }
+    return redirect()->back()->with('success', 'Status updated!');
+}
+
+    
+    
 }

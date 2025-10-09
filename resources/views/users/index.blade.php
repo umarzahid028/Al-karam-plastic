@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'User List')
@@ -119,11 +120,16 @@ thead th {
                            </td>
                         <td>{{ ucfirst($u->role) }}</td>
                         <td>
-                            <select class="form-select form-select-sm status-select" data-id="{{ $u->id }}">
-                                <option value="active"   {{ $u->status == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ $u->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                            </select>
+                            <form action="{{ route('users.update-status', $u->id) }}" method="POST">
+                                @csrf
+                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="active" {{ $u->status == 'active' ? 'selected' : '' }}>Active</option>
+                                    <option value="inactive" {{ $u->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                            </form>
                         </td>
+                        
+                        
                         <td class="text-center">
                             <a href="#" class="text-white btn btn-info">View</a>
                         </td>
@@ -142,46 +148,52 @@ thead th {
     </div>
 </div>
 @endsection
-@push('script')
+@push('scripts')
 <script>
-function filterTable() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
-    const rows = document.querySelectorAll("#usersTable tbody tr");
+    function filterTable() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
+        const rows = document.querySelectorAll("#usersTable tbody tr");
+    
+        rows.forEach(row => {
+            const textMatch = Array.from(row.cells).some(cell =>
+                cell.textContent.toLowerCase().includes(input)
+            );
+            const status = row.querySelector(".status-select")?.value.toLowerCase();
+            const statusMatch = !statusFilter || status === statusFilter;
+            row.style.display = (textMatch && statusMatch) ? "" : "none";
+        });
+    }
+    
+//     document.querySelector('#usersTable tbody').addEventListener('change', function(e){
+//     if(e.target.classList.contains('status-select')){
+//         const userId = e.target.dataset.id;
+//         const newStatus = e.target.value;
+//         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    rows.forEach(row => {
-        const textMatch = Array.from(row.cells).some(cell =>
-            cell.textContent.toLowerCase().includes(input)
-        );
-        const status = row.querySelector(".status-select")?.value.toLowerCase();
-        const statusMatch = !statusFilter || status === statusFilter;
-        row.style.display = (textMatch && statusMatch) ? "" : "none";
-    });
-}
+//         fetch(`/users/${userId}/update-status`, {
+//             method: 'POST',
+//             headers: {
+//     'Content-Type': 'application/json',
+//     'X-CSRF-TOKEN': csrfToken,
+//     'Accept': 'application/json',
+//     'X-Requested-With': 'XMLHttpRequest'
+// },
 
-document.querySelectorAll('.status-select').forEach(select => {
-    select.addEventListener('change', function() {
-        const userId = this.getAttribute('data-id');
-        const newStatus = this.value;
+//             body: JSON.stringify({ status: newStatus })
+//         })
+//         .then(res => res.json())
+//         .then(data => {
+//             if(data.success){
+//                 console.log("✅ Status updated to", data.status);
+//             } else {
+//                 alert("Update failed!");
+//             }
+//         })
+//         .catch(err => console.error(err));
+//     }
+// });
 
-        fetch(`/users/${userId}/update-status`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ status: newStatus })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                console.log("Status updated to " + data.status);
-            } else {
-                alert("Update failed");
-            }
-        })
-        .catch(err => console.error("Error:", err));
-    });
-});
-</script>
+    </script>
+    
 @endpush

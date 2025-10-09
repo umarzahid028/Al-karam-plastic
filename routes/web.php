@@ -69,7 +69,8 @@ Route::post('/suppliers/{id}/update-status', [SupplierController::class, 'update
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::post('/users/{id}/update-status', [UserController::class, 'updateStatus'])->name('users.updateStatus');
+Route::post('/users/{id}/update-status', [UserController::class, 'updateStatus'])->name('users.update-status');
+
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
 // Customers 
