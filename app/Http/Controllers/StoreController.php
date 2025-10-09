@@ -23,7 +23,10 @@ class StoreController extends Controller
     // Show form to add a store
     public function create()
     {
-        return view('stores.create');
+        // Get all users to populate the manager dropdown
+    $users = \App\Models\User::all();
+
+        return view('stores.create', compact('users'));
     }
 
     // Save a new store
