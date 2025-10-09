@@ -119,23 +119,5 @@ class PurchaseController extends Controller
         ]);
     }
 }
-public function destroy($id)
-{
-    try {
-        $purchase = Purchase::findOrFail($id);
-
-        // delete related items first to maintain integrity
-        $purchase->items()->delete();
-
-        // delete the purchase itself
-        $purchase->delete();
-
-        return redirect()->route('purchases.index')
-                         ->with('success', 'Purchase deleted successfully!');
-    } catch (\Exception $e) {
-        return redirect()->route('purchases.index')
-                         ->with('error', 'Failed to delete purchase: ' . $e->getMessage());
-    }
-}
 
 }    
