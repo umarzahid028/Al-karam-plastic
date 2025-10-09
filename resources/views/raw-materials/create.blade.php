@@ -119,6 +119,8 @@ label {
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 let stores = [];
 // Fetch stores
@@ -134,8 +136,7 @@ fetch("/stores-json")
         console.error(err);
     });
 
-// Submit form
-document.getElementById("rawMaterialForm").addEventListener("submit", function(e){
+    document.getElementById("rawMaterialForm").addEventListener("submit", function(e){
     e.preventDefault();
 
     const data = {
@@ -143,29 +144,48 @@ document.getElementById("rawMaterialForm").addEventListener("submit", function(e
         material_name: document.getElementById("material_name").value,
         unit: document.getElementById("unit").value,
         packing: document.getElementById("packing").value,
-        purchase_price: document.getElementById("purchase_price").value,
-        stocks: document.getElementById("stocks").value,
+        purchase_price: parseFloat(document.getElementById("purchase_price").value),
+        stocks: parseInt(document.getElementById("stocks").value),
         store_id: document.getElementById("store_id").value
     };
 
     fetch("/api/raw-material", { 
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    },
-    body: JSON.stringify(data)
-})
-.then(res => res.json())
-.then(resp => {
-    if(resp.success){
-        alert(resp.message);
-        location.href = "/raw-material/create";
-    } else {
-        alert("Error: " + resp.message);
-    }
-})
-.catch(err => alert("Request failed: " + err));
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(resp => {
+        if(resp.success){
+            Swal.fire({
+                icon: 'success',
+                title: 'Saved!',
+                text: resp.message,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                // Redirect after sweetalert closes
+                window.location.href = "/raw-material";
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: resp.message
+            });
+        }
+    })
+    .catch(err => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Request failed!',
+            text: err
+        });
+    });
 });
+
 </script>
 @endpush

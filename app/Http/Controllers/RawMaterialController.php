@@ -98,6 +98,22 @@ public function store(Request $request) {
 
     return response()->json(['success'=>true,'message'=>'Raw Material saved!']);
 }
+public function destroy($id)
+{
+    $material = RawMaterial::findOrFail($id);
+
+    // Check if there are linked purchase records
+    if ($material->purchaseItems()->exists()) {
+        return redirect()->route('raw_materials.index')
+            ->with('error', 'Cannot delete — material is linked with purchase records.');
+    }
+
+    $material->delete();
+
+    return redirect()->route('raw_materials.index')
+        ->with('success', 'Raw material deleted successfully!');
+}
+
 
     
 }

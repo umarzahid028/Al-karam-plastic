@@ -15,17 +15,17 @@ class RawMaterial extends Model
         'purchase_price',
         'unit',
         'packing',
-        'stocks',      // stocks field added
+        'stocks',
         'store_id',
     ];
 
-    // Relation with store
     public function store()
     {
         return $this->belongsTo(Store::class);
     }
+
     public function purchaseItems()
     {
-        return $this->hasMany(PurchaseItem::class, 'material_id');
+        return $this->hasMany(PurchaseItem::class, 'raw_material_id', 'id');
     }
 }

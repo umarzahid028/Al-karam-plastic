@@ -41,6 +41,8 @@ Route::get('/api/raw-materials', [RawMaterialController::class, 'list'])->name('
 Route::post('/api/raw-material-issue', [RawMaterialController::class, 'storeIssue'])->name('raw_materials.issue.store');
 Route::get('/raw-material-issues', [RawMaterialController::class, 'showIssues']) ->name('raw-material.issues');
 Route::post('/api/raw-material', [RawMaterialController::class, 'store'])->name('raw_materials.store');
+Route::delete('/raw-material/{id}', [RawMaterialController::class, 'destroy'])
+    ->name('raw_materials.destroy');
 
 // Route::get('/api/raw-materials', [PurchaseController::class, 'materials']);
 

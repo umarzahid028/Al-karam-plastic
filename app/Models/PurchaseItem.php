@@ -36,6 +36,11 @@ class PurchaseItem extends Model
         return $this->belongsTo(Purchase::class);
     }
  
+public function purchaseItems()
+{
+    return $this->hasMany(PurchaseItem::class, 'rawpro_id');
+}
+
 
 public function returnItems()
 {

@@ -83,12 +83,12 @@
                     <td>{{ $purchase->description }}</td>
                     <td class="d-flex gap-1">
                         <a href="{{ route('purchases.show', $purchase->id) }}" class="btn btn-info btn-sm text-white">View</a>
-                        <form action="{{ route('purchases.destroy', $purchase->id) }}"
-                              method="POST" onsubmit="return confirm('Delete this purchase?')">
+                        <form class="delete-purchase-form" action="{{ route('purchases.destroy', $purchase->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger btn-sm">Delete</button>
                         </form>
+                        
                     </td>
                 </tr>
                 @empty
@@ -119,4 +119,28 @@ function filterTable() {
     });
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.querySelectorAll('.delete-purchase-form').forEach(form => {
+    form.addEventListener('submit', function(e){
+        e.preventDefault(); // prevent default submit
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This purchase will be permanently deleted!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // submit the form if confirmed
+            }
+        });
+    });
+});
+</script>
+
 @endpush

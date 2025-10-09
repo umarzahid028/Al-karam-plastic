@@ -1,10 +1,9 @@
-@extends('layouts.app')   {{-- master layout with navbar & sidebar --}}
+@extends('layouts.app')
 
 @section('title','Create Purchase')
 
 @push('styles')
 <style>
-   
     .purchase-container {
         max-width: 900px;
         margin: 40px auto;
@@ -37,32 +36,33 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <label>Purchase Code</label>
-                <input type="text" class="form-control" id="purchase_code" placeholder="PUR-001" required>
+                <input type="text" class="form-control" id="purchase_code" name="purchase_code" placeholder="PUR-001" required>
             </div>
             <div class="col-md-4">
                 <label>Supplier</label>
-                <select class="form-select" id="supplier_id" required>
+                <select class="form-select" id="supplier_id" name="supplier_id" required>
                     <option value="">Loading suppliers...</option>
                 </select>
             </div>
             <div class="col-md-4">
                 <label>Purchase Date</label>
-                <input type="date" class="form-control" id="purchase_date" required>
+                <input type="date" class="form-control" id="purchase_date" name="purchase_date" required>
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-4">
                 <label>Invoice No</label>
-                <input type="text" class="form-control" id="invoice_no" placeholder="INV-001" required>
+                <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="INV-001" required>
+
             </div>
             <div class="col-md-4">
                 <label>Invoice Date</label>
-                <input type="date" class="form-control" id="invoice_date" required>
+                <input type="date" class="form-control" id="invoice_date" name="invoice_date" required>
             </div>
             <div class="col-md-4">
                 <label>Payment Method</label>
-                <select class="form-select" id="payment_method" required>
+                <select class="form-select" id="payment_method" name="payment_method" required>
                     <option value="">-- Select --</option>
                     <option value="cash">Cash</option>
                     <option value="bank">Bank</option>
@@ -74,18 +74,18 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <label>Status</label>
-                <select class="form-select" id="status" required>
+                <select class="form-select" id="status" name="status" required>
                     <option value="pending">Pending</option>
                     <option value="completed">Completed</option>
                 </select>
             </div>
             <div class="col-md-4">
                 <label>Total Amount</label>
-                <input type="number" class="form-control" id="total_amount" placeholder="0.00" readonly>
+                <input type="number" class="form-control" id="total_amount" name="total_amount" placeholder="0.00" readonly>
             </div>
             <div class="col-md-4">
                 <label>Description</label>
-                <input type="text" class="form-control" id="description" placeholder="Optional">
+                <input type="text" class="form-control" id="description" name="description" placeholder="Optional">
             </div>
         </div>
 
@@ -100,8 +100,8 @@
     </form>
 </div>
 @endsection
-
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 let suppliers = [];
 let materials = [];
@@ -118,7 +118,7 @@ Promise.all([
         `<option value="">Select Supplier</option>` +
         suppliers.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
 })
-.catch(err => console.error(err));
+.catch(err => console.error("Error loading suppliers/materials:", err));
 
 // Add item row
 document.getElementById("addItemBtn").addEventListener("click", () => {
@@ -129,10 +129,10 @@ document.getElementById("addItemBtn").addEventListener("click", () => {
     row.innerHTML = `
         <select class="form-select item-material" required>
             <option value="">Select Material</option>
-            ${materials.map(m =>
-                `<option value="${m.id}" data-unit="${m.unit}" data-price="${m.purchase_price}">
+            ${materials.map(m => `
+                <option value="${m.id}" data-unit="${m.unit}" data-price="${m.purchase_price}">
                     ${m.material_name} (${m.material_code})
-                 </option>`).join('')}
+                </option>`).join('')}
         </select>
         <input type="number" class="form-control item-qty" placeholder="Qty" min="1" required>
         <input type="text" class="form-control item-unit" placeholder="Unit" readonly>
@@ -172,24 +172,44 @@ function calculateTotal() {
 
 document.getElementById("purchaseForm").addEventListener("submit", function(e){
     e.preventDefault();
+
+    const invoiceInput = document.querySelector("#purchaseForm input[name='invoice_no']");
+    const invoiceNo = invoiceInput.value.trim();
+
+    if (!invoiceNo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Missing Invoice Number',
+            text: 'Please enter an invoice number before saving.'
+        });
+        invoiceInput.focus();
+        return;
+    }
+
+    // Collect items
     const items = [];
     document.querySelectorAll("#itemsContainer .row-item").forEach(row => {
         const matId = row.querySelector(".item-material").value;
         const qty = row.querySelector(".item-qty").value;
         const unit = row.querySelector(".item-unit").value;
         const price = row.querySelector(".item-price").value;
-        if(matId && qty) items.push({material_id: matId, qty, unit, price});
+        if(matId && qty) items.push({ material_id: matId, qty, unit, price });
     });
     if(items.length === 0){
-        alert("Add at least one item!");
+        Swal.fire({
+            icon: 'info',
+            title: 'No Items Added',
+            text: 'Add at least one material item before saving.'
+        });
         return;
     }
 
+    // Collect form data
     const data = {
         purchase_code: document.getElementById("purchase_code").value,
         supplier_id: document.getElementById("supplier_id").value,
         purchase_date: document.getElementById("purchase_date").value,
-        invoice_no: document.getElementById("invoice_no").value,
+        invoice_no: document.querySelector("#purchaseForm input[name='invoice_no']").value,
         invoice_date: document.getElementById("invoice_date").value,
         payment_method: document.getElementById("payment_method").value,
         status: document.getElementById("status").value,
@@ -198,27 +218,71 @@ document.getElementById("purchaseForm").addEventListener("submit", function(e){
         items: items
     };
 
+    const formData = new FormData();
+    for (let key in data) {
+        if (key !== "items") formData.append(key, data[key]);
+    }
+    data.items.forEach((item, index) => {
+        formData.append(`items[${index}][material_id]`, item.material_id);
+        formData.append(`items[${index}][qty]`, item.qty);
+        formData.append(`items[${index}][unit]`, item.unit);
+        formData.append(`items[${index}][price]`, item.price);
+    });
+
     fetch("{{ route('purchases.store') }}", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
             "Accept": "application/json",
             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
         },
-        body: JSON.stringify(data)
+        body: formData
     })
-    .then(res => res.json())
-    .then(resp => {
-        if(resp.success){
-            alert(resp.message);
-            window.location.href = "{{ route('purchases.index') }}";
-        } else if(resp.errors) {
-            alert("Validation Error:\n" + Object.values(resp.errors).flat().join("\n"));
-        } else {
-            alert("Error: " + (resp.message || "Unknown error"));
+    .then(async res => {
+        const text = await res.text();
+        try {
+            return JSON.parse(text);
+        } catch {
+            console.error("Laravel HTML Error:", text);
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Something went wrong! Check console for details.'
+            });
+            throw new Error("Laravel returned HTML instead of JSON");
         }
     })
-    .catch(err => alert("Request failed: " + err));
+    .then(resp => {
+        if(resp.success){
+            Swal.fire({
+                icon: 'success',
+                title: 'Purchase Saved!',
+                text: resp.message,
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = "{{ route('purchases.index') }}";
+            });
+        } else if(resp.errors) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                html: Object.values(resp.errors).flat().join("<br>")
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: resp.message || 'Unknown error occurred.'
+            });
+        }
+    })
+    .catch(err => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Request Failed',
+            text: err.message
+        });
+    });
 });
 </script>
 @endpush
