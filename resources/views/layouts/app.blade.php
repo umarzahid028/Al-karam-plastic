@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title','Dashboard')</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   {{-- Bootstrap & Icons --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +21,7 @@
 
     /* NAVBAR */
     .brand-navbar {
-      background: linear-gradient(90deg,#0f172a 0%,#1e293b 50%,#3b82f6 100%);
+      background: #1e293b; /* solid modern color */
       color:#fff;
       box-shadow:0 2px 6px rgba(0,0,0,.2);
     }
@@ -68,10 +69,10 @@
       color:#fff;
     }
     .sidebar .nav-link.active {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      background: #1e293b;
       color: #ffffff;
       font-weight: 600;
-      box-shadow: inset 3px 0 0 #0284c7;
+      box-shadow: inset 3px 0 0 #1e293b;
     }
     .sidebar-heading {
       font-size:.75rem;
@@ -90,7 +91,7 @@
       transition: margin-left 0.3s ease;
     }
     .main-expanded {
-      margin-left: -240px; /* Adjust main when sidebar hidden */
+      margin-left: -240px; 
     }
   </style>
 </head>
