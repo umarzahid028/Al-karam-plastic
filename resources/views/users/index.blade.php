@@ -1,199 +1,116 @@
-
 @extends('layouts.app')
 
 @section('title', 'User List')
+
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-
-.container {
-     max-width: 1100px; 
-     margin: 50px auto; 
-     background: white; 
-     padding: 25px; 
-     border-radius: 12px; 
-     box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+    .disabled-row {
+        opacity: 0.5;
+        pointer-events: none;
     }
-.table-hover tbody tr:hover {
-     background-color: #f9f9f9;
-     }
-/* Primary button (Add User, View) */
-.btn-info {
-    background: linear-gradient(135deg, #3b82f6, #497be6);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 18px;    /* bigger */
-    font-size: 15px;       /* slightly larger */
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-.btn-info:hover {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(37,99,235,0.25);
-}
-
-/* Secondary button (Back) */
-.btn-secondary {
-    background: #64748b;
-    border: none;
-    color: #fff;
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-.btn-secondary:hover {
-    background: #475569;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(71,85,105,0.25);
-}
-
-.badge { 
-    font-size: 0.85rem; 
-    padding: 6px 10px; 
-}
-#searchInput { 
-    max-width: 300px; 
-}
-thead th { 
-    position: sticky; 
-    top: 0; 
-    background: #f8f9fa; 
-    z-index: 2; }
-.status-select {
-    min-width: 110px;  
-}
 </style>
 @endpush
+
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="m-0">Users</h3>
-        <button class="btn btn-info text-white" onclick="window.location.href='/users/create'">
-            + Add User
-        </button>
-    </div>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">User List</h2>
 
-    <!-- Search & Filter -->
-    <div class="d-flex justify-content-between mb-3">
-        <input type="text" id="searchInput" 
-               class="form-control w-50" 
-               placeholder="Search User..." 
-               onkeyup="filterTable()">
-        
-        <select id="statusFilter" 
-                class="form-select w-25" 
-                onchange="filterTable()">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-        </select>
-    </div>
-
-    <!-- Table -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle" id="usersTable">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Contact No</th>
-                    <th>Salary</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th class="text-center">Actions</th>
+    <table class="table table-bordered text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact No</th>
+                <th>Salary</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($users as $user)
+                <tr class="{{ $user->status === 'inactive' ? 'disabled-row' : '' }}" id="userRow{{ $user->id }}">
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->contact_no ?? '-' }}</td>
+                    <td>{{ $user->salary ?? '-' }}</td>
+                    <td>{{ ucfirst($user->role) }}</td>
+                    <td>
+                        <span class="badge bg-{{ $user->status == 'active' ? 'success' : 'secondary' }}" id="statusBadge{{ $user->id }}">
+                            {{ ucfirst($user->status) }}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-primary toggleStatusBtn"
+                        data-id="{{ $user->id }}"
+                        {{ $user->status === 'inactive' ? 'disabled' : '' }}>
+                        Deactivate
+                    </button>
+                    
+                    
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($users as $u)
-                    <tr>
-                        <td>{{ $users->firstItem() + $loop->index }}</td>
-                        <td>{{ $u->name }}</td>
-                        <td>{{ $u->email }}</td>
-                        <td>{{ $u->contact_no ?? '-' }}</td>
-                        <td>
-                            {{rtrim(rtrim(number_format($u->salary,2), '0'), '.') }}
-                           </td>
-                        <td>{{ ucfirst($u->role) }}</td>
-                        <td>
-                            <form action="{{ route('users.update-status', $u->id) }}" method="POST">
-                                @csrf
-                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                                    <option value="active" {{ $u->status == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ $u->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                </select>
-                            </form>
-                        </td>
-                        
-                        
-                        <td class="text-center">
-                            <a href="#" class="text-white btn btn-info">View</a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="d-flex justify-content-end mt-3">
-            {{  $users->links('pagination::bootstrap-5') }}
-        </div>
-        <div class="d-flex justify-content-between mt-3">
-            <button class="btn btn-secondary" onclick="window.location.href='/'">
-                Back
-            </button>
-        </div>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function filterTable() {
-        const input = document.getElementById("searchInput").value.toLowerCase();
-        const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
-        const rows = document.querySelectorAll("#usersTable tbody tr");
-    
-        rows.forEach(row => {
-            const textMatch = Array.from(row.cells).some(cell =>
-                cell.textContent.toLowerCase().includes(input)
-            );
-            const status = row.querySelector(".status-select")?.value.toLowerCase();
-            const statusMatch = !statusFilter || status === statusFilter;
-            row.style.display = (textMatch && statusMatch) ? "" : "none";
+document.querySelectorAll('.toggleStatusBtn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        let id = this.dataset.id;
+        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch(`/users/${id}/toggle-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token,
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({}), // required even if empty for POST
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                let row = document.getElementById('userRow' + id);
+                let badge = document.getElementById('statusBadge' + id);
+
+                badge.className = 'badge bg-secondary';
+                badge.textContent = 'Inactive';
+                row.classList.add('disabled-row');
+                btn.disabled = true;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Deactivated',
+                    text: data.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Not Allowed',
+                    text: data.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        })
+        .catch(() => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong. Please refresh and try again.',
+            });
         });
-    }
-    
-//     document.querySelector('#usersTable tbody').addEventListener('change', function(e){
-//     if(e.target.classList.contains('status-select')){
-//         const userId = e.target.dataset.id;
-//         const newStatus = e.target.value;
-//         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-//         fetch(`/users/${userId}/update-status`, {
-//             method: 'POST',
-//             headers: {
-//     'Content-Type': 'application/json',
-//     'X-CSRF-TOKEN': csrfToken,
-//     'Accept': 'application/json',
-//     'X-Requested-With': 'XMLHttpRequest'
-// },
-
-//             body: JSON.stringify({ status: newStatus })
-//         })
-//         .then(res => res.json())
-//         .then(data => {
-//             if(data.success){
-//                 console.log("✅ Status updated to", data.status);
-//             } else {
-//                 alert("Update failed!");
-//             }
-//         })
-//         .catch(err => console.error(err));
-//     }
-// });
-
-    </script>
-    
+    });
+});
+</script>
 @endpush

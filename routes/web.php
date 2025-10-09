@@ -20,13 +20,32 @@ Route::get('/buyers/{id}/balance', [InvoiceController::class, 'getBalance']);
 Route::post('/sales-invoices', [InvoiceController::class, 'store']);
 Route::get('/invoices', [InvoiceController::class, 'index'])
      ->name('invoices.index');
+
+// Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+// Route::get('/products', [ProductController::class, 'list']);   
+// Route::post('/products', [ProductController::class, 'store']); 
+
+// Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+// Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
+// Route::get('/products', [ProductController::class, 'indesx'])->name('products.update-index');
+
+// Main products page
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products', [ProductController::class, 'list']);   
-Route::post('/products', [ProductController::class, 'store']); 
-// web.php
+
+// JSON API list (for JS fetch/ajax)
+Route::get('/products/list', [ProductController::class, 'list'])->name('products.list');
+
+// Optional: Update index page
+Route::get('/products/update-index', [ProductController::class, 'updateIndex'])->name('products.update-index');
+
+// Create & store
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+// Update
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-Route::get('/products', [ProductController::class, 'indesx'])->name('products.update-index');
+
+
 // Raw Stocks
 Route::get('/raw-stocks', [RawStockController::class, 'index'])->name('raw-stocks.index');
 Route::get('/raw-stocks/search', [RawStockController::class, 'search']);
@@ -62,6 +81,8 @@ Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('pu
 Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
 Route::get('/api/suppliers', [PurchaseController::class, 'suppliers']);
 Route::get('/api/raw-materials', [PurchaseController::class, 'materials']);
+// Delete a purchase
+Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
 
 // Supplier
 Route::get('/suppliers-json', [PurchaseController::class, 'suppliers']);
@@ -75,7 +96,9 @@ Route::post('/suppliers/{id}/update-status', [SupplierController::class, 'update
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::post('/users/{id}/update-status', [UserController::class, 'updateStatus'])->name('users.update-status');
+// ✅ Must be in web.php
+Route::post('/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
+
 
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
@@ -86,6 +109,8 @@ Route::get('/customers', [CustomerController::class, 'index'])->name('customers.
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
 Route::post('/customers/{id}/update-status', [CustomerController::class, 'updateStatus']) ->name('customers.updateStatus');
+// For showing a single customer
+Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
 
 
 Route::get('/customers/invoice', [CustomerController::class, 'createInvoice'])->name('customers.customer_invoice');

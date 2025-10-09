@@ -11,11 +11,9 @@ class UserController extends Controller
     // Show all users
     public function index()
     {
-        $users = User::paginate(5);
-        // Purchase::paginate(5);
+        $users = User::orderBy('id', 'desc')->get();
         return view('users.index', compact('users'));
     }
-
     // Show create form
     public function create()
     {
@@ -55,15 +53,38 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
-    public function updateStatus(Request $request, $id)
+//     public function updateStatus(Request $request, User $user)
+// {
+//     $request->validate([
+//         'status' => 'required|in:active,inactive',
+//     ]);
+
+//     $user->update(['status' => $request->status]);
+
+//     return response()->json([
+//         'success' => true,
+//         'status' => $user->status
+//     ]);
+// }
+public function toggleStatus($id)
 {
     $user = User::findOrFail($id);
-    $user->status = $request->status;
-    $user->save();
 
-    return redirect()->back()->with('success', 'Status updated!');
+    // Only allow active → inactive
+    if ($user->status === 'active') {
+        $user->status = 'inactive';
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $user->status,
+            'message' => 'User has been deactivated.',
+        ]);
+    }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Inactive users cannot be reactivated.',
+    ]);
 }
-
-    
-    
 }

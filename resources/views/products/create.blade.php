@@ -97,7 +97,7 @@ document.getElementById("productForm").addEventListener("submit", function(e){
         opening_remarks: document.getElementById("opening_remarks").value
     };
 
-    fetch("{{ url('/api/products') }}", {
+    fetch("{{ url('/products') }}", {
         method:"POST",
         headers:{
             "Content-Type":"application/json",
