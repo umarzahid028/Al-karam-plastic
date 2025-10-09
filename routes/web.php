@@ -47,7 +47,13 @@ Route::delete('/raw-material/{id}', [RawMaterialController::class, 'destroy'])
 // Route::get('/api/raw-materials', [PurchaseController::class, 'materials']);
 
 
-// Stores
+
+
+Route::get('/stores', [StoreController::class, 'index'])->name('stores.index'); // List all stores
+Route::get('/stores/create', [StoreController::class, 'create'])->name('stores.create'); // Form to add store
+Route::post('/stores', [StoreController::class, 'store'])->name('stores.store'); // Save store
+Route::get('/stores/{store}/edit', [StoreController::class, 'edit'])->name('stores.edit'); // Edit store
+Route::put('/stores/{store}', [StoreController::class, 'update'])->name('stores.update'); // Update store
  Route::get('/stores-json', [StoreController::class, 'list']); 
 
  //  Purchase

@@ -135,7 +135,7 @@
 
           <li class="sidebar-heading">Sales</li>
           <li><a class="nav-link {{ request()->routeIs('invoice.create')?'active':'' }}" href="{{ route('invoice.create') }}"><i class="bi bi-receipt"></i> Create Invoice</a></li>
-          <li><a class="nav-link" href="#"><i class="bi bi-credit-card"></i> Make Payment</a></li>
+          <li><a class="nav-link" href="{{ route('stores.create') }}"><i class="bi bi-credit-card"></i>Add Store</a></li>
           @include('report.index')
 
           <li class="sidebar-heading">Management</li>
