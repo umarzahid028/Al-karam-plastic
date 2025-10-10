@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Total Sales Report')
+@section('title', 'Daily Sheet')
 
 @push('styles')
 {{-- Bootstrap & DataTables CSS --}}
@@ -78,7 +78,8 @@ body.dark-mode {
         <div class="col-md-3">
             <div class="card shadow-sm text-center kpi-card">
                 <div class="card-body">
-                    <i class="bi bi-currency-dollar fs-3 text-success mb-2"></i>
+                    <i class="bi bi-coin fs-3 text-success mb-2"></i>
+
                     <h6>Sales</h6>
                     <h4 class="text-success">{{ number_format($sales->gross ?? 0,2) }}</h4>
                 </div>
