@@ -103,15 +103,18 @@ Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
 // Customers 
 
-
+// Customer routes
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-Route::post('/customers/{id}/update-status', [CustomerController::class, 'updateStatus']) ->name('customers.updateStatus');
-// For showing a single customer
+
+// ✅ Activate / Deactivate status (AJAX)
+Route::post('/customers/{id}/update-status', [CustomerController::class, 'updateStatus'])->name('customers.updateStatus');
+
+// View single customer (optional)
 Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
 
-
+// Customer invoice routes
 Route::get('/customers/invoice', [CustomerController::class, 'createInvoice'])->name('customers.customer_invoice');
 Route::post('/customer-invoices', [CustomerController::class, 'storeInvoice'])->name('customer_invoices.store');
 

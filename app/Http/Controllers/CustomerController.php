@@ -58,21 +58,19 @@ class CustomerController extends Controller
     }
 
     // ✅ Update status
-    public function updateStatus(Request $request, $id)
+    public function updateStatus($id)
     {
-        $request->validate([
-            'status' => 'required|in:active,inactive,onhold',
-        ]);
-
         $customer = Customer::findOrFail($id);
-        $customer->status = $request->status;
+        $customer->status = $customer->status === 'active' ? 'inactive' : 'active';
         $customer->save();
-
+    
         return response()->json([
             'success' => true,
-            'status'  => $customer->status
+            'status' => $customer->status,
+            'message' => "Customer {$customer->status} successfully!"
         ]);
     }
+    
 
     // ================================
     // ✅ Create Customer Invoice
@@ -147,4 +145,5 @@ class CustomerController extends Controller
 
         return redirect()->route('customers.index')->with('success', 'Invoice created successfully!');
     }
+    
 }
