@@ -17,10 +17,11 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-    public function indesx() {
+    public function updateIndex() {
         $products = Product::paginate(5);
         return view('products.update-index', compact('products'));
     }
+    
 
     public function create() {
         return view('products.create');
@@ -46,7 +47,8 @@ class ProductController extends Controller
             'size'         => $request->size,
             'packing_sqr'  => $request->packing_sqr,
             'pieces_per_bundle' => $request->pieces_per_bundle ?? 0,
-            'weight'       => $request->weight,
+            'weight'       => $request->weight ?? 0,
+
         ]);
 
         if ($request->opening_qty > 0) {
@@ -128,7 +130,8 @@ public function update(Request $request, $id)
         'size'         => $request->size,
         'packing_sqr'  => $request->packing_sqr,
         'pieces_per_bundle' => $request->pieces_per_bundle ?? 0,
-        'weight'       => $request->weight,
+       'weight'       => $request->weight ?? 0,
+
     ]);
 
     // Agar opening_qty di gayi hai to update karein
@@ -167,7 +170,26 @@ public function update(Request $request, $id)
         );
     }
 
-    return response()->json(['success' => true, 'message' => 'Product updated successfully!']);
+    return redirect()->route('products.update-index')->with('success', 'Product updated successfully!');
+
 }
+public function destroy($id)
+{
+    try {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product deleted successfully!'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Could not delete the product. Try again later.'
+        ], 500);
+    }
+}
+
 
 }

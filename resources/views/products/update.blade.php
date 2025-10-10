@@ -89,7 +89,7 @@ body {
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary me-2">Cancel</a>
+                    <a href="{{ route('products.update-index') }}" class="btn btn-secondary me-2">Cancel</a>
                     <button type="submit" class="btn btn-primary">Update Product</button>
                 </div>
             </form>
@@ -97,5 +97,3 @@ body {
     </div>
 </div>
 @endsection
-
-

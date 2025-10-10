@@ -106,19 +106,11 @@ body {
                     <td>{{ rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}</td>
                     <td>{{ $p->current_stock }}</td>
                     <td class="text-center d-flex gap-2 justify-content-center">
-                        <!-- View -->
-                        {{-- <a href="{{ route('products.show', $p->id) }}" class="btn btn-sm btn-warning">View</a> --}}
-                        <!-- Edit -->
                         <a href="{{ route('products.update', $p->id) }}" class="btn btn-sm btn-info text-white">Edit</a>
-                        <!-- Delete -->
-                        <form action="{{ route('products.destroy', $p->id) }}" method="POST" 
-                              onsubmit="return confirm('Are you sure you want to delete this product?')" 
-                              style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $p->id }}, '{{ $p->product_name }}')">Delete</button>
                     </td>
+                    
+
                 </tr>
                 @endforeach
             </tbody>
@@ -135,3 +127,51 @@ body {
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmDelete(id, name) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: `You are about to delete "${name}".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc2626",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // AJAX request to delete the product
+            fetch(`/products/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                    "Accept": "application/json"
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted!",
+                        text: `"${name}" has been deleted successfully.`,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    // Optionally remove row from table without reload:
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Failed!",
+                        text: "Could not delete the product. Try again later."
+                    });
+                }
+            });
+        }
+    });
+}
+</script>
+@endpush

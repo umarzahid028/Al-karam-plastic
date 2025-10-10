@@ -29,22 +29,18 @@ Route::get('/invoices', [InvoiceController::class, 'index'])
 // Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 // Route::get('/products', [ProductController::class, 'indesx'])->name('products.update-index');
 
-// Main products page
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-// JSON API list (for JS fetch/ajax)
-Route::get('/products/list', [ProductController::class, 'list'])->name('products.list');
 
-// Optional: Update index page
-Route::get('/products/update-index', [ProductController::class, 'updateIndex'])->name('products.update-index');
-
-// Create & store
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-
-// Update
-Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/list', [ProductController::class, 'list'])->name('products.list');
+    Route::get('/update-index', [ProductController::class, 'updateIndex'])->name('products.update-index');
+    Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/{id}', [ProductController::class, 'show'])->name('products.show');
+    Route::put('/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+});
 
 // Raw Stocks
 Route::get('/raw-stocks', [RawStockController::class, 'index'])->name('raw-stocks.index');
