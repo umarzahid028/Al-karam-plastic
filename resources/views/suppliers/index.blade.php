@@ -1,201 +1,187 @@
 @extends('layouts.app')
 
-@section('title', 'Suppliers List')
+@section('title','Suppliers List')
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-
-.container {
-     max-width: 1100px; 
-     margin: 50px auto; 
-     background: white; 
-     padding: 25px; 
-     border-radius: 12px; 
-     box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+    .suppliers-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
-.table-hover tbody tr:hover {
-     background-color: #f9f9f9;
-     }
-/* Primary dashboard-style button */
-.btn-info {
-    background: linear-gradient(135deg, #3b82f6, #497be6);
-    border: none;
-    color: #fff;
-    font-weight: 600;
-    padding: 10px 20px;    /* bigger */
-    border-radius: 8px;
-    font-size: 15px;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.btn-info:hover,
-.btn-info:focus {
-    background: linear-gradient(135deg, #2563eb 0%, #3560d7 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
-}
-
-/* Secondary button (Back) */
-.btn-secondary {
-    background: #64748b;
-    border: none;
-    color: #fff;
-    font-weight: 600;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 15px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
-}
-.btn-secondary:hover {
-    background: #475569;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(71, 85, 105, 0.3);
-}
-
-.badge { 
-    font-size: 0.85rem; 
-    padding: 6px 10px; 
-}
-#searchInput { 
-    max-width: 300px; 
-}
-thead th { 
-    position: sticky; 
-    top: 0; 
-    background: #f8f9fa; 
-    z-index: 2; }
-.status-select {
-    min-width: 110px;  
-}
+    .page-header h3 {
+        font-weight: 700;
+        letter-spacing: .4px;
+        color: #1e293b;
+    }
+    .btn-info {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-info:hover,
+    .btn-info:focus {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
+    .btn-status {
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.15s ease;
+    }
+    .btn-status:hover { transform: translateY(-2px); }
+    #searchInput {
+        margin-bottom: 15px;
+        max-width: 320px;
+    }
+    .table thead th {
+        background: #f1f5f9;
+        color: #334155;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    .table-hover tbody tr:hover { background-color: #f8fafc; }
+    .disabled-row { opacity: 0.5; }
 </style>
-</head>
 @endpush
 
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="m-0">Suppliers</h3>
-        <button class="btn btn-info text-white" onclick="window.location.href='/suppliers/create'">
-            + Add Supplier
-        </button>
-        
+<div class="suppliers-container">
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h3><i class="bi bi-people me-2"></i> Suppliers</h3>
+        <a href="{{ route('suppliers.create') }}" class="btn btn-info text-white">+ Add Supplier</a>
     </div>
 
-    <!-- Search & Filter -->
-    <div class="d-flex justify-content-between mb-3">
-        <input type="text" id="searchInput" 
-               class="form-control w-50" 
-               placeholder="Search Supplier..." 
-               onkeyup="filterTable()">
-        
-        <select id="statusFilter" 
-                class="form-select w-25" 
-                onchange="filterTable()">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="on hold">On Hold</option>
-        </select>
-    </div>
+    <input type="text"
+           id="searchInput"
+           class="form-control"
+           placeholder="Search Supplier..."
+           onkeyup="filterTable()">
 
-    <!-- Table -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle" id="suppliersTable">
-            <thead class="table-light">
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered table-hover align-middle text-center" id="suppliersTable">
+            <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>#</th>
                     <th>Code</th>
                     <th>Company</th>
                     <th>Contact Name</th>
                     <th>Email</th>
                     <th>Contact No</th>
-                    <th>Status</th>
                     <th>Opening Balance</th>
-                    <th class="text-center">Actions</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($suppliers as $s)
-                    <tr>
-                        <td>{{  $suppliers->firstItem() + $loop->index }}</td>
-                        <td>{{ $s->supplier_code }}</td>
-                        <td>{{ $s->company_name }}</td>
-                        <td>{{ $s->name }}</td>
-                        <td>{{ $s->email ?? '-' }}</td>
-                        <td>{{ $s->contact_no ?? '-' }}</td>
-                        <td>
-                            <select class="form-select status-select form-select-sm status-select" data-id="{{ $s->id }}">
-                                <option value="active"   {{ $s->status == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ $s->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                <option value="on hold"  {{ $s->status == 'on hold' ? 'selected' : '' }}>On Hold</option>
-                            </select>
-                        </td>
-                        <td>
-                            {{rtrim(rtrim(number_format($s->opening_balance, 2), '0'), '.') }}
-                        </td>
-                        <td class="text-center text-white">
-                            <a href="#" class="btn btn-sm btn-info text-white">View</a>
-                        </td>
-                    </tr>
+                <tr class="{{ $s->status === 'inactive' ? 'disabled-row' : '' }}" id="supplierRow{{ $s->id }}">
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $s->supplier_code }}</td>
+                    <td>{{ $s->company_name }}</td>
+                    <td>{{ $s->name }}</td>
+                    <td>{{ $s->email ?? '-' }}</td>
+                    <td>{{ $s->contact_no ?? '-' }}</td>
+                    <td>{{ rtrim(rtrim(number_format($s->opening_balance, 2), '0'), '.') }}</td>
+                    <td>
+                        <span class="badge bg-{{ $s->status === 'active' ? 'success' : 'secondary' }}" id="statusBadge{{ $s->id }}">
+                            {{ ucfirst($s->status) }}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-status
+                        {{ $s->status === 'active' ? 'btn-primary' : 'btn-success' }}"
+                        data-id="{{ $s->id }}">
+                        {{ $s->status === 'active' ? 'Deactivate' : 'Activate' }}
+                        </button>
+                    </td>
+                </tr>
                 @endforeach
             </tbody>
-
         </table>
-        <div class="d-flex justify-content-end mt-3">
-            {{ $suppliers->links('pagination::bootstrap-5') }}
-        </div>
-        <div class="d-flex justify-content-between align-items-right mb-3">
-            
-            <button class="btn btn-secondary" onclick="window.location.href='/'">
-                Back
-            </button>
-            </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+        {{ $suppliers->links('pagination::bootstrap-5') }}
+    </div>
+
+    <div class="d-flex justify-content-start mt-3">
+        <a href="{{ url('/') }}" class="btn btn-secondary">Back</a>
     </div>
 </div>
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function filterTable() {
     const input = document.getElementById("searchInput").value.toLowerCase();
-    const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
-    const rows = document.querySelectorAll("#suppliersTable tbody tr");
-
-    rows.forEach(row => {
-        const textMatch = Array.from(row.cells).some(cell =>
+    document.querySelectorAll("#suppliersTable tbody tr").forEach(row => {
+        const match = Array.from(row.cells).some(cell =>
             cell.textContent.toLowerCase().includes(input)
         );
-        const status = row.querySelector(".status-select")?.value.toLowerCase();
-        const statusMatch = !statusFilter || status === statusFilter;
-        row.style.display = (textMatch && statusMatch) ? "" : "none";
+        row.style.display = match ? "" : "none";
     });
 }
-document.querySelectorAll('.status-select').forEach(select => {
-    select.addEventListener('change', function() {
-        const supplierId = this.getAttribute('data-id');
-        const newStatus = this.value;
 
-        fetch(`/suppliers/${supplierId}/update-status`, {
+// Status toggle button
+document.querySelectorAll('.btn-status').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const supplierId = this.dataset.id;
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const button = this;
+        const badge = document.getElementById('statusBadge' + supplierId);
+        const row = document.getElementById('supplierRow' + supplierId);
+
+        fetch(`/suppliers/${supplierId}/toggle-status`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': token
             },
-            body: JSON.stringify({ status: newStatus })
+            body: JSON.stringify({})
         })
         .then(res => res.json())
         .then(data => {
-            if (data.success) {
-                console.log("Status updated to " + data.status);
+            if(data.success) {
+                badge.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                badge.className = 'badge bg-' + (data.status === 'active' ? 'success' : 'secondary');
+                row.classList.toggle('disabled-row', data.status !== 'active');
+
+                button.textContent = data.status === 'active' ? 'Deactivate' : 'Activate';
+                button.classList.toggle('btn-primary', data.status === 'active');
+                button.classList.toggle('btn-success', data.status !== 'active');
+
+                Swal.fire({
+                    icon: 'success',
+                    title: `Supplier ${data.status === 'active' ? 'Activated' : 'Deactivated'}`,
+                    text: data.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             } else {
-                alert("Update failed ");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message
+                });
             }
         })
-        .catch(err => console.error("Error:", err));
+        .catch(() => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong. Please refresh the page.'
+            });
+        });
     });
 });
-
-
 </script>
 @endpush

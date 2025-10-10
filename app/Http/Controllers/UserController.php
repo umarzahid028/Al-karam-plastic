@@ -70,21 +70,21 @@ public function toggleStatus($id)
 {
     $user = User::findOrFail($id);
 
-    // Only allow active → inactive
     if ($user->status === 'active') {
         $user->status = 'inactive';
-        $user->save();
-
-        return response()->json([
-            'success' => true,
-            'status' => $user->status,
-            'message' => 'User has been deactivated.',
-        ]);
+        $message = 'User has been deactivated.';
+    } else {
+        $user->status = 'active';
+        $message = 'User has been activated.';
     }
 
+    $user->save();
+
     return response()->json([
-        'success' => false,
-        'message' => 'Inactive users cannot be reactivated.',
+        'success' => true,
+        'status' => $user->status,
+        'message' => $message,
     ]);
 }
+
 }

@@ -69,4 +69,27 @@ class StoreController extends Controller
 
         return redirect()->route('stores.index')->with('success', 'Store status updated successfully!');
     }
+    // Store toggle via AJAX
+    public function toggleStatus($id)
+    {
+        $store = Store::findOrFail($id);
+
+        // Toggle status
+        if ($store->status === 'active') {
+            $store->status = 'inactive';
+            $message = 'Store has been deactivated.';
+        } else {
+            $store->status = 'active';
+            $message = 'Store has been activated.';
+        }
+
+        $store->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $store->status,
+            'message' => $message,
+        ]);
+    }
+
 }

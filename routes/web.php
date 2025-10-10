@@ -74,7 +74,8 @@ Route::post('/stores', [StoreController::class, 'store'])->name('stores.store');
 Route::get('/stores/{store}/edit', [StoreController::class, 'edit'])->name('stores.edit'); // Edit store
 Route::put('/stores/{store}', [StoreController::class, 'update'])->name('stores.update'); // Update store
  Route::get('/stores-json', [StoreController::class, 'list']); 
-
+// Toggle store status (AJAX)
+Route::post('/stores/{id}/toggle-status', [StoreController::class, 'toggleStatus'])->name('stores.toggleStatus');
  //  Purchase
 Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
 Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
@@ -90,7 +91,9 @@ Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.
 Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create'); 
 Route::post('/api/suppliers', [SupplierController::class, 'store'])->name('suppliers.api.store');
 Route::post('/suppliers/{id}/update-status', [SupplierController::class, 'updateStatus']);
-
+// Toggle status route
+Route::post('/suppliers/{supplier}/toggle-status', [SupplierController::class, 'toggleStatus'])
+    ->name('suppliers.toggle-status');
 // Users 
 
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');

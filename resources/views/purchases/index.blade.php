@@ -40,13 +40,47 @@
     @media (max-width: 768px) {
         .table-responsive { overflow-x: auto; }
     }
+    .btn-info {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-info:hover,
+    .btn-info:focus {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
+    #searchInput {
+        margin-bottom: 15px;
+        max-width: 320px;
+    }
+    .table thead th {
+        background: #f1f5f9;
+        color: #334155;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    .page-header h3 {
+       
+       letter-spacing: .4px;
+       color: #1e293b;
+   }
 </style>
 @endpush
 
 @section('content')
 <div class="purchase-container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Purchases</h3>
+        <h3 class="page-header">
+            <i class="bi bi-cart3 me-2"></i> Purchases
+        </h3>
+        
         <div class="d-flex gap-2">
             <a href="{{ route('purchases.create') }}" class="btn btn-info text-white">+ Add Purchase</a>
             <a href="{{ url('/') }}" class="btn btn-secondary text-white">Back</a>

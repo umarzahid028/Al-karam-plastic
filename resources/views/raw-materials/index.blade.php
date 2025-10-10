@@ -13,7 +13,7 @@
         box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
     .page-header h3 {
-        font-weight: 700;
+       
         letter-spacing: .4px;
         color: #1e293b;
     }

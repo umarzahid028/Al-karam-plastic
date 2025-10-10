@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\RawSupplier;
 use App\Models\Ledger;
+
+
 class SupplierController extends Controller
 {
     // Show create form
@@ -80,6 +82,25 @@ class SupplierController extends Controller
         return response()->json([
             'success' => true,
             'status' => $supplier->status
+        ]);
+    }
+    public function toggleStatus(RawSupplier $supplier)
+    {
+        // Only toggle between active/inactive
+        if (!in_array($supplier->status, ['active', 'inactive'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Status cannot be toggled.'
+            ]);
+        }
+    
+        $supplier->status = $supplier->status === 'active' ? 'inactive' : 'active';
+        $supplier->save();
+    
+        return response()->json([
+            'success' => true,
+            'status' => $supplier->status,
+            'message' => "Supplier has been {$supplier->status}."
         ]);
     }
     
