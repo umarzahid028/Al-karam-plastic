@@ -161,7 +161,7 @@ h3 {
             <i class="bi bi-arrow-counterclockwise"></i> Return Selected Items
         </button>
         
-            <button class="btn btn-secondary" onclick="window.location.href='{{ url('/') }}'">Back</button>
+            {{-- <button class="btn btn-secondary" onclick="window.location.href='{{ url('/') }}'">Back</button> --}}
            
       
     </form>
