@@ -25,6 +25,19 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
     border-radius: 5px;
     z-index: 1000;
 }
+.btn-purple{
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-purple:hover,
+    .btn-purple:focus {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    }
 .card-body { position: relative; }
 @media print { .no-print { display: none; } }
 </style>
@@ -105,7 +118,7 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
             <input id="weight" type="number" class="form-control" placeholder="W">
         </div>
         <div class="col-md-1 d-grid">
-            <button id="addBtn" class="btn btn-purple">Add</button>
+            <button id="addBtn" class="btn btn-purple text-white">Add</button>
         </div>
     </div>
 
@@ -129,7 +142,7 @@ body { background: #f5f7fa; font-family: Arial, sans-serif; }
 
     <!-- Buttons -->
     <div class="d-flex justify-content-between mt-4">
-        <button class="btn btn-purple" id="generatePDF">Generate PDF</button>
+        <button class="btn btn-purple text-white" id="generatePDF">Generate PDF</button>
         <button class="btn btn-success" id="submitBtn">Submit Invoice</button>
         <a class="btn btn-secondary" href="{{route('welcome')}}" >Back</a>
     </div>
