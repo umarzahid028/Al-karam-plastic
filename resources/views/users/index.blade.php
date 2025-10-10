@@ -63,13 +63,21 @@
     @media (max-width: 768px) {
         .table-responsive { overflow-x: auto; }
     }
+    .page-header h3 {
+       
+       letter-spacing: .4px;
+       color: #1e293b;
+   }
 </style>
 @endpush
 
 @section('content')
 <div class="user-container">
     <div class=" d-flex justify-content-between align-items-center mb-3">
-        <h3 class="page-header">User List</h3>
+        <h3 class="page-header">
+            <i class="bi bi-people me-2"></i> User List
+        </h3>
+        
         <div class="d-flex gap-2">
             <a href="{{ route('users.create') }}" class="btn btn-primary text-white">+ Add User</a>
             <a href="{{ url('/') }}" class="btn btn-secondary text-white">Back</a>
@@ -83,7 +91,7 @@
         <table class="table table-bordered table-hover text-center align-middle" id="usersTable">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Contact No</th>

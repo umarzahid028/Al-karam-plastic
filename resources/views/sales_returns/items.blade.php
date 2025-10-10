@@ -93,7 +93,7 @@ h3 {
     @endphp
 
     <!-- Back Button -->
-    <button class="btn btn-info mb-3" onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back to Invoices</button>
+    <button class="btn btn-info mb-3 text-white" onclick="window.history.back()"><i class="bi bi-arrow-left"></i> Back to Invoices</button>
 
     <!-- Invoice Info -->
     <h3>Invoice: {{ $invoice->invoice_no }}</h3>
@@ -155,7 +155,7 @@ h3 {
 
         <button class="btn btn-danger btn-return" type="submit"><i class="bi bi-arrow-counterclockwise"></i> Return Selected Items</button>
     
-        <button class="btn btn-secondary" onclick="window.location.href='{{ url('/') }}'">Back</button>
+        {{-- <button class="btn btn-secondary" onclick="window.location.href='{{ url('/') }}'">Back</button> --}}
            
       
     </form>

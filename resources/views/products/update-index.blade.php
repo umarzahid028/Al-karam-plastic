@@ -67,16 +67,26 @@ body {
 .btn-danger:hover {
     background: #b91c1c;
 }
+
+.page-header h3 {
+       
+       letter-spacing: .4px;
+       color: #1e293b;
+   }
 </style>
 @endpush
 
 @section('content')
 <div class="container mt-5 p-4 bg-white rounded shadow-sm" style="max-width:1100px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0">Products List</h3>
-        <a href="{{ route('products.create') }}" class="btn btn-info text-white">
-            + Add New Product
+        <h3 class="mb-0 page-header">
+            <i class="bi bi-box-seam me-2"></i> Products List
+        </h3>
+        
+        <a href="{{ route('products.update', $products->first()->id ?? 1) }}" class="btn btn-info text-white" >
+            <i class="bi bi-pencil-square me-1 "></i> Edit
         </a>
+
     </div>
 
     <div class="table-responsive">
@@ -106,7 +116,7 @@ body {
                     <td>{{ rtrim(rtrim(number_format($p->cost_price, 2), '0'), '.') }}</td>
                     <td>{{ $p->current_stock }}</td>
                     <td class="text-center d-flex gap-2 justify-content-center">
-                        <a href="{{ route('products.update', $p->id) }}" class="btn btn-sm btn-info text-white">Edit</a>
+                       
                         <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete({{ $p->id }}, '{{ $p->product_name }}')">Delete</button>
                     </td>
                     

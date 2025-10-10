@@ -66,13 +66,21 @@ tfoot {
     font-weight: bold;
     font-size: 16px;
 }
+.page-header h3 {
+       
+       letter-spacing: .4px;
+       color: #1e293b;
+   }
 </style>
 @endpush
 
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="m-0">Gate Passes</h3>
+        <h3 class="page-header m-0">
+            <i class="bi bi-clipboard-check me-2"></i> Gate Passes
+        </h3>
+        
         <button class="btn btn-info text-white" onclick="window.location.href='{{ route('gatepass.create') }}'">
             + Generate Pass
         </button>

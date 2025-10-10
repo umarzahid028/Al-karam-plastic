@@ -89,7 +89,7 @@ h3 {
     @endphp
 
     <!-- Back Button -->
-    <button class="btn btn-info  mb-3" onclick="window.history.back()">
+    <button class="btn btn-info  text-white mb-3" onclick="window.history.back()">
         <i class="bi bi-arrow-left"></i> Back to Purchases
     </button>
 

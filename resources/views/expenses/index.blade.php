@@ -72,13 +72,21 @@ thead th, tfoot td {
 }
 thead th { top: 0; background: #f8f9fa; }
 tfoot { bottom: 0; background: #f8f9fc; font-weight: bold; font-size: 16px; }
+.page-header h3 {
+       
+       letter-spacing: .4px;
+       color: #1e293b;
+   }
 </style>
 @endpush
 
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="m-0">Expenses Report</h3>
+        <h3 class="m-0 page-header">
+            <i class="bi bi-file-earmark-bar-graph me-2"></i> Expenses Report
+        </h3>
+        
         <a href="{{ route('expenses.create') }}" class="btn btn-info text-white">+ Add Expense</a>
     </div>
 

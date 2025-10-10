@@ -11,7 +11,7 @@ class UserController extends Controller
     // Show all users
     public function index()
     {
-        $users = User::orderBy('id', 'desc')->get();
+        $users = User::orderBy('id', 'asc')->get();
         return view('users.index', compact('users'));
     }
     // Show create form

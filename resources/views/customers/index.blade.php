@@ -14,11 +14,7 @@
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
-    .page-header h3 {
-        font-weight: 700;
-        letter-spacing: .4px;
-        color: #1e293b;
-    }
+    
     .btn-info {
     background: linear-gradient(135deg, #3b82f6, #497be6);
     color: #fff;
@@ -52,13 +48,18 @@
     }
     .table-hover tbody tr:hover { background-color: #f8fafc; }
     .disabled-row { opacity: 0.5; }
+    .page-header h3 {
+       
+       letter-spacing: .4px;
+       color: #1e293b;
+   }
 </style>
 @endpush
 
 @section('content')
 <div class="customers-container">
     <div class="page-header d-flex justify-content-between align-items-center mb-4">
-        <h3><i class="bi bi-person-lines-fill me-2"></i> Customers</h3>
+        <h3><i class="bi bi-person me-2"></i> Customers</h3>
         <a href="{{ route('customers.create') }}" class="btn btn-info text-white">+ Add Customer</a>
     </div>
 
