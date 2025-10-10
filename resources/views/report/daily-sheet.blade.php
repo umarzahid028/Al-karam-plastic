@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Daily Sheet')
+@section('title', 'Total Sales Report')
 
 @push('styles')
-{{-- <title>Daily Sheet – {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</title> --}}
-
 {{-- Bootstrap & DataTables CSS --}}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
@@ -24,7 +22,7 @@
 }
 body {
     background: var(--background-color);
-   
+    font-family: 'Inter', sans-serif;
     color: #333;
     transition: background .3s, color .3s;
 }
@@ -213,6 +211,7 @@ body.dark-mode {
             </div>
         </div>
     </section>
+
 </div>
 @endsection
 
