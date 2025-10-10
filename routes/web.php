@@ -9,8 +9,19 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CustomerController;
-// Home
-// Route::get('/', function () {return view('welcome');})->name('welcome');
+use App\Http\Controllers\LedgerController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\GatePassController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\SalesReturnController;
+use App\Http\Controllers\DashboardController;
+
+
+// Dashboard Route
+Route::get('/', [DashboardController::class, 'index'])->name('welcome');
+            
 // Invoice
 Route::get('/sales', [InvoiceController::class, 'create'])->name('invoice.create');
 
@@ -20,16 +31,6 @@ Route::get('/buyers/{id}/balance', [InvoiceController::class, 'getBalance']);
 Route::post('/sales-invoices', [InvoiceController::class, 'store']);
 Route::get('/invoices', [InvoiceController::class, 'index'])
      ->name('invoices.index');
-
-// Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-// Route::get('/products', [ProductController::class, 'list']);   
-// Route::post('/products', [ProductController::class, 'store']); 
-
-// Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-// Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-// Route::get('/products', [ProductController::class, 'indesx'])->name('products.update-index');
-
-
 
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('products.index');
@@ -59,10 +60,7 @@ Route::post('/api/raw-material', [RawMaterialController::class, 'store'])->name(
 Route::delete('/raw-material/{id}', [RawMaterialController::class, 'destroy'])
     ->name('raw_materials.destroy');
 
-// Route::get('/api/raw-materials', [PurchaseController::class, 'materials']);
-
-
-
+// Stores Routes
 
 Route::get('/stores', [StoreController::class, 'index'])->name('stores.index'); // List all stores
 Route::get('/stores/create', [StoreController::class, 'create'])->name('stores.create'); // Form to add store
@@ -70,61 +68,51 @@ Route::post('/stores', [StoreController::class, 'store'])->name('stores.store');
 Route::get('/stores/{store}/edit', [StoreController::class, 'edit'])->name('stores.edit'); // Edit store
 Route::put('/stores/{store}', [StoreController::class, 'update'])->name('stores.update'); // Update store
  Route::get('/stores-json', [StoreController::class, 'list']); 
-// Toggle store status (AJAX)
 Route::post('/stores/{id}/toggle-status', [StoreController::class, 'toggleStatus'])->name('stores.toggleStatus');
- //  Purchase
+ 
+//  Purchase Routes
 Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
 Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
 Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
 Route::get('/api/suppliers', [PurchaseController::class, 'suppliers']);
 Route::get('/api/raw-materials', [PurchaseController::class, 'materials']);
-// Delete a purchase
 Route::delete('/purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
 
-// Supplier
+// Supplier Routes
 Route::get('/suppliers-json', [PurchaseController::class, 'suppliers']);
 Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index'); 
 Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create'); 
 Route::post('/api/suppliers', [SupplierController::class, 'store'])->name('suppliers.api.store');
 Route::post('/suppliers/{id}/update-status', [SupplierController::class, 'updateStatus']);
-// Toggle status route
 Route::post('/suppliers/{supplier}/toggle-status', [SupplierController::class, 'toggleStatus'])
     ->name('suppliers.toggle-status');
-// Users 
+
+
+    // Users Routes
 
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
-// ✅ Must be in web.php
 Route::post('/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
-
-
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-
-// Customers 
 
 // Customer routes
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-
-// ✅ Activate / Deactivate status (AJAX)
 Route::post('/customers/{id}/update-status', [CustomerController::class, 'updateStatus'])->name('customers.updateStatus');
-
-// View single customer (optional)
 Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
-
-// Customer invoice routes
 Route::get('/customers/invoice', [CustomerController::class, 'createInvoice'])->name('customers.customer_invoice');
 Route::post('/customer-invoices', [CustomerController::class, 'storeInvoice'])->name('customer_invoices.store');
 
-     use App\Http\Controllers\LedgerController;
-
+    
+// Ledger  Routes
 Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger.index');
 Route::get('/ledger/create', [LedgerController::class, 'create'])->name('ledger.create');
 Route::post('/ledger', [LedgerController::class, 'store'])->name('ledger.store');
 
-use App\Http\Controllers\ReportController;
+// Reports Route
+
 Route::get('/report/total-sales', [ReportController::class, 'totalSalesReport'])
     ->name('reports.total_sales');
     Route::get('/report/returns_sales_report', [ReportController::class, 'salesReturnReport'])
@@ -155,7 +143,7 @@ Route::get('/report/total-sales', [ReportController::class, 'totalSalesReport'])
  
  Route::get('/reports/ledger', [ReportController::class, 'ledgerReport'])
  ->name('reports.ledger');
- // web.php
+
 Route::get('/reports/payments', [ReportController::class, 'paymentsReport'])->name('reports.payments');
 Route::get('/reports/stock-summary', [ReportController::class, 'stockSummary'])
      ->name('reports.stock-summary');
@@ -171,17 +159,18 @@ Route::get('/reports/stock-summary', [ReportController::class, 'stockSummary'])
 // Route::get('/reports/purchase-detail-data', [ReportController::class, 'purchaseDetailReportData'])->name('reports.purchase_detail_data');
 // Route::get('/reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
 
-use App\Http\Controllers\ExpenseController;
+// Expense Routes
 
 Route::resource('expenses', ExpenseController::class);
 
-use App\Http\Controllers\GatePassController;
+// Get Pass Routes
+
 Route::get('/gate-pass', [GatePassController::class, 'index'])->name('gatepass.index');
 Route::get('/gate-pass/create', [GatePassController::class, 'create'])->name('gatepass.create');
 Route::post('/gate-pass/store', [GatePassController::class, 'store'])->name('gatepass.store');
 Route::get('/gate-pass/{id}', [GatePassController::class, 'show'])->name('gatepass.show');
 
-use App\Http\Controllers\PaymentController;
+// Payments Routes
 
 Route::get('/payments', [PaymentController::class,'index'])->name('payments.index');
 Route::post('/payments/customer', [PaymentController::class,'storeCustomer'])->name('payments.customer.store');
@@ -197,7 +186,7 @@ Route::get('/reports/pending-payables', [PaymentController::class, 'pendingPayab
 Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
 
 
-use App\Http\Controllers\PurchaseReturnController;
+// Purchase Return Routes
 
 Route::get('/purchase-returns', [PurchaseReturnController::class, 'index'])
         ->name('purchase_returns.index');
@@ -211,7 +200,7 @@ Route::post('/purchase-returns/{purchase}', [PurchaseReturnController::class, 's
         ->name('purchase_returns.search.get');
 
         
-        use App\Http\Controllers\SalesReturnController;
+// Sales Return Routes
 
         Route::get('/sales-returns', [SalesReturnController::class, 'index'])
             ->name('sales_returns.index');
@@ -225,9 +214,3 @@ Route::post('/purchase-returns/{purchase}', [PurchaseReturnController::class, 's
         Route::post('/sales-returns/{invoice}', [SalesReturnController::class, 'store'])
             ->name('sales_returns.store');
         
-
-            use App\Http\Controllers\DashboardController;
-
-            // Root route now runs the controller
-            Route::get('/', [DashboardController::class, 'index'])->name('welcome');
-            
