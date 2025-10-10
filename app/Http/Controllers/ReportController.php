@@ -618,15 +618,18 @@ public function dailySheet(Request $request)
                      SUM(paid_amount)  as paid')
         ->first();
 
-    $purchases = DB::table('purchases')
-        ->whereDate('purchase_date', $date)
+        $purchases = DB::table('purchases')
+        ->whereDate('created_at', $date)
+
         ->selectRaw('COUNT(*) as invoices,
                      SUM(total_amount) as gross,
                      SUM(paid_amount)  as paid')
         ->first();
+    
 
     $expenses = DB::table('expenses')
-        ->whereDate('expense_date', $date)
+    ->whereDate('expense_date', $date)
+    ->orWhereDate('created_at', $date)
         ->sum('amount');
 
     $stock = DB::table('raw_stock_logs')
@@ -651,28 +654,33 @@ public function dailySheet(Request $request)
 
     // ---- Purchase detail: also join to raw_suppliers ----
     $purchaseList = DB::table('purchases as p')
-        ->join('raw_suppliers as rs', 'p.supplier_id', '=', 'rs.id')
-        ->whereDate('p.purchase_date', $date)
-        ->select(
-            'p.invoice_no',
-            'rs.name as supplier_name', // or rs.company_name if that’s your display name
-            'p.total_amount',
-            'p.paid_amount'
-        )
-        ->orderBy('p.id', 'desc')
-        ->get();
+    ->leftJoin('raw_suppliers as rs', 'p.supplier_id', '=', 'rs.id')
+    ->whereDate('p.created_at', $date)
 
-        $expenseList = DB::table('expenses')
-        ->whereDate('expense_date', $date)
-        ->select(
-            'expense_category',
-            'description',
-            'amount',
-            'vendor',
-            'payment_method'
-        )
-        ->orderBy('id', 'desc')
-        ->get();
+
+    ->select(
+        'p.invoice_no',
+        DB::raw('COALESCE(rs.name, "Unknown Supplier") as supplier_name'),
+        'p.total_amount',
+        'p.paid_amount'
+    )
+    ->orderBy('p.id', 'desc')
+    ->get();
+
+    $expenseList = DB::table('expenses')
+    ->whereDate('expense_date', $date)
+    ->orWhereDate('created_at', $date)
+    ->select(
+        'expense_category',
+        'description',
+        'amount',
+        'vendor',
+        'payment_method'
+    )
+    ->orderBy('id', 'desc')
+    ->get();
+
+
     
     return view('report.daily-sheet', compact(
         'date',
